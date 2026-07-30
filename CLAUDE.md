@@ -79,8 +79,9 @@ loop on any machine, from this file alone:
    `docs/learning/<m2x-nnn>-concepts.md`. If it doesn't exist, write it first: the
    concepts the ticket exercises (what each is, why it matters here, the pitfall),
    grounded in the ticket spec and existing design docs. Then offer the developer a
-   short interactive Q&A on it before coding starts — a web-coach session where the
-   local setup provides one, plain in-terminal Q&A otherwise. Skippable, never silent.
+   short interactive Q&A on it before coding starts — a coach session via the bundled
+   `tools/coach/` server (see `tools/coach/README.md`), plain in-terminal Q&A as
+   fallback. Skippable, never silent.
 2. **Ticket close — retro.** After posting the ticket's Odoo completion comment,
    append an entry to `docs/learning/retros.md`: what was executed, deviations + why,
    lessons. Same content as the Odoo comment, kept in-repo so it survives the course.

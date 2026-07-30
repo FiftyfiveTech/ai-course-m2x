@@ -27,7 +27,17 @@ Short Video Overviews are generated per topic and indexed below.
 
 ## Running a session
 
-At ticket start Claude offers a short interactive Q&A over the ticket's primer —
-a web-coach browser session where the machine has one set up, otherwise plain
-in-terminal questions. Either way the primer file is the source of truth, so the
-session works the same on any developer's machine.
+The interactive session tooling is bundled in this repo — works on any machine with
+Python 3 and Claude Code, no extra deps:
+
+```bash
+python3 tools/coach/server.py --dir docs/learning/coach --port 8765
+# open http://127.0.0.1:8765/m2x-day1.html
+# then in Claude Code: "start web coach session"
+```
+
+Full instructions: [tools/coach/README.md](../../tools/coach/README.md). Lesson pages
+live in `coach/`; the ticket primer file stays the source of truth, so the session
+works the same on any developer's machine. Topic videos: download from the shared
+notebook into `coach/videos/` (filenames in the page; git-ignored) — pages work
+without them.
