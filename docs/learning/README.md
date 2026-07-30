@@ -12,7 +12,8 @@ Every ticket in this repo doubles as course material. The full protocol lives in
 
 ## Shared NotebookLM notebook
 
-**Notebook:** M2X — Course Concepts · _link pending — added on first share_
+**Notebook:** [M2X — Course Concepts](https://notebooklm.google.com/notebook/1085a4a5-5505-4fe4-97b9-b1a8b8293026)
+— shared with both developers (editor access).
 
 Sources are the design docs (`docs/design/`) and the concept primers in this folder.
 Short Video Overviews are generated per topic and indexed below.
@@ -21,8 +22,8 @@ Short Video Overviews are generated per topic and indexed below.
 
 | Topic | Primer | Video |
 |-------|--------|-------|
-| Provider adapter, content-addressed caching | [m2x-011-adapter-concepts.md](m2x-011-adapter-concepts.md) | _pending_ |
-| Retry/backoff, run logging, secrets, hermetic tests | [m2x-011-adapter-concepts.md](m2x-011-adapter-concepts.md) | _pending_ |
+| Provider adapter, content-addressed caching | [m2x-011-adapter-concepts.md](m2x-011-adapter-concepts.md) | Video Overview in notebook |
+| Retry/backoff, run logging, secrets, hermetic tests | [m2x-011-adapter-concepts.md](m2x-011-adapter-concepts.md) | Video Overview in notebook |
 
 ## Running a session
 
