@@ -1,0 +1,89 @@
+# Model + provider registry — TRACKED IN GIT, contains no secrets.
+#
+# Why this file is committed while `.env` is not:
+#   `.env` holds credentials. This file holds *facts about models* — which provider
+#   serves them, what each provider calls them, and what they cost. Those facts must
+#   be reproducible from a fresh clone, because the cost-attribution report is built
+#   by replaying `data/runs/runs.jsonl` against this price table. If prices lived in
+#   the git-ignored `.env`, a supervisor cloning the repo would compute $0.00 for
+#   everything and the report would be unverifiable.
+#
+# Adding a model:
+#   1. Key the entry by its **Hugging Face repo id** — that is the only canonical id
+#      used anywhere in application code.
+#   2. List every provider that can serve it under [models."<repo>".served_as],
+#      mapping provider -> the name that provider's own API expects.
+#   3. Set prices. Free tier is 0.0, but keep the keys present: the cost multiplication
+#      is exercised by tests with a fake non-zero price.
+
+# --------------------------------------------------------------------------------
+# Providers — all three speak the OpenAI-compatible wire format, which is the whole
+# reason one adapter covers them. Only `base_url` and the credential differ.
+# --------------------------------------------------------------------------------
+
+[providers.groq]
+base_url = "https://api.groq.com/openai/v1"
+api_key_setting = "groq_api_key"
+
+[providers.nim]
+base_url = "https://integrate.api.nvidia.com/v1"
+api_key_setting = "nvidia_api_key"
+
+[providers.ollama]
+# Local inference. Overridden at runtime by OLLAMA_HOST when that variable is set.
+base_url = "http://localhost:11434/v1"
+api_key_setting = ""  # empty => no Authorization header is sent
+
+# --------------------------------------------------------------------------------
+# Chat models
+# --------------------------------------------------------------------------------
+
+[models."meta-llama/Llama-3.3-70B-Instruct"]
+kind = "chat"
+default_provider = "groq"
+price_per_1k_tokens_in = 0.0
+price_per_1k_tokens_out = 0.0
+
+[models."meta-llama/Llama-3.3-70B-Instruct".served_as]
+groq = "llama-3.3-70b-versatile"
+nim = "meta/llama-3.3-70b-instruct"
+ollama = "hf.co/bartowski/Llama-3.3-70B-Instruct-GGUF"
+
+[models."meta-llama/Llama-3.1-8B-Instruct"]
+kind = "chat"
+default_provider = "groq"
+price_per_1k_tokens_in = 0.0
+price_per_1k_tokens_out = 0.0
+
+[models."meta-llama/Llama-3.1-8B-Instruct".served_as]
+groq = "llama-3.1-8b-instant"
+nim = "meta/llama-3.1-8b-instruct"
+ollama = "hf.co/bartowski/Meta-Llama-3.1-8B-Instruct-GGUF"
+
+# --------------------------------------------------------------------------------
+# Transcription models
+#
+# Audio is billed per minute of input, not per token, so `price_per_audio_minute`
+# carries the cost and the token counters stay 0 — Whisper responses do not report
+# token usage and inventing a number would corrupt the cost report.
+# --------------------------------------------------------------------------------
+
+[models."openai/whisper-large-v3"]
+kind = "transcribe"
+default_provider = "groq"
+price_per_1k_tokens_in = 0.0
+price_per_1k_tokens_out = 0.0
+price_per_audio_minute = 0.0
+
+[models."openai/whisper-large-v3".served_as]
+groq = "whisper-large-v3"
+
+[models."openai/whisper-large-v3-turbo"]
+kind = "transcribe"
+default_provider = "groq"
+price_per_1k_tokens_in = 0.0
+price_per_1k_tokens_out = 0.0
+price_per_audio_minute = 0.0
+
+[models."openai/whisper-large-v3-turbo".served_as]
+groq = "whisper-large-v3-turbo"
