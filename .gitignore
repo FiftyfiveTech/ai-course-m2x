@@ -1,0 +1,9 @@
+# data never enters git — raw meetings, transcripts, sandbox writes
+data/
+# real keys live in ~/.config, only .env.example is tracked
+.env
+# held-out set is Evaluator-only until the gate (blind-labelling rule)
+eval/heldout/
+__pycache__/
+.venv/
+.pytest_cache/
