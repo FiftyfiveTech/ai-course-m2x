@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2X Day 1 — Adapter Concepts</title>
+<style>
+  :root{--ink:#1a2b3c;--acc:#0b6e4f;--warn:#b3541e;--bg:#f6f8f7;--card:#fff;--line:#dce3e0;--grid:#e8edea;--chatbg:#fafcfb;--accfg:#fff}
+  html.dark{--ink:#e4ebe7;--acc:#3fb489;--warn:#e08a52;--bg:#101614;--card:#1a2320;--line:#2c3833;--grid:#182019;--chatbg:#141c18;--accfg:#08130e}
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.55 system-ui,sans-serif;color:var(--ink);background:
+    linear-gradient(var(--bg),var(--bg)),
+    repeating-linear-gradient(0deg,transparent,transparent 23px,var(--grid) 24px),
+    repeating-linear-gradient(90deg,transparent,transparent 23px,var(--grid) 24px);}
+  header{position:relative;background:var(--acc);color:var(--accfg);padding:14px 22px}
+  header h1{margin:0;font-size:19px} header p{margin:2px 0 0;opacity:.85;font-size:13px}
+  main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;max-width:1200px;margin:18px auto;padding:0 16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:16px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .card h2{margin:0 0 8px;font-size:16px;color:var(--acc)}
+  .card h3{margin:14px 0 6px;font-size:14px}
+  .concept{border-left:4px solid var(--acc);padding-left:12px;margin:10px 0}
+  .concept b{display:block}
+  .pit{color:var(--warn);font-size:13px}
+  .q{margin:14px 0;padding:12px;border:1px solid var(--line);border-radius:8px}
+  .q p{margin:0 0 8px;font-weight:600}
+  .q label{display:block;margin:4px 0;cursor:pointer;font-weight:400}
+  textarea{width:100%;min-height:56px;border:1px solid var(--line);border-radius:6px;padding:8px;font:inherit;resize:vertical;background:var(--card);color:var(--ink)}
+  button{background:var(--acc);color:var(--accfg);border:0;border-radius:8px;padding:10px 18px;font:600 15px system-ui;cursor:pointer}
+  button:disabled{background:#9bb5ab;cursor:default}
+  #chatlog{height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:8px;background:var(--chatbg);border:1px solid var(--line);border-radius:8px}
+  .msg{max-width:88%;padding:8px 11px;border-radius:10px;font-size:14px;white-space:pre-wrap;word-wrap:break-word}
+  .msg.user{align-self:flex-end;background:var(--acc);color:var(--accfg)}
+  .msg.coach{align-self:flex-start;background:var(--card);border:1px solid var(--line)}
+  .chatrow{display:flex;gap:8px;margin-top:10px}
+  .chatrow textarea{min-height:44px;flex:1}
+  .sticky{position:sticky;top:14px}
+  video{width:100%;border-radius:8px;background:#000}
+  @media (max-width:900px){main{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>M2X Day 1 — Provider Adapter Concepts</h1>
+  <p>Tickets M2X-010/011 · PR #1 · answer, hit DONE, Claude grades in chat →</p>
+  <button id="themebtn" style="position:absolute;top:14px;right:18px;padding:6px 12px;font-size:13px">🌙 dark</button>
+</header>
+<main>
+<section>
+
+  <div class="card" id="vidcard1" style="display:none">
+    <h2>🎬 Video: adapter pattern + caching</h2>
+    <video controls preload="metadata" src="videos/m2x-011-adapter-caching.mp4"></video>
+  </div>
+  <div class="card" id="vidcard2" style="display:none">
+    <h2>🎬 Video: reliability + observability</h2>
+    <video controls preload="metadata" src="videos/m2x-011-reliability-observability.mp4"></video>
+  </div>
+
+  <div class="card">
+    <h2>Concepts (60-second read)</h2>
+    <div class="concept"><b>1 · Provider adapter</b> One interface (<code>complete()</code>/<code>transcribe()</code>) in front of Groq/NIM/Ollama; model = HF repo id; routing is data in <code>config/models.toml</code>.<span class="pit">Pitfall: <code>if provider == "groq"</code> branches leaking into feature code.</span></div>
+    <div class="concept"><b>2 · Content-addressed cache</b> Key = sha256 of everything that changes the answer: kind + model + provider + payload + params.<span class="pit">Pitfall: hashing too little → silently stale answers.</span></div>
+    <div class="concept"><b>3 · Retry + backoff</b> 429/5xx retried, delay doubles, <code>Retry-After</code> wins; other 4xx never retried.<span class="pit">Pitfall: retrying malformed requests burns quota to fail again.</span></div>
+    <div class="concept"><b>4 · Run log</b> One JSONL record per call, cache hits included; log write failure raises, cache write failure is swallowed.<span class="pit">Pitfall: a measurement tool that silently loses records.</span></div>
+    <div class="concept"><b>5 · Secrets boundary</b> Keys only via Pydantic <code>Settings</code> as <code>SecretStr</code>; fetched per request; never logged.<span class="pit">Pitfall: a stray <code>repr</code>/<code>print</code> leaking a key.</span></div>
+    <div class="concept"><b>6 · Hermetic tests</b> 129 tests, zero network (<code>httpx.MockTransport</code>), zero real clocks (injected sleep/monotonic); cost math tested with fake non-zero prices.<span class="pit">Pitfall: free-tier $0.00 makes cost assertions vacuous.</span></div>
+  </div>
+
+  <div class="card">
+    <h2>Quiz</h2>
+
+    <div class="q" data-q="1"><p>1. Why is provider routing a data table rather than if/else in feature code?</p>
+      <label><input type="radio" name="q1" value="a"> a. Tables are faster than branches at runtime</label>
+      <label><input type="radio" name="q1" value="b"> b. Switching provider becomes a config change; no feature code is touched</label>
+      <label><input type="radio" name="q1" value="c"> c. Python discourages if/else chains</label>
+    </div>
+
+    <div class="q" data-q="2"><p>2. One HTTP implementation covers Groq, NIM and Ollama because…</p>
+      <label><input type="radio" name="q2" value="a"> a. All three expose OpenAI-compatible endpoints — only base URL + credential vary</label>
+      <label><input type="radio" name="q2" value="b"> b. They share one SDK</label>
+      <label><input type="radio" name="q2" value="c"> c. The adapter converts formats per provider</label>
+    </div>
+
+    <div class="q" data-q="3"><p>3. Cache key omits <code>provider</code>. You run one prompt across Groq, NIM, Ollama. What happens?</p>
+      <label><input type="radio" name="q3" value="a"> a. Three fresh calls; comparison is valid</label>
+      <label><input type="radio" name="q3" value="b"> b. Runs 2 and 3 cache-hit into run 1's answer — three identical results presented as a comparison</label>
+      <label><input type="radio" name="q3" value="c"> c. Cache errors out on the second provider</label>
+    </div>
+
+    <div class="q" data-q="4"><p>4. Why are unset sampling params <em>dropped</em> from the key rather than hashed as <code>null</code>?</p>
+      <label><input type="radio" name="q4" value="a"> a. Hashing null is undefined behaviour</label>
+      <label><input type="radio" name="q4" value="b"> b. Smaller keys are faster to compare</label>
+      <label><input type="radio" name="q4" value="c"> c. Adding a new optional param later must not invalidate every existing cache entry</label>
+    </div>
+
+    <div class="q" data-q="5"><p>5. Which failures get retried, and whose delay hint wins?</p>
+      <label><input type="radio" name="q5" value="a"> a. All 4xx/5xx; local exponential backoff always</label>
+      <label><input type="radio" name="q5" value="b"> b. 429 + 5xx only; provider's <code>Retry-After</code> overrides the local guess</label>
+      <label><input type="radio" name="q5" value="c"> c. Only network timeouts; fixed 1s delay</label>
+    </div>
+
+    <div class="q" data-q="6"><p>6. Cache write fails (disk full) vs run-log write fails. The design says…</p>
+      <label><input type="radio" name="q6" value="a"> a. Both raise — fail fast</label>
+      <label><input type="radio" name="q6" value="b"> b. Both are swallowed — availability first</label>
+      <label><input type="radio" name="q6" value="c"> c. Cache failure swallowed (accelerator), log failure raises (a run that can't be measured has failed its purpose)</label>
+    </div>
+
+    <div class="q" data-q="7"><p>7. A cache hit logs <code>cost_usd=0</code> but keeps real token counts. Why the asymmetry? (own words)</p>
+      <textarea name="q7" placeholder="Your reasoning…"></textarea>
+    </div>
+
+    <div class="q" data-q="8"><p>8. Why must cost arithmetic be tested with fake <em>non-zero</em> prices? (own words)</p>
+      <textarea name="q8" placeholder="Your reasoning…"></textarea>
+    </div>
+
+    <div class="q" data-q="9"><p>9. The ticket spec said key = <code>sha256(model_id + messages)</code>. We deviated. When is deviating from a ticket spec legitimate, and what must accompany it? (own words)</p>
+      <textarea name="q9" placeholder="Your reasoning…"></textarea>
+    </div>
+
+    <button id="donebtn">DONE — send answers to Claude</button>
+    <span id="donenote" style="margin-left:10px;font-size:13px;color:var(--warn)"></span>
+  </div>
+</section>
+
+<aside class="sticky">
+  <div class="card">
+    <h2>Coach chat</h2>
+    <div id="chatlog"></div>
+    <div class="chatrow">
+      <textarea id="chatinput" placeholder="Ask anything… (Enter=send)"></textarea>
+      <button id="chatsend">Send</button>
+    </div>
+  </div>
+</aside>
+</main>
+
+<script>
+const KEY = {q1:'b', q2:'a', q3:'b', q4:'c', q5:'b', q6:'c'};
+
+// --- theme
+const themebtn = document.getElementById('themebtn');
+function setTheme(dark){
+  document.documentElement.classList.toggle('dark', dark);
+  themebtn.textContent = dark ? '☀️ light' : '🌙 dark';
+  localStorage.setItem('coach-theme', dark ? 'dark' : 'light');
+}
+themebtn.addEventListener('click', ()=> setTheme(!document.documentElement.classList.contains('dark')));
+setTheme(localStorage.getItem('coach-theme') ? localStorage.getItem('coach-theme')==='dark'
+         : matchMedia('(prefers-color-scheme: dark)').matches);
+
+function send(text, tag){
+  return fetch('/send', {method:'POST', body: JSON.stringify({text, tag})});
+}
+
+// --- video cards auto-show when mp4 exists
+[['vidcard1','videos/m2x-011-adapter-caching.mp4'],
+ ['vidcard2','videos/m2x-011-reliability-observability.mp4']].forEach(([id,src])=>{
+  fetch(src,{method:'HEAD'}).then(r=>{if(r.ok)document.getElementById(id).style.display=''}).catch(()=>{});
+});
+
+// --- DONE
+document.getElementById('donebtn').addEventListener('click', ()=>{
+  const lines = ['SESSION ANSWERS — m2x-day1 adapter concepts'];
+  let unanswered = [];
+  for (const q of ['q1','q2','q3','q4','q5','q6']){
+    const pick = document.querySelector(`input[name=${q}]:checked`);
+    if(!pick){unanswered.push(q); continue;}
+    const ok = pick.value === KEY[q] ? 'CORRECT' : `WRONG (picked ${pick.value}, key ${KEY[q]})`;
+    lines.push(`${q}: picked "${pick.value}" — ${ok}`);
+  }
+  for (const q of ['q7','q8','q9']){
+    const t = document.querySelector(`textarea[name=${q}]`).value.trim();
+    if(!t){unanswered.push(q); continue;}
+    lines.push(`${q} (free text): ${t}`);
+  }
+  if(unanswered.length){
+    document.getElementById('donenote').textContent = 'Unanswered: '+unanswered.join(', ')+' — answer or hit DONE again to submit partial.';
+    if(!document.getElementById('donebtn').dataset.warned){
+      document.getElementById('donebtn').dataset.warned = '1';
+      return;
+    }
+  }
+  lines.push('');
+  lines.push('TASKS FOR CLAUDE: grade the free-text answers (q7-q9), challenge any weak reasoning, coach the wrong picks, update the learning progress in the vault (work/internal/ai-engineering-course/notes/build-log/), and say what the next session covers.');
+  send(lines.join('\n'), 'session-done');
+  const b = document.getElementById('donebtn');
+  b.disabled = true; b.textContent = 'Sent — Claude is grading…';
+  document.getElementById('donenote').textContent = '';
+});
+
+// --- chat
+function pushChat(){
+  const el = document.getElementById('chatinput');
+  const t = el.value.trim(); if(!t) return;
+  send(t, 'chat'); el.value = '';
+}
+document.getElementById('chatsend').addEventListener('click', pushChat);
+document.getElementById('chatinput').addEventListener('keydown', e=>{
+  if(e.key==='Enter' && !e.shiftKey){e.preventDefault(); pushChat();}
+});
+
+// --- poll chat.jsonl
+let lastLen = 0;
+async function poll(){
+  try{
+    const r = await fetch('/chat.jsonl', {cache:'no-store'});
+    if(!r.ok) return;
+    const txt = await r.text();
+    if(txt.length === lastLen) return;
+    lastLen = txt.length;
+    const log = document.getElementById('chatlog');
+    log.innerHTML = '';
+    for(const line of txt.split('\n')){
+      if(!line.trim()) continue;
+      let m; try{m = JSON.parse(line);}catch(e){continue;}
+      if(m.tag === 'session-done') { // show as compact marker
+        const d = document.createElement('div');
+        d.className = 'msg user'; d.textContent = '📤 answers submitted';
+        log.appendChild(d); continue;
+      }
+      const d = document.createElement('div');
+      d.className = 'msg ' + (m.role === 'user' ? 'user' : 'coach');
+      d.textContent = m.text;
+      log.appendChild(d);
+    }
+    log.scrollTop = log.scrollHeight;
+  }catch(e){}
+}
+setInterval(poll, 3000); poll();
+</script>
+</body>
+</html>
