@@ -69,3 +69,31 @@ Yash (Evaluator). Claude acts as project manager for tickets.
   `monotonic`/`now`). Cache-hit accounting: `cost_usd=0.0`, token counts stay real.
 - Design records live in `docs/design/` (e.g. `docs/design/day1-adapter.md`);
   cross-review lines in `docs/reviews.md`.
+
+## Learning loop (per ticket — developer-agnostic)
+
+Every ticket doubles as course material for both developers. Claude (PM) runs this
+loop on any machine, from this file alone:
+
+1. **Ticket start — concept briefing.** Before implementation, read
+   `docs/learning/<m2x-nnn>-concepts.md`. If it doesn't exist, write it first: the
+   concepts the ticket exercises (what each is, why it matters here, the pitfall),
+   grounded in the ticket spec and existing design docs. Then offer the developer a
+   short interactive Q&A on it before coding starts — a web-coach session where the
+   local setup provides one, plain in-terminal Q&A otherwise. Skippable, never silent.
+2. **Ticket close — retro.** After posting the ticket's Odoo completion comment,
+   append an entry to `docs/learning/retros.md`: what was executed, deviations + why,
+   lessons. Same content as the Odoo comment, kept in-repo so it survives the course.
+3. **Shared NotebookLM notebook.** "M2X — Course Concepts" is shared with both
+   developers; its sources are the design docs and concept primers in this repo, and
+   it hosts short Video Overviews per topic. The notebook link and video index live in
+   `docs/learning/README.md` — update the index when a new video lands.
+4. Primers and retros are committed on the ticket's feature branch — they are
+   deliverables, not scratch.
+
+## Attribution
+
+- No AI attribution in git or forge artifacts: no `Co-Authored-By: Claude` /
+  `noreply@anthropic.com` trailers, no "🤖 Generated with …" footers in commits, PR
+  bodies, or ticket comments. The developers are the authors; strip any footer a tool
+  inserts before committing.
