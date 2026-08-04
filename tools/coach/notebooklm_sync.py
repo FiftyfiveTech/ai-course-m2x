@@ -38,7 +38,7 @@ import asyncio
 import sys
 from pathlib import Path
 
-from notebooklm import NotebookLMClient
+from notebooklm import NotebookLMClient, VideoStyle
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -49,19 +49,25 @@ Indexed in ``docs/learning/README.md``; override with ``--notebook``.
 """
 
 SOURCE_DOCS = (
-    "docs/m2x-week1-handbook.md",
-    "docs/corpus.md",
-    "docs/design/day1-adapter.md",
-    "docs/design/phase0-local-path.md",
-    "docs/learning/m2x-000-corpus-concepts.md",
-    "docs/learning/m2x-011-adapter-concepts.md",
-    "docs/learning/m2x-012-013-pipeline-concepts.md",
-    "docs/learning/retros.md",
+    ("docs/m2x-week1-handbook.md", "m2x-week1-handbook.md"),
+    ("docs/corpus.md", "m2x-000-corpus-record.md"),
+    ("docs/design/day1-adapter.md", "day1-adapter-design.md"),
+    ("docs/design/phase0-local-path.md", "phase0-local-path-design.md"),
+    ("docs/learning/m2x-000-corpus-concepts.md", "m2x-000-corpus-concepts.md"),
+    ("docs/learning/m2x-011-adapter-concepts.md", "m2x-day1-concepts-primer.md"),
+    ("docs/learning/m2x-012-013-pipeline-concepts.md", "m2x-012-013-pipeline-concepts.md"),
+    ("docs/learning/retros.md", "m2x-retros.md"),
 )
-"""Docs that make up the notebook's source set, repo-relative.
+"""``(repo-relative path, notebook source title)`` pairs making up the source set.
 
-Missing files are skipped with a warning rather than fatal: several of these live on
-ticket branches that are not merged yet (``docs/corpus.md`` on M2X-000,
+The title is explicit rather than derived from the filename because the notebook was
+first populated by hand: ``docs/design/day1-adapter.md`` is already in there as
+``day1-adapter-design.md`` and the M2X-011 primer as ``m2x-day1-concepts-primer.md``.
+Matching those names is what makes re-running this a no-op instead of a second copy of
+the same doc competing in retrieval.
+
+Missing files are skipped with a warning rather than fatal: several live on ticket
+branches that are not merged yet (``docs/corpus.md`` on M2X-000,
 ``docs/design/phase0-local-path.md`` on M2X-013), so the useful behaviour on ``main``
 is "upload what exists".
 """
@@ -69,7 +75,7 @@ is "upload what exists".
 VIDEOS = (
     {
         "filename": "m2x-recap-corpus-adapter.mp4",
-        "style": "whiteboard",
+        "style": VideoStyle.WHITEBOARD,
         "instructions": (
             "A tight technical explainer for the two engineers who built this, not an "
             "audience of beginners. Cover: why the pilot corpus needed an English AMI "
@@ -83,7 +89,7 @@ VIDEOS = (
     },
     {
         "filename": "m2x-recap-pipeline-local.mp4",
-        "style": "whiteboard",
+        "style": VideoStyle.WHITEBOARD,
         "instructions": (
             "A tight technical explainer for the two engineers who built this. Cover: "
             "the Phase-0 vertical slice (CLI parses, pipeline decides, adapter is the "
@@ -99,6 +105,10 @@ VIDEOS = (
     },
 )
 """Video Overviews to build, keyed by the filename the coach pages already expect.
+
+``style`` must be a :class:`~notebooklm.VideoStyle` member, not the string the CLI
+accepts — the library reads ``.value`` off it and an ``AttributeError`` is all you get
+otherwise.
 
 ``docs/learning/coach/m2x-week1-recap.html`` HEAD-probes these paths and reveals its
 video cards only when the files exist, so a failed or skipped generation degrades to a
@@ -133,19 +143,19 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     return ap.parse_args(argv)
 
 
-def resolve_sources() -> tuple[list[Path], list[str]]:
+def resolve_sources() -> tuple[list[tuple[Path, str]], list[str]]:
     """Split :data:`SOURCE_DOCS` into files that exist and paths that do not.
 
     Returns:
-        ``(present, missing)`` — absolute paths, and repo-relative strings for the ones
-        that are not on this branch.
+        ``(present, missing)`` — ``(absolute path, notebook title)`` pairs, and
+        repo-relative strings for the docs that are not on this branch.
     """
-    present: list[Path] = []
+    present: list[tuple[Path, str]] = []
     missing: list[str] = []
-    for rel in SOURCE_DOCS:
+    for rel, title in SOURCE_DOCS:
         path = REPO_ROOT / rel
         if path.is_file():
-            present.append(path)
+            present.append((path, title))
         else:
             missing.append(rel)
     return present, missing
@@ -167,11 +177,11 @@ async def sync(args: argparse.Namespace) -> int:
     if args.dry_run:
         print(f"notebook: {args.notebook}")
         print("would upload:")
-        for path in present:
-            print(f"  + {path.relative_to(REPO_ROOT).as_posix()}")
+        for path, title in present:
+            print(f"  + {path.relative_to(REPO_ROOT).as_posix()} -> {title}")
         print("would generate:")
         for spec in VIDEOS:
-            print(f"  + {spec['filename']} (style={spec['style']})")
+            print(f"  + {spec['filename']} (style={spec['style'].name.lower()})")
         return 0
 
     args.videos_dir.mkdir(parents=True, exist_ok=True)
@@ -180,16 +190,16 @@ async def sync(args: argparse.Namespace) -> int:
     async with NotebookLMClient.from_storage() as client:
         if not args.skip_sources:
             existing = {s.title for s in await client.sources.list(args.notebook) if s.title}
-            for path in present:
+            for path, title in present:
                 # NotebookLM has no "replace source" — re-uploading a same-titled doc
-                # would leave two copies competing in retrieval. Titling by filename and
-                # skipping known titles keeps the source set idempotent; delete a source
-                # in the UI (or `notebooklm source delete`) when a doc changes materially.
-                if path.name in existing:
-                    print(f"  = already a source: {path.name}")
+                # would leave two copies competing in retrieval. Skipping titles that are
+                # already there keeps re-runs idempotent; delete the source in the UI (or
+                # `notebooklm source delete`) when a doc has changed materially.
+                if title in existing:
+                    print(f"  = already a source: {title}")
                     continue
-                await client.sources.add_file(args.notebook, path, wait=True, title=path.name)
-                print(f"  + uploaded: {path.name}")
+                await client.sources.add_file(args.notebook, path, wait=True, title=title)
+                print(f"  + uploaded: {title}")
 
         if not args.skip_videos:
             for spec in VIDEOS:
@@ -197,7 +207,7 @@ async def sync(args: argparse.Namespace) -> int:
                 if out.exists():
                     print(f"  = video already downloaded: {out.name}")
                     continue
-                print(f"  … generating {out.name} (this takes minutes)")
+                print(f"  ~ generating {out.name} (this takes minutes)")
                 status = await client.artifacts.generate_video(
                     args.notebook,
                     instructions=spec["instructions"],
@@ -213,7 +223,7 @@ async def sync(args: argparse.Namespace) -> int:
                 await client.artifacts.download_video(
                     args.notebook, str(out), artifact_id=status.task_id
                 )
-                print(f"  ↓ saved {out.relative_to(REPO_ROOT).as_posix()}")
+                print(f"  > saved {out.relative_to(REPO_ROOT).as_posix()}")
 
     return 1 if failures else 0
 
