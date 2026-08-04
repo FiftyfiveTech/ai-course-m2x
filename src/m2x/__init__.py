@@ -27,6 +27,14 @@ from m2x.errors import (
     UnknownModelError,
 )
 from m2x.model_registry import ModelRegistry, ModelSpec, ProviderSpec, ResolvedTarget
+from m2x.pipeline import (
+    DEFAULT_TRANSCRIBE_MODEL,
+    DEFAULT_TRANSCRIPTS_DIR,
+    ProcessOutcome,
+    load_transcript,
+    process_meeting,
+    write_transcript,
+)
 from m2x.pricing import compute_cost
 from m2x.run_log import RunContext, RunLogger, RunRecord
 from m2x.settings import Settings
@@ -53,6 +61,13 @@ __all__ = [
     "ModelSpec",
     "ProviderSpec",
     "ResolvedTarget",
+    # Pipeline
+    "process_meeting",
+    "ProcessOutcome",
+    "load_transcript",
+    "write_transcript",
+    "DEFAULT_TRANSCRIBE_MODEL",
+    "DEFAULT_TRANSCRIPTS_DIR",
     # Values
     "AdapterResult",
     "Message",
