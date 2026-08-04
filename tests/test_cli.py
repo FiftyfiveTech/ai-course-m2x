@@ -171,3 +171,80 @@ def test_parser_rejects_an_unknown_provider() -> None:
     """A typo'd backend is rejected at parse time rather than at request time."""
     with pytest.raises(SystemExit):
         build_parser().parse_args(["process", "clip.wav", "--provider", "openai"])
+
+
+def test_runs_summary_tabulates_the_log(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """Seeded fixture data in, correct table out — the acceptance criterion for M2X-014."""
+    log_path = tmp_path / "runs.jsonl"
+    log_path.write_text(
+        "\n".join(
+            [
+                _run_line(provider="groq", latency_ms=721, tokens_in=1433, tokens_out=99),
+                _run_line(provider="ollama", latency_ms=189_200, tokens_in=1413, tokens_out=86),
+            ]
+        )
+        + "\n"
+    )
+
+    assert main(["runs", "summary", "--log", str(log_path)]) == EXIT_OK
+
+    out = capsys.readouterr().out
+    assert "groq" in out and "ollama" in out
+    assert "721" in out and "189200" in out
+    assert "TOTAL" in out
+    assert "2846" in out  # tokens_in summed across both routes
+
+
+def test_runs_summary_on_a_missing_log_is_not_an_error(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """A fresh clone has no log yet; the report says so and exits clean."""
+    code = main(["runs", "summary", "--log", str(tmp_path / "absent.jsonl")])
+
+    assert code == EXIT_OK
+    assert "no runs logged yet" in capsys.readouterr().out
+
+
+def test_runs_summary_on_a_corrupt_log_fails_loudly(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """A cost report that silently skips unparseable calls is worse than no report."""
+    log_path = tmp_path / "runs.jsonl"
+    log_path.write_text("{not json}\n")
+
+    code = main(["runs", "summary", "--log", str(log_path)])
+
+    assert code == EXIT_FAILURE
+    assert "not a valid run record" in capsys.readouterr().err
+
+
+def _run_line(
+    *,
+    provider: str,
+    latency_ms: int,
+    tokens_in: int,
+    tokens_out: int,
+) -> str:
+    """One JSONL run record, written the way the logger writes it."""
+    import json
+
+    return json.dumps(
+        {
+            "ts": "2026-08-04T09:00:00+00:00",
+            "phase": "phase-0",
+            "command": "m2x process",
+            "model_repo_id": CHAT_MODEL,
+            "provider": provider,
+            "latency_ms": latency_ms,
+            "tokens_in": tokens_in,
+            "tokens_out": tokens_out,
+            "cost_usd": 0.0,
+            "cached": False,
+            "meeting_id": "mtg-002",
+        }
+    )
