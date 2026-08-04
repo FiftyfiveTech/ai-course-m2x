@@ -1,0 +1,21 @@
+# Hand transcript — ami-001 (357s – 477s of AMI meeting ami-001)
+#
+# THIS FILE IS WRITTEN BY EAR. Do not paste model output into it, and do not "fix it
+# up" against a transcript you have already seen. It is the reference every Day 2
+# number is measured against (M2X-021 informal WER, M2X-024 entity capture), so a
+# reference contaminated by the system under test measures nothing.
+#
+# Reproduce the clip:
+#   ffmpeg -ss 357 -t 120 -i data/raw/ami-001.wav -c:a pcm_s16le \
+#       data/clips/snippet-ami-001-2min.wav
+#
+# Conventions:
+#   - one line per speaker turn, prefixed "S1:", "S2:", ... in order of first speaking
+#   - transcribe what was said, not what was meant — keep false starts and fillers
+#   - code-switched speech stays in the script it was spoken in; write Hindi words in
+#     Devanagari and English words in Latin, on the same line
+#   - [inaudible] for anything you cannot make out; [crosstalk] for overlaps
+#   - do not translate, do not summarise, do not tidy grammar
+#
+# Status: NOT YET TRANSCRIBED
+
