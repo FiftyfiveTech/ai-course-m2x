@@ -18,15 +18,28 @@ make run               # Phase 0: transcribe the corpus clip end to end
 ## Processing a meeting
 
 ```bash
-uv run m2x process data/clips/clip-mtg-002-5min.wav          # default route (Groq)
-uv run m2x process data/raw/mtg-001-fe-uiux.wav --provider groq
-uv run m2x process <audio> --meeting-id mtg-001 --language en
+uv run m2x process data/clips/clip-mtg-002-5min.wav                  # transcribe + summarise
+uv run m2x process data/clips/clip-mtg-002-5min.wav --provider ollama # same run, local summary
+uv run m2x process <audio> --meeting-id mtg-001 --language en --no-summary
 ```
 
-Writes `data/transcripts/<meeting-id>.json` — a `Transcript` with timestamped segments
-— and appends one record per call to `data/runs/runs.jsonl`. Re-running the same file
-is a content-hash cache hit: no request, no cost, sub-second. The meeting id defaults
-to the audio filename stem. Corpus provenance and consent: `docs/corpus.md`.
+Two steps, both logged: hosted Whisper transcription, then a three-bullet summary from
+a chat model. Writes `data/transcripts/<meeting-id>.json` (a `Transcript` with
+timestamped segments) and `data/summaries/<meeting-id>.<provider>.md`, and appends one
+record per call to `data/runs/runs.jsonl`. Re-running the same input is a content-hash
+cache hit: no request, no cost, sub-second. The meeting id defaults to the audio
+filename stem. Corpus provenance and consent: `docs/corpus.md`.
+
+**Hosted vs local.** `--provider` selects the backend for the *summary* step — that is
+the switch the Phase 0 comparison flips. Transcription has its own `--transcribe-provider`
+because Whisper is served by Groq alone in `config/models.toml`; one flag driving both
+would make `--provider ollama` fail at transcription and the local leg could never run.
+Rationale and measured numbers: `docs/design/phase0-local-path.md`.
+
+```bash
+make run        # hosted leg  (Groq summary)
+make run-local  # local leg   (Ollama summary, same clip, same model repo id)
+```
 
 ## Architecture (target — PRD §4)
 

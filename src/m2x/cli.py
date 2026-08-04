@@ -18,6 +18,8 @@ from typing import Callable, Sequence
 from m2x.adapter import ModelAdapter
 from m2x.errors import M2XError
 from m2x.pipeline import (
+    DEFAULT_CHAT_MODEL,
+    DEFAULT_SUMMARIES_DIR,
     DEFAULT_TRANSCRIBE_MODEL,
     DEFAULT_TRANSCRIPTS_DIR,
     ProcessOutcome,
@@ -52,12 +54,32 @@ def build_parser() -> argparse.ArgumentParser:
         type=Provider,
         choices=list(Provider),
         default=None,
-        help="force a backend; default routes by the model's registry entry",
+        help=(
+            "backend for the summary step — this is the hosted-vs-local switch; "
+            "transcription routes separately (see --transcribe-provider)"
+        ),
+    )
+    process.add_argument(
+        "--transcribe-provider",
+        type=Provider,
+        choices=list(Provider),
+        default=None,
+        help="backend for transcription; default routes by the model's registry entry",
     )
     process.add_argument(
         "--model",
         default=DEFAULT_TRANSCRIBE_MODEL,
         help=f"Hugging Face repo id of the transcription model (default: {DEFAULT_TRANSCRIBE_MODEL})",
+    )
+    process.add_argument(
+        "--chat-model",
+        default=DEFAULT_CHAT_MODEL,
+        help=f"Hugging Face repo id of the summarising model (default: {DEFAULT_CHAT_MODEL})",
+    )
+    process.add_argument(
+        "--no-summary",
+        action="store_true",
+        help="stop after transcription, skipping the language-model step",
     )
     process.add_argument(
         "--meeting-id",
@@ -74,6 +96,12 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=DEFAULT_TRANSCRIPTS_DIR,
         help=f"where transcript JSON is written (default: {DEFAULT_TRANSCRIPTS_DIR})",
+    )
+    process.add_argument(
+        "--summaries-dir",
+        type=Path,
+        default=DEFAULT_SUMMARIES_DIR,
+        help=f"where summaries are written (default: {DEFAULT_SUMMARIES_DIR})",
     )
     return parser
 
@@ -102,9 +130,13 @@ def main(
                 adapter=adapter,
                 meeting_id=args.meeting_id,
                 model_repo_id=args.model,
+                chat_model_repo_id=args.chat_model,
                 provider=args.provider,
+                transcribe_provider=args.transcribe_provider,
                 language=args.language,
+                summarize=not args.no_summary,
                 transcripts_dir=args.transcripts_dir,
+                summaries_dir=args.summaries_dir,
             )
     except FileNotFoundError as error:
         print(f"error: {error}", file=sys.stderr)
@@ -144,6 +176,18 @@ def _format_outcome(outcome: ProcessOutcome) -> str:
         f"  cost      ${transcript.cost_usd:.4f}",
         f"  written   {outcome.transcript_path}",
     ]
+
+    summary = outcome.summary
+    if summary is not None:
+        summary_source = "cache" if summary.cached else "provider"
+        lines += [
+            f"summary via {summary.provider.value} "
+            f"({summary_source}, {summary.latency_ms} ms)",
+            f"  model     {summary.model_repo_id}",
+            f"  tokens    {summary.usage.tokens_in} in / {summary.usage.tokens_out} out",
+            f"  cost      ${summary.cost_usd:.4f}",
+            f"  written   {outcome.summary_path}",
+        ]
     return "\n".join(lines)
 
 
