@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>M2X Recap — Everything Learned So Far</title>
+<style>
+  :root{--ink:#1a2b3c;--acc:#0b6e4f;--warn:#b3541e;--bg:#f6f8f7;--card:#fff;--line:#dce3e0;--grid:#e8edea;--chatbg:#fafcfb;--accfg:#fff;--dim:#5d6f68}
+  html.dark{--ink:#e4ebe7;--acc:#3fb489;--warn:#e08a52;--bg:#101614;--card:#1a2320;--line:#2c3833;--grid:#182019;--chatbg:#141c18;--accfg:#08130e;--dim:#9bb0a7}
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.55 system-ui,sans-serif;color:var(--ink);background:
+    linear-gradient(var(--bg),var(--bg)),
+    repeating-linear-gradient(0deg,transparent,transparent 23px,var(--grid) 24px),
+    repeating-linear-gradient(90deg,transparent,transparent 23px,var(--grid) 24px);}
+  header{position:relative;background:var(--acc);color:var(--accfg);padding:14px 22px}
+  header h1{margin:0;font-size:19px} header p{margin:2px 0 0;opacity:.85;font-size:13px}
+  main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;max-width:1200px;margin:18px auto;padding:0 16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:16px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .card h2{margin:0 0 8px;font-size:16px;color:var(--acc)}
+  .card h3{margin:14px 0 6px;font-size:14px}
+  .tick{font-size:12px;color:var(--dim);margin:0 0 10px}
+  .concept{border-left:4px solid var(--acc);padding-left:12px;margin:10px 0}
+  .concept b{display:block}
+  .pit{color:var(--warn);font-size:13px;display:block;margin-top:3px}
+  .q{margin:14px 0;padding:12px;border:1px solid var(--line);border-radius:8px}
+  .q p{margin:0 0 8px;font-weight:600}
+  .q label{display:block;margin:4px 0;cursor:pointer;font-weight:400}
+  table{border-collapse:collapse;width:100%;font-size:13px;margin:8px 0}
+  th,td{border:1px solid var(--line);padding:5px 8px;text-align:left}
+  th{background:var(--chatbg)}
+  textarea{width:100%;min-height:56px;border:1px solid var(--line);border-radius:6px;padding:8px;font:inherit;resize:vertical;background:var(--card);color:var(--ink)}
+  button{background:var(--acc);color:var(--accfg);border:0;border-radius:8px;padding:10px 18px;font:600 15px system-ui;cursor:pointer}
+  button:disabled{background:#9bb5ab;cursor:default}
+  #chatlog{height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:8px;background:var(--chatbg);border:1px solid var(--line);border-radius:8px}
+  .msg{max-width:88%;padding:8px 11px;border-radius:10px;font-size:14px;white-space:pre-wrap;word-wrap:break-word}
+  .msg.user{align-self:flex-end;background:var(--acc);color:var(--accfg)}
+  .msg.coach{align-self:flex-start;background:var(--card);border:1px solid var(--line)}
+  .chatrow{display:flex;gap:8px;margin-top:10px}
+  .chatrow textarea{min-height:44px;flex:1}
+  .sticky{position:sticky;top:14px}
+  video{width:100%;border-radius:8px;background:#000}
+  code{font-size:.92em}
+  @media (max-width:900px){main{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>M2X Recap — everything learned so far</h1>
+  <p>M2X-000 corpus · M2X-010/011 adapter · M2X-012 slice · M2X-013 local path — read, answer, hit DONE, Claude grades in chat →</p>
+  <button id="themebtn" style="position:absolute;top:14px;right:18px;padding:6px 12px;font-size:13px">🌙 dark</button>
+</header>
+<main>
+<section>
+
+  <div class="card" id="vidcard1" style="display:none">
+    <h2>🎬 Video: corpus design + the provider adapter</h2>
+    <video controls preload="metadata" src="videos/m2x-recap-corpus-adapter.mp4"></video>
+  </div>
+  <div class="card" id="vidcard2" style="display:none">
+    <h2>🎬 Video: the Phase-0 slice, hosted vs local</h2>
+    <video controls preload="metadata" src="videos/m2x-recap-pipeline-local.mp4"></video>
+  </div>
+
+  <div class="card">
+    <h2>Where we are</h2>
+    <p class="tick">Four tickets of ground covered. Merged: M2X-010/011 (PR #1) + the learning loop (PR #2). Open: M2X-000 corpus (PR #3), M2X-012 process (PR #4), M2X-013 local path (PR #5).</p>
+    <table>
+      <tr><th>Ticket</th><th>What exists now</th><th>Primer</th></tr>
+      <tr><td>M2X-000</td><td>5 meetings / ~118 min: 2 internal Hinglish + 3 English AMI, plus a 5-min clip</td><td>m2x-000-corpus-concepts.md</td></tr>
+      <tr><td>M2X-010/011</td><td><code>ModelAdapter</code>, content-hash cache, JSONL run log, retry, secrets boundary, 129 hermetic tests</td><td>m2x-011-adapter-concepts.md</td></tr>
+      <tr><td>M2X-012</td><td><code>m2x process</code> — audio in, timestamped transcript on disk</td><td>m2x-012-013-pipeline-concepts.md</td></tr>
+      <tr><td>M2X-013</td><td>Summary step, same repo id served by Groq <em>and</em> Ollama — hosted vs local measured</td><td>m2x-012-013-pipeline-concepts.md</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Block A · Corpus as an instrument (M2X-000)</h2>
+    <div class="concept"><b>A1 · A data boundary is written, not implied</b> Internal FiftyFive meetings only, no client calls, consent given — and every <em>exclusion</em> listed with its reason, so the boundary is auditable.<span class="pit">Pitfall: treating "I didn't include it" as documentation — nobody can tell excluded-on-purpose from forgotten.</span></div>
+    <div class="concept"><b>A2 · Consent names a mechanism</b> Teams recordings inside the FiftyFive tenant: participants see the recording notice before capture, chat names it afterwards, Saurabh attended both. Checkable by a third party.<span class="pit">Pitfall: "consent given" as a bare assertion.</span></div>
+    <div class="concept"><b>A3 · Register is a corpus axis</b> Both internal meetings are Hinglish; Whisper returns Devanagari and transliterates "GPT" as "जीपीटी". With one register you can't separate "model is weak" from "audio is code-switched" — so 3 English AMI meetings (CC BY 4.0, whole meetings) were added as a control. 24 min → ~118 min.<span class="pit">Pitfall: mistaking the control set for domain data. AMI has none of our vocabulary or screen-shares.</span></div>
+    <div class="concept"><b>A4 · Verify instrumentally</b> 16 kHz mono PCM confirmed by probe; usability measured as mean volume (−18.4 dB / −19.3 dB with near-full-scale peaks); screen-share confirmed by extracting frames at 25/55/85%.<span class="pit">Pitfall: "I listened, it's fine" — not reproducible, doesn't survive the fresh-clone gate.</span></div>
+    <div class="concept"><b>A5 · Dependency hygiene at the data edge</b> <code>fetch_ami.py</code> reads encoded bytes instead of letting <code>datasets</code> 4.x decode through <code>torchcodec</code>; <code>datasets</code>+<code>soundfile</code> sit in an optional <code>corpus</code> group.<span class="pit">Pitfall: a one-off fetch taxing every future <code>uv sync</code>.</span></div>
+  </div>
+
+  <div class="card">
+    <h2>Block B · The adapter and its invariants (M2X-010/011)</h2>
+    <div class="concept"><b>B1 · Provider adapter</b> One interface (<code>complete()</code>/<code>transcribe()</code>) over Groq/NIM/Ollama; model named by HF repo id; routing is data in <code>config/models.toml</code>. All three speak OpenAI-compatible wire format, so one HTTP path varies only base URL + credential.<span class="pit">Pitfall: <code>if provider == "groq"</code> leaking into feature code — then every switch is a refactor.</span></div>
+    <div class="concept"><b>B2 · Content-addressed cache</b> Key = sha256 of everything that changes the answer: kind + model + provider + payload + sampling params; audio hashed to a digest.<span class="pit">Pitfall: hashing too little. Drop <code>provider</code> and a 3-provider comparison returns one provider's answer three times.</span></div>
+    <div class="concept"><b>B3 · Retry + backoff</b> 429/5xx retried with doubling delay; the provider's <code>Retry-After</code> beats the local guess; other 4xx never retried; the exhausted error names an escape hatch. Retries never multiply log records.<span class="pit">Pitfall: retrying a malformed request — burns quota to fail identically.</span></div>
+    <div class="concept"><b>B4 · Run log + asymmetric failure policy</b> One JSONL record per logical call, cache hits included. Cache write failure is swallowed (an accelerator may degrade); log write failure raises (a measurement tool must never lose a record). Prices live in tracked config so cost is replayable.<span class="pit">Pitfall: git-ignored prices → the cost report can't be reproduced on a fresh clone.</span></div>
+    <div class="concept"><b>B5 · Secrets boundary</b> Keys enter through one Pydantic <code>Settings</code> object as <code>SecretStr</code>, fetched per request, never stored on instances, never logged. Split rule: needed to reproduce a number → tracked config; leaking it compromises an account → <code>.env</code>.<span class="pit">Pitfall: a stray <code>print</code>/<code>repr</code> in a traceback.</span></div>
+    <div class="concept"><b>B6 · Hermetic tests</b> 129 tests, zero network (<code>httpx.MockTransport</code> asserts the exact outgoing request per provider), zero real clocks (injected sleep/monotonic). The shipped routing config is validated by the suite.<span class="pit">Pitfall: testing cost math at free-tier $0.00 — every assertion passes vacuously.</span></div>
+  </div>
+
+  <div class="card">
+    <h2>Block C · The Phase-0 slice (M2X-012)</h2>
+    <div class="concept"><b>C1 · Vertical slice first</b> One command all the way through on real audio beats three polished layers that have never met — integration bugs surface on day one, not at the gate.</div>
+    <div class="concept"><b>C2 · Three jobs, three seams</b> CLI parses and prints; pipeline decides what happens to a meeting; adapter is the only thing that talks to a provider. The pipeline is <em>handed</em> an adapter and never builds one.<span class="pit">Pitfall: logic in <code>main()</code> — untestable, so it stops being tested.</span></div>
+    <div class="concept"><b>C3 · Timestamps are the foundation</b> Segment-level output gives every text piece a <code>t_start</code>/<code>t_end</code>. Decision evidence, RAG citations, contradiction detection and frame OCR are all pointers into that axis.<span class="pit">Pitfall: dropping timestamps at ingest — no citation layer can be added later at any price.</span></div>
+    <div class="concept"><b>C4 · Return where the artefact went</b> <code>ProcessOutcome</code> carries meeting id, transcript, <code>transcript_path</code> and optional summary, so the caller never re-derives the path.<span class="pit">Pitfall: two copies of path logic that eventually disagree.</span></div>
+    <div class="concept"><b>C5 · Untrusted data from the first prompt</b> The summary system prompt already says the transcript is data and instructions inside it get summarised, never followed — before M2X-035 attacks it.<span class="pit">Pitfall: retrofitting the injection rule after several prompts exist without it.</span></div>
+  </div>
+
+  <div class="card">
+    <h2>Block D · Hosted vs local, measured (M2X-013)</h2>
+    <div class="concept"><b>D1 · Make it a comparison, not two numbers</b> Local Whisper would compare two STT implementations; moving the <em>summary</em> local compares one repo id — <code>meta-llama/Llama-3.1-8B-Instruct</code> — served two ways. One variable: where it runs.</div>
+    <table>
+      <tr><th>leg</th><th>step</th><th>model @ provider</th><th>latency</th><th>tokens in/out</th></tr>
+      <tr><td>hosted</td><td>transcribe</td><td>whisper-large-v3 @ groq</td><td>6,729 ms</td><td>—</td></tr>
+      <tr><td>hosted</td><td>summarise</td><td>Llama-3.1-8B @ groq</td><td><b>721 ms</b></td><td>1433 / 99</td></tr>
+      <tr><td>local</td><td>summarise</td><td>Llama-3.1-8B @ ollama</td><td><b>189,200 ms</b></td><td>1413 / 86</td></tr>
+    </table>
+    <div class="concept"><b>D2 · 262× and why</b> Same model, same input, $0.00 both ways, cache hit at 0 ms on re-run. i5-1135G7 + Iris Xe that llama.cpp doesn't offload to → ~0.45 output tokens/s on CPU. Memory was never the limit (4.9 GB model, ~12 GiB free), so the bottleneck is compute.<span class="pit">Pitfall: reading this as "local is bad". It's a fallback that keeps the pipeline runnable with no key and no network — build it to measure it.</span></div>
+    <div class="concept"><b>D3 · A flag must not claim authority it lacks</b> <code>--provider ollama</code> for the <em>whole</em> pipeline can't pass: whisper routes to Groq only and a forced provider that can't serve a model must raise. So <code>--provider</code> steers the summary (the hosted-vs-local switch) and <code>--transcribe-provider</code> steers transcription.<span class="pit">Pitfall: "fixing" it with a silent fallback — then no number in the week can name the provider that produced it.</span></div>
+    <div class="concept"><b>D4 · Portability floor ≠ token budget</b> <code>SUMMARY_INPUT_CHAR_LIMIT = 6000</code> exists because a quantised 8B on Ollama has a smaller default context than the same weights on Groq. Clamp inputs to the weaker environment or you measure the limits instead of the systems.</div>
+    <div class="concept"><b>D5 · One file per meeting <em>and</em> provider</b> Otherwise the second run silently overwrites the first and comparison work dies looking like success.</div>
+  </div>
+
+  <div class="card">
+    <h2>Cross-cutting: what these four tickets keep repeating</h2>
+    <div class="concept"><b>1 · Every decision that a number depends on is written down</b> — design records, deviation notes, retros. Claimed ≠ verified; a gate number counts only when it reproduces on a fresh clone.</div>
+    <div class="concept"><b>2 · Deviate from the spec when the spec defeats itself — in writing</b> Three times so far: cache key (needs provider + params or the acceptance criterion is unsatisfiable), prices in tracked config (not <code>.env</code>), 5-min clip (10 min would duplicate the whole meeting), <code>--provider</code> scope.</div>
+    <div class="concept"><b>3 · Never fall back silently</b> Missing route, forced provider that can't serve, failed log write — all raise. Silence is what makes a measurement unattributable.</div>
+    <div class="concept"><b>4 · Reproducibility is a design constraint, not a chore</b> HF repo ids, tracked prices, <code>uv.lock</code>, <code>mkdir -p</code> under git-ignored <code>data/</code>, hermetic tests, optional dependency groups.</div>
+  </div>
+
+  <div class="card">
+    <h2>Quiz — 9 picks + 4 in your own words</h2>
+
+    <div class="q" data-q="1"><p>1. Why were 3 AMI meetings added to a corpus that already had real internal meetings?</p>
+      <label><input type="radio" name="q1" value="a"> a. To reach a file-count minimum in the ticket</label>
+      <label><input type="radio" name="q1" value="b"> b. An English control set — otherwise "the model is weak" and "the audio is Hinglish" can't be separated</label>
+      <label><input type="radio" name="q1" value="c"> c. AMI audio is higher quality than Teams recordings</label>
+    </div>
+
+    <div class="q" data-q="2"><p>2. The excluded client call is listed in <code>docs/corpus.md</code> <em>with its reason</em>. Why list it at all?</p>
+      <label><input type="radio" name="q2" value="a"> a. Completeness for its own sake</label>
+      <label><input type="radio" name="q2" value="b"> b. So the data boundary is auditable — otherwise excluded-on-purpose looks identical to forgotten</label>
+      <label><input type="radio" name="q2" value="c"> c. To document that the file exists in case it's needed later</label>
+    </div>
+
+    <div class="q" data-q="3"><p>3. Cache key omits <code>provider</code>. You run one prompt across Groq, NIM and Ollama. What happens?</p>
+      <label><input type="radio" name="q3" value="a"> a. Three fresh calls; the comparison is valid</label>
+      <label><input type="radio" name="q3" value="b"> b. Runs 2 and 3 cache-hit into run 1 — three identical answers presented as a comparison</label>
+      <label><input type="radio" name="q3" value="c"> c. The cache raises on the second provider</label>
+    </div>
+
+    <div class="q" data-q="4"><p>4. Cache write fails (disk full) vs run-log write fails. The design says…</p>
+      <label><input type="radio" name="q4" value="a"> a. Both raise — fail fast</label>
+      <label><input type="radio" name="q4" value="b"> b. Both swallowed — availability first</label>
+      <label><input type="radio" name="q4" value="c"> c. Cache swallowed (accelerator), log raises (a run that can't be measured has failed its purpose)</label>
+    </div>
+
+    <div class="q" data-q="5"><p>5. Why does the pipeline receive an adapter instead of constructing one?</p>
+      <label><input type="radio" name="q5" value="a"> a. Fewer objects allocated per run</label>
+      <label><input type="radio" name="q5" value="b"> b. So the slice is testable with no network, and no call can escape the run log</label>
+      <label><input type="radio" name="q5" value="c"> c. Because the CLI already owns HTTP configuration</label>
+    </div>
+
+    <div class="q" data-q="6"><p>6. M2X-013 moved the <em>summary</em> local rather than transcription. The reason is…</p>
+      <label><input type="radio" name="q6" value="a"> a. faster-whisper doesn't run on this laptop</label>
+      <label><input type="radio" name="q6" value="b"> b. One repo id served two ways is a controlled comparison; two STT implementations is two unrelated measurements</label>
+      <label><input type="radio" name="q6" value="c"> c. Ollama can't do audio, so there was no choice worth reasoning about</label>
+    </div>
+
+    <div class="q" data-q="7"><p>7. Local was 262× slower with ~12 GiB free and a 4.9 GB model. What does that tell you about the fix?</p>
+      <label><input type="radio" name="q7" value="a"> a. More RAM would close most of the gap</label>
+      <label><input type="radio" name="q7" value="b"> b. Compute is the bottleneck (CPU-only, no Iris Xe offload) — RAM wouldn't help; use a smaller local model or the hosted leg</label>
+      <label><input type="radio" name="q7" value="c"> c. The measurement is probably wrong</label>
+    </div>
+
+    <div class="q" data-q="8"><p>8. <code>--provider ollama</code> was scoped to the summary step only. What would the "obvious" alternative (fall back to a working provider when the forced one can't serve the model) cost you?</p>
+      <label><input type="radio" name="q8" value="a"> a. Nothing — it's more convenient</label>
+      <label><input type="radio" name="q8" value="b"> b. Attribution: no number in the week could name the provider that produced it</label>
+      <label><input type="radio" name="q8" value="c"> c. Only some extra latency on the first call</label>
+    </div>
+
+    <div class="q" data-q="9"><p>9. <code>SUMMARY_INPUT_CHAR_LIMIT = 6000</code> is best described as…</p>
+      <label><input type="radio" name="q9" value="a"> a. A cost control</label>
+      <label><input type="radio" name="q9" value="b"> b. A portability floor — clamp to the weaker environment or you measure context limits instead of models</label>
+      <label><input type="radio" name="q9" value="c"> c. An arbitrary safety margin</label>
+    </div>
+
+    <div class="q" data-q="10"><p>10. Four deviations from ticket specs have been recorded so far (cache key, price table location, clip length, <code>--provider</code> scope). What makes a deviation legitimate rather than sloppy — and what must accompany it? (own words)</p>
+      <textarea name="q10" placeholder="Your reasoning…"></textarea>
+    </div>
+
+    <div class="q" data-q="11"><p>11. Timestamped segments are called "the foundation". Name two later features that become impossible if ingest drops them, and say why you can't bolt them on afterwards. (own words)</p>
+      <textarea name="q11" placeholder="Your reasoning…"></textarea>
+    </div>
+
+    <div class="q" data-q="12"><p>12. The corpus was verified with mean-volume numbers and extracted frames rather than by listening. Generalise that: what makes a verification acceptable in this project? (own words)</p>
+      <textarea name="q12" placeholder="Your reasoning…"></textarea>
+    </div>
+
+    <div class="q" data-q="13"><p>13. Given everything measured so far, where should the <em>local</em> leg be used for the rest of the week, and where must it not be? Justify with a number. (own words)</p>
+      <textarea name="q13" placeholder="Your reasoning…"></textarea>
+    </div>
+
+    <button id="donebtn">DONE — send answers to Claude</button>
+    <span id="donenote" style="margin-left:10px;font-size:13px;color:var(--warn)"></span>
+  </div>
+</section>
+
+<aside class="sticky">
+  <div class="card">
+    <h2>Coach chat</h2>
+    <div id="chatlog"></div>
+    <div class="chatrow">
+      <textarea id="chatinput" placeholder="Ask anything… (Enter=send)"></textarea>
+      <button id="chatsend">Send</button>
+    </div>
+  </div>
+</aside>
+</main>
+
+<script>
+const KEY = {q1:'b', q2:'b', q3:'b', q4:'c', q5:'b', q6:'b', q7:'b', q8:'b', q9:'b'};
+const MCQ = ['q1','q2','q3','q4','q5','q6','q7','q8','q9'];
+const FREE = ['q10','q11','q12','q13'];
+
+// --- theme
+const themebtn = document.getElementById('themebtn');
+function setTheme(dark){
+  document.documentElement.classList.toggle('dark', dark);
+  themebtn.textContent = dark ? '☀️ light' : '🌙 dark';
+  localStorage.setItem('coach-theme', dark ? 'dark' : 'light');
+}
+themebtn.addEventListener('click', ()=> setTheme(!document.documentElement.classList.contains('dark')));
+setTheme(localStorage.getItem('coach-theme') ? localStorage.getItem('coach-theme')==='dark'
+         : matchMedia('(prefers-color-scheme: dark)').matches);
+
+function send(text, tag){
+  return fetch('/send', {method:'POST', body: JSON.stringify({text, tag})});
+}
+
+// --- video cards auto-show when mp4 exists
+[['vidcard1','videos/m2x-recap-corpus-adapter.mp4'],
+ ['vidcard2','videos/m2x-recap-pipeline-local.mp4']].forEach(([id,src])=>{
+  fetch(src,{method:'HEAD'}).then(r=>{if(r.ok)document.getElementById(id).style.display=''}).catch(()=>{});
+});
+
+// --- DONE
+document.getElementById('donebtn').addEventListener('click', ()=>{
+  const lines = ['SESSION ANSWERS — m2x-week1-recap (M2X-000, 010/011, 012, 013)'];
+  let unanswered = [];
+  for (const q of MCQ){
+    const pick = document.querySelector(`input[name=${q}]:checked`);
+    if(!pick){unanswered.push(q); continue;}
+    const ok = pick.value === KEY[q] ? 'CORRECT' : `WRONG (picked ${pick.value}, key ${KEY[q]})`;
+    lines.push(`${q}: picked "${pick.value}" — ${ok}`);
+  }
+  for (const q of FREE){
+    const t = document.querySelector(`textarea[name=${q}]`).value.trim();
+    if(!t){unanswered.push(q); continue;}
+    lines.push(`${q} (free text): ${t}`);
+  }
+  if(unanswered.length){
+    document.getElementById('donenote').textContent = 'Unanswered: '+unanswered.join(', ')+' — answer or hit DONE again to submit partial.';
+    if(!document.getElementById('donebtn').dataset.warned){
+      document.getElementById('donebtn').dataset.warned = '1';
+      return;
+    }
+  }
+  lines.push('');
+  lines.push('TASKS FOR CLAUDE: grade the free-text answers (q10-q13) strictly, challenge weak reasoning instead of accepting it, coach every wrong pick back to the underlying rule, record the session outcome in docs/learning/retros.md, and say what the next session covers.');
+  send(lines.join('\n'), 'session-done');
+  const b = document.getElementById('donebtn');
+  b.disabled = true; b.textContent = 'Sent — Claude is grading…';
+  document.getElementById('donenote').textContent = '';
+});
+
+// --- chat
+function pushChat(){
+  const el = document.getElementById('chatinput');
+  const t = el.value.trim(); if(!t) return;
+  send(t, 'chat'); el.value = '';
+}
+document.getElementById('chatsend').addEventListener('click', pushChat);
+document.getElementById('chatinput').addEventListener('keydown', e=>{
+  if(e.key==='Enter' && !e.shiftKey){e.preventDefault(); pushChat();}
+});
+
+// --- poll chat.jsonl
+let lastLen = 0;
+async function poll(){
+  try{
+    const r = await fetch('/chat.jsonl', {cache:'no-store'});
+    if(!r.ok) return;
+    const txt = await r.text();
+    if(txt.length === lastLen) return;
+    lastLen = txt.length;
+    const log = document.getElementById('chatlog');
+    log.innerHTML = '';
+    for(const line of txt.split('\n')){
+      if(!line.trim()) continue;
+      let m; try{m = JSON.parse(line);}catch(e){continue;}
+      if(m.tag === 'session-done'){
+        const d = document.createElement('div');
+        d.className = 'msg user'; d.textContent = '📤 answers submitted';
+        log.appendChild(d); continue;
+      }
+      const d = document.createElement('div');
+      d.className = 'msg ' + (m.role === 'user' ? 'user' : 'coach');
+      d.textContent = m.text;
+      log.appendChild(d);
+    }
+    log.scrollTop = log.scrollHeight;
+  }catch(e){}
+}
+setInterval(poll, 3000); poll();
+</script>
+</body>
+</html>
