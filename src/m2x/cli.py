@@ -25,6 +25,8 @@ from m2x.pipeline import (
     ProcessOutcome,
     process_meeting,
 )
+from m2x.run_log import RunLogger
+from m2x.run_summary import DEFAULT_RUN_LOG, format_summary, summarise
 from m2x.types import Provider
 
 EXIT_OK = 0
@@ -103,6 +105,19 @@ def build_parser() -> argparse.ArgumentParser:
         default=DEFAULT_SUMMARIES_DIR,
         help=f"where summaries are written (default: {DEFAULT_SUMMARIES_DIR})",
     )
+
+    runs = subcommands.add_parser("runs", help="report on the run log")
+    run_actions = runs.add_subparsers(dest="action", required=True)
+    runs_summary = run_actions.add_parser(
+        "summary",
+        help="totals and p50/p95 latency per phase, provider and model",
+    )
+    runs_summary.add_argument(
+        "--log",
+        type=Path,
+        default=DEFAULT_RUN_LOG,
+        help=f"run log to read (default: {DEFAULT_RUN_LOG})",
+    )
     return parser
 
 
@@ -122,6 +137,9 @@ def main(
         Process exit code: 0 on success, 1 on a run failure, 2 on bad input.
     """
     args = build_parser().parse_args(argv)
+
+    if args.command == "runs":
+        return _run_summary(args)
 
     try:
         with adapter_factory() as adapter:
@@ -149,6 +167,26 @@ def main(
         return EXIT_FAILURE
 
     print(_format_outcome(outcome))
+    return EXIT_OK
+
+
+def _run_summary(args: argparse.Namespace) -> int:
+    """Print the run-log summary.
+
+    Args:
+        args: Parsed ``runs summary`` arguments.
+
+    Returns:
+        Process exit code. A corrupt log is a failure, not an empty report — the
+        alternative is a cost figure that is quietly missing calls.
+    """
+    try:
+        records = RunLogger(args.log).read_all()
+    except ValueError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_FAILURE
+
+    print(format_summary(summarise(records)))
     return EXIT_OK
 
 
