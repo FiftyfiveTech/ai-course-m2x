@@ -7,11 +7,12 @@ into the page's chat panel.
 ## Run a session (any machine)
 
 ```bash
-# 1. serve the lesson pages (from the repo root)
+# 1. serve the lesson pages (from the repo root; `python` on Windows)
 python3 tools/coach/server.py --dir docs/learning/coach --port 8765
 
-# 2. open the session page
-#    http://127.0.0.1:8765/m2x-day1.html
+# 2. open a session page
+#    http://127.0.0.1:8765/m2x-day1.html          (M2X-010/011 only)
+#    http://127.0.0.1:8765/m2x-week1-recap.html   (everything covered so far)
 
 # 3. in a Claude Code session in this repo, say: "start web coach session"
 #    Claude arms a watcher on docs/learning/coach/chat.jsonl, grades your DONE
@@ -36,11 +37,22 @@ done
 ## Topic videos
 
 Lesson pages embed short NotebookLM Video Overviews from `docs/learning/coach/videos/`
-(git-ignored — mp4s don't belong in the repo). Get them from the shared notebook
-"M2X — Course Concepts" (link in [docs/learning/README.md](../../docs/learning/README.md)):
-open the notebook → download the Video Overview → save as the filename the page
-expects (for day 1: `m2x-011-adapter-caching.mp4`, `m2x-011-reliability-observability.mp4`).
-The video cards auto-appear once the files exist; the page works fine without them.
+(git-ignored — mp4s don't belong in the repo). Scripted path — uploads the primers as
+sources and downloads the videos under the exact filenames the pages probe for:
+
+```bash
+uv tool install "notebooklm-py[browser]"
+notebooklm login                                    # once; opens a browser
+uv run --script notebooklm_sync.py --dry-run        # from tools/coach/, or use repo-relative path
+uv run --script notebooklm_sync.py
+```
+
+Manual path (same result): open the shared notebook "M2X — Course Concepts" (link in
+[docs/learning/README.md](../../docs/learning/README.md)) → download the Video Overview →
+save as the filename the page expects (day 1: `m2x-011-adapter-caching.mp4`,
+`m2x-011-reliability-observability.mp4`; recap: `m2x-recap-corpus-adapter.mp4`,
+`m2x-recap-pipeline-local.mp4`). The video cards auto-appear once the files exist; pages
+work fine without them.
 
 ## Adding a session page
 
