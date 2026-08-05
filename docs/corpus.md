@@ -7,7 +7,7 @@ cloud drive.
 
 ## Data boundary
 
-PRD §data: **internal FiftyFive meetings only, no HEIDI client calls, consent notice
+PRD §data: **internal FiftyFive meetings only, no client calls, consent notice
 given.** A recording is admitted only if all three hold. Exclusions are listed below
 with the reason, so the boundary is auditable rather than implied by absence.
 
@@ -68,7 +68,7 @@ meetings in one language register, 24 minutes of speech: too thin for M2X-033's 
 hand-labelled cases, and no English control to separate "the model is wrong" from "the
 audio is code-switched".
 
-The obvious English recordings on hand are HEIDI client calls, which the boundary
+The obvious English recordings on hand are client calls, which the boundary
 excludes. So the English set comes from Hugging Face instead — the same sourcing rule
 the project already applies to models.
 

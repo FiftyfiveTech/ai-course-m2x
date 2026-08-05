@@ -1,38 +1,24 @@
 # Vocabulary hints for the corpus (M2X-015)
 #
 # Terms a general-purpose ASR model has no reason to know, which therefore come back
-# mangled: product names, stack names, acronyms, and the names of people who speak in
-# the recordings. M2X-024 measures entity capture with and without this file — the VOX
-# lesson was that a domain vocabulary moves entity accuracy more than a bigger model
-# does, and this is the file that tests it.
+# mangled: product names, stack names and acronyms. M2X-024 measures entity capture with
+# and without this file — a prior internal project showed a domain vocabulary moves entity
+# accuracy more than a bigger model does, and this is the file that tests it.
 #
 # Rules:
 #   - one term per line; blank lines and #-comments ignored
-#   - NO client names, client contacts, or tenant city names — this repo is public
+#   - NO client names, client contacts, tenant city names, or personal names — this
+#     repo is public. Identifying hotwords that the corpus genuinely needs live in
+#     `eval/vocab.local.txt` (git-ignored), which the loader appends when present.
 #   - a term earns its place by actually appearing in the corpus, not by being jargon
 #
 # Format is deliberately plain text: Whisper's prompt parameter takes a comma-joined
 # string, and other strategies want a list. One term per line converts to both.
 
-# --- organisation and projects
+# --- organisation and projects (identifying names → vocab.local.txt)
 FiftyFive
 FiftyFive Technologies
-HEIDI
-HEIDI Suite
 M2X
-VOX
-KODI
-
-# --- people heard in the recordings (internal only)
-Saurabh
-Saurabh Patel
-Yash
-Yash Pancholi
-Shashank
-Shashank Pathak
-Madhav
-Aman
-Sudiksha
 
 # --- stack and tooling
 NestJS

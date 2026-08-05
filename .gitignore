@@ -12,3 +12,5 @@ eval/heldout/
 __pycache__/
 .venv/
 .pytest_cache/
+# local-only hotwords: client/project and personal names the public file must not carry
+eval/vocab.local.txt
