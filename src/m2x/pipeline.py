@@ -17,6 +17,7 @@ from pathlib import Path
 from pydantic import BaseModel, ConfigDict
 
 from m2x.adapter import ModelAdapter
+from m2x.chunking import iter_chunks, merge_transcripts
 from m2x.run_log import RunContext
 from m2x.types import Message, Provider, Response, Role, Transcript
 
@@ -38,6 +39,10 @@ hosted-versus-local numbers a comparison rather than two unrelated measurements.
 
 DEFAULT_TRANSCRIPTS_DIR = Path("data/transcripts")
 """Where transcripts land. Under git-ignored ``data/``, created on demand."""
+
+DEFAULT_CHUNKS_DIR = Path("data/chunks")
+"""Where oversized audio is split before upload. Also git-ignored, and reused across
+runs — the pieces are a deterministic function of the source file."""
 
 DEFAULT_SUMMARIES_DIR = Path("data/summaries")
 """Where summaries land — one file per meeting *and* provider, so running the pipeline
@@ -103,6 +108,7 @@ def process_meeting(
     summarize: bool = True,
     transcripts_dir: Path = DEFAULT_TRANSCRIPTS_DIR,
     summaries_dir: Path = DEFAULT_SUMMARIES_DIR,
+    chunks_dir: Path = DEFAULT_CHUNKS_DIR,
 ) -> ProcessOutcome:
     """Transcribe one meeting, summarise it, and persist both artefacts.
 
@@ -147,12 +153,14 @@ def process_meeting(
     resolved_id = meeting_id or audio_path.stem
     context = RunContext(phase=PHASE, command="m2x process", meeting_id=resolved_id)
 
-    transcript = adapter.transcribe(
+    transcript = transcribe_audio(
         audio_path,
-        model_repo_id,
+        adapter=adapter,
+        model_repo_id=model_repo_id,
         provider=transcribe_provider,
         language=language,
         context=context,
+        chunks_dir=chunks_dir,
     )
     transcript_path = write_transcript(transcript, resolved_id, transcripts_dir)
 
@@ -179,6 +187,57 @@ def process_meeting(
         summary=summary,
         summary_path=summary_path,
     )
+
+
+def transcribe_audio(
+    audio_path: Path,
+    *,
+    adapter: ModelAdapter,
+    model_repo_id: str = DEFAULT_TRANSCRIBE_MODEL,
+    provider: Provider | None = None,
+    language: str | None = None,
+    context: RunContext | None = None,
+    chunks_dir: Path = DEFAULT_CHUNKS_DIR,
+) -> Transcript:
+    """Transcribe a file, splitting it first when it exceeds the upload limit.
+
+    Most of the corpus fits in one request and takes the single-call path unchanged.
+    The two long meetings do not: Groq answers HTTP 413 above 25 MB, which is roughly
+    13 minutes of 16 kHz mono PCM. Splitting happens here rather than in the adapter so
+    the adapter keeps its single job — one call, one provider, one cache entry, one run
+    record — and a chunked meeting shows up in the run log as the several calls it
+    genuinely was.
+
+    Args:
+        audio_path: Meeting audio.
+        adapter: Adapter performing (and caching, and logging) each call.
+        model_repo_id: Hugging Face repo id of the transcription model.
+        provider: Force a transcription backend.
+        language: ISO-639-1 hint, or ``None`` to auto-detect.
+        context: Provenance for the run log; shared by every chunk of one meeting.
+        chunks_dir: Where pieces are written when a split is needed.
+
+    Returns:
+        One transcript for the whole file, with chunk timestamps already shifted onto
+        the meeting's own time axis.
+
+    Raises:
+        M2XError: Splitting failed, or any adapter failure.
+    """
+    parts = [
+        (
+            offset,
+            adapter.transcribe(
+                piece,
+                model_repo_id,
+                provider=provider,
+                language=language,
+                context=context,
+            ),
+        )
+        for offset, piece in iter_chunks(audio_path, chunks_dir)
+    ]
+    return parts[0][1] if len(parts) == 1 else merge_transcripts(parts)
 
 
 def summarise_transcript(

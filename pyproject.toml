@@ -34,6 +34,8 @@ packages = ["src/m2x"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-# tests/ on sys.path so shared fixtures import as `from conftest import ...`.
-pythonpath = ["tests"]
+# tests/ on sys.path so shared fixtures import as `from conftest import ...`; eval/ too,
+# so the scoring scripts stay runnable standalone (`python eval/wer.py`) and still get
+# unit tests — a metric nobody tests is a number nobody should trust.
+pythonpath = ["tests", "eval"]
 addopts = "--strict-markers"
