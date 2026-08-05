@@ -19,9 +19,31 @@ corpus = [
     "datasets>=3.0",
     "soundfile>=0.12",
 ]
+# Speaker diarisation (M2X-022). Optional for the same reason as `corpus`: pyannote
+# drags in torch, and a normal `uv sync` should not install a deep-learning runtime to
+# run the Phase-0 pipeline. CPU wheels only — this box has no usable GPU offload.
+diarize = [
+    # Pinned below 4.x: pyannote 4 redirects speaker-diarization-3.1 to the separately
+    # gated speaker-diarization-community-1, which this account is not authorised for.
+    "pyannote-audio>=3.1,<4",
+    # torchaudio 2.9 removed AudioMetaData, which pyannote 3.x still imports.
+    "torch>=2.2,<2.9",
+    "torchaudio>=2.2,<2.9",
+    # huggingface-hub 1.0 dropped the use_auth_token argument pyannote 3.x passes.
+    "huggingface-hub<1.0",
+]
 dev = [
     "pytest>=9.1.1",
 ]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchaudio = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
 
 # Declared so `uv sync` installs src/m2x into the venv. Without a build backend the
 # src layout is not importable and every test fails at collection on a fresh clone.

@@ -47,6 +47,13 @@ class Meeting(BaseModel):
     snippet: Path | None = None
     """Hand-written reference transcript for a 2-minute window, when one exists."""
 
+    speakers: dict[str, str] = Field(default_factory=dict)
+    """``{diarisation label: real name}``, written after listening to the first 30
+    seconds once (M2X-022). Kept in the manifest rather than beside the transcript
+    because the mapping is a property of the *meeting*, and re-running diarisation
+    would otherwise discard it — labels are stable within a run, never across runs, so
+    this needs re-checking whenever the diarisation model or its version changes."""
+
     notes: str = ""
 
     def exists(self) -> bool:
