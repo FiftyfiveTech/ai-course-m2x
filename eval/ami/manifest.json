@@ -1,0 +1,34 @@
+{
+  "dataset": "diarizers-community/ami",
+  "config": "ihm",
+  "split": "test",
+  "meetings": [
+    {
+      "meeting_id": "ami-001",
+      "file": "data/raw/ami-001.wav",
+      "reference": "eval/ami/ami-001.speakers.json",
+      "duration_s": 1786.8,
+      "speakers": 4,
+      "segments": 490,
+      "sampling_rate": 16000
+    },
+    {
+      "meeting_id": "ami-002",
+      "file": "data/raw/ami-002.wav",
+      "reference": "eval/ami/ami-002.speakers.json",
+      "duration_s": 1505.6,
+      "speakers": 4,
+      "segments": 242,
+      "sampling_rate": 16000
+    },
+    {
+      "meeting_id": "ami-003",
+      "file": "data/raw/ami-003.wav",
+      "reference": "eval/ami/ami-003.speakers.json",
+      "duration_s": 2334.4,
+      "speakers": 4,
+      "segments": 497,
+      "sampling_rate": 16000
+    }
+  ]
+}
