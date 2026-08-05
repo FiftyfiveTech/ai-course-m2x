@@ -139,6 +139,15 @@ def build_parser() -> argparse.ArgumentParser:
         default=DEFAULT_MANIFEST,
         help="corpus manifest supplying the speaker-label to name mapping",
     )
+    diarize.add_argument(
+        "--num-speakers",
+        type=int,
+        default=None,
+        help=(
+            "fix the speaker count instead of letting clustering choose; unconstrained "
+            "runs over-cluster on this corpus (see docs/design/day2-matrix.md)"
+        ),
+    )
 
     runs = subcommands.add_parser("runs", help="report on the run log")
     run_actions = runs.add_subparsers(dest="action", required=True)
@@ -244,7 +253,12 @@ def _run_diarize(args: argparse.Namespace) -> int:
         transcript = Transcript.model_validate_json(args.transcript.read_text(encoding="utf-8"))
         hf_token = Settings().hf_token
         pipeline = load_pipeline(token=hf_token.get_secret_value() if hf_token else None)
-        result = diarize(args.audio, pipeline=pipeline, meeting_id=meeting_id)
+        result = diarize(
+            args.audio,
+            pipeline=pipeline,
+            meeting_id=meeting_id,
+            num_speakers=args.num_speakers,
+        )
     except M2XError as error:
         print(f"error: {error}", file=sys.stderr)
         return EXIT_FAILURE

@@ -111,7 +111,13 @@ def load_pipeline(model_repo_id: str = DEFAULT_DIARIZATION_MODEL, *, token: str 
     return pipeline
 
 
-def diarize(audio_path: Path, *, pipeline: Any, meeting_id: str | None = None) -> DiarizationResult:
+def diarize(
+    audio_path: Path,
+    *,
+    pipeline: Any,
+    meeting_id: str | None = None,
+    num_speakers: int | None = None,
+) -> DiarizationResult:
     """Run diarisation over a whole audio file.
 
     Audio is read with ``soundfile`` and handed over as a waveform rather than a path.
@@ -123,6 +129,13 @@ def diarize(audio_path: Path, *, pipeline: Any, meeting_id: str | None = None) -
         audio_path: Meeting audio, 16 kHz mono as the corpus is normalised.
         pipeline: A loaded pyannote pipeline.
         meeting_id: Stable id; defaults to the filename stem.
+        num_speakers: Fix the number of speakers instead of letting clustering choose.
+            Unconstrained runs over-cluster on this corpus — 9 speakers found where the
+            AMI reference has 4, with the five extras holding 7.9% of speech between
+            them. The manifest already knows the participant count, so passing it is
+            using evidence we have rather than filtering the output afterwards. Left
+            ``None`` by default: a wrong count would be forced onto the audio, and the
+            count is only trustworthy where a human confirmed it.
 
     Returns:
         Turns in start order, with the wall-clock cost of producing them.
@@ -138,7 +151,8 @@ def diarize(audio_path: Path, *, pipeline: Any, meeting_id: str | None = None) -
     waveform, sample_rate = soundfile.read(audio_path, dtype="float32")
     started = time.monotonic()
     annotation = pipeline(
-        {"waveform": torch.from_numpy(waveform).unsqueeze(0), "sample_rate": sample_rate}
+        {"waveform": torch.from_numpy(waveform).unsqueeze(0), "sample_rate": sample_rate},
+        **({"num_speakers": num_speakers} if num_speakers else {}),
     )
     latency_ms = int((time.monotonic() - started) * 1000)
 
