@@ -22,7 +22,17 @@ first run:
    compute WER only on the forced run. This changes what M2X-024's vocabulary
    experiment is measured on too, so it needs agreeing, not assuming.
 
-*Status: drafted, pairing not yet held.*
+   **Superseded by the runs, before the pairing happened.** Forced `--language en`
+   *translates* rather than transliterates, so it fabricates evidence and was withdrawn
+   as a scoring route (see `docs/design/day2-matrix.md`). The question Yash still has to
+   answer is therefore a different one: WER on the Hinglish meetings now has no valid
+   route at all, so either the hand snippets get written in Devanagari, or those two
+   meetings are scored on entity capture only. Recorded here, not resolved — it is his
+   call and the pairing has still not been held.
+
+*Status: drafted, pairing not yet held.* The two open points above have both moved since
+drafting (point 2 superseded, D-1 numbers now in), so the pairing has more to cover than
+it did, not less.
 
 **PM — cross-review.** *Pending.* Yash explains the diarisation code path (M2X-022);
 Saurabh explains the comparison doc's conclusions and defends the adopted route.
