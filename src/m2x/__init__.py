@@ -28,11 +28,15 @@ from m2x.errors import (
 )
 from m2x.model_registry import ModelRegistry, ModelSpec, ProviderSpec, ResolvedTarget
 from m2x.pipeline import (
+    DEFAULT_CHAT_MODEL,
+    DEFAULT_SUMMARIES_DIR,
     DEFAULT_TRANSCRIBE_MODEL,
     DEFAULT_TRANSCRIPTS_DIR,
     ProcessOutcome,
     load_transcript,
     process_meeting,
+    summarise_transcript,
+    write_summary,
     write_transcript,
 )
 from m2x.pricing import compute_cost
@@ -65,9 +69,13 @@ __all__ = [
     "process_meeting",
     "ProcessOutcome",
     "load_transcript",
+    "summarise_transcript",
     "write_transcript",
+    "write_summary",
     "DEFAULT_TRANSCRIBE_MODEL",
+    "DEFAULT_CHAT_MODEL",
     "DEFAULT_TRANSCRIPTS_DIR",
+    "DEFAULT_SUMMARIES_DIR",
     # Values
     "AdapterResult",
     "Message",

@@ -17,7 +17,7 @@ from m2x.adapter import ModelAdapter
 from m2x.cli import EXIT_FAILURE, EXIT_OK, EXIT_USAGE, build_parser, main
 from m2x.pipeline import load_transcript
 from m2x.types import Provider
-from conftest import TRANSCRIBE_MODEL, transcription_response
+from conftest import CHAT_MODEL, TRANSCRIBE_MODEL, chat_response, transcription_response
 
 AdapterFactory = Callable[..., ModelAdapter]
 
@@ -30,9 +30,11 @@ def audio_file(tmp_path: Path) -> Path:
     return path
 
 
-def _ok_handler(_request: httpx.Request) -> httpx.Response:
-    """Always answer with a valid verbose_json transcription."""
-    return httpx.Response(200, json=transcription_response())
+def _ok_handler(request: httpx.Request) -> httpx.Response:
+    """Answer both pipeline endpoints with valid payloads."""
+    if request.url.path.endswith("/audio/transcriptions"):
+        return httpx.Response(200, json=transcription_response())
+    return httpx.Response(200, json=chat_response(text="- one\n- two\n- three"))
 
 
 def test_process_writes_a_transcript_and_reports_it(
