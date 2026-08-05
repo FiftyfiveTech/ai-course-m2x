@@ -14,7 +14,8 @@ run yet, never "roughly the same".
 | **T-A** | `openai/whisper-large-v3` @ groq | M2X-021 | Saurabh | mtg-001, mtg-002, ami-001 |
 | **T-B** | `openai/whisper-large-v3-turbo` @ groq | M2X-021 | Saurabh | mtg-001, mtg-002, ami-001 |
 | **D-1** | pyannote speaker-diarization (gated HF repo) | M2X-022 | Saurabh | all 3 |
-| **D-2** | heuristic fallback (silence-gap turns + clustering) | M2X-022 | Saurabh | all 3 |
+| **D-1c** | same, clustering constrained to the manifest participant count | M2X-022 | Saurabh | ami-001 |
+| ~~**D-2**~~ | ~~heuristic fallback (silence-gap turns + clustering)~~ — not built, pyannote access cleared | M2X-022 | Saurabh | — |
 | **C-1 / C-2** | chaptering, two strategies | M2X-023 | Yash | Yash picks in AM pairing |
 | **S-1 / S-2** | summarisation, two strategies | M2X-023 | Yash | Yash picks in AM pairing |
 | **V-1** | vocabulary file on vs off | M2X-024 | Yash | mtg-001, mtg-002 |
@@ -133,17 +134,115 @@ change the *margin*; it is very unlikely to reverse a one-third content gap.
 
 ### Diarisation (M2X-022)
 
-| approach | meeting | attribution accuracy | measured against | note |
-|---|---|---|---|---|
-| D-1 pyannote | ami-001 | | `eval/ami/ami-001.speakers.json` (490 reference segments) | |
-| D-1 pyannote | mtg-001 | | snippet spot-check | |
-| D-1 pyannote | mtg-002 | | snippet spot-check | |
-| D-2 heuristic | ami-001 | | same reference | |
-| D-2 heuristic | mtg-001 | | snippet spot-check | |
-| D-2 heuristic | mtg-002 | | snippet spot-check | |
+`pyannote/speaker-diarization-3.1`, unconstrained clustering, CPU. **D-2 was not built:**
+pyannote access cleared, so the heuristic fallback had no reason to exist. The row is
+struck rather than left blank — an empty cell reads as "not measured yet", and this one
+will never be measured.
 
-D-2 is only built if pyannote access has not cleared. If it is built, it ships **with its
-quality documented as a known limitation**, not quietly.
+| approach | meeting | all speech | single-speaker speech | speakers | latency |
+|---|---|---|---|---|---|
+| D-1 pyannote | ami-001 | 77.0% | **90.7%** | 9 / 4 | 46.1 min |
+| D-1c constrained | ami-001 | 75.2% | **84.1%** | 4 / 4 | 34.3 min |
+| D-1 pyannote | mtg-001 | — | — | 8 / 4 in manifest | 27.9 min |
+| D-1 pyannote | mtg-002 | — | — | 4 / 3 in manifest | 10.3 min |
+| ~~D-2 heuristic~~ | — | not built | — | — | — |
+
+Measured against `eval/ami/ami-001.speakers.json` — 490 reference turns, 1943.4s of
+summed speaker-time. **Adopted: D-1, unconstrained.**
+
+Segment attribution held on all three: 99% of 582 segments on ami-001, 99% of 104 on
+mtg-001, 100% of 64 on mtg-002. So the *join* works — the transcript and the turns share
+a usable time axis, which was the thing M2X-012 kept segment timestamps for.
+
+Cost, for planning: RTF ≈ 1.55 on this CPU, so diarisation is roughly 1.5× wall-clock per
+minute of audio. ami-001 took 46 min for 29.8 min of speech. Diarisation is **not** in
+`data/runs/runs.jsonl` (it does not go through the adapter), so these latencies live here
+and in the artefact JSON only.
+
+#### Two numbers, because one of them is a ceiling
+
+**People talk over each other.** The reference holds 1943.4s of summed speaker-time across
+only 1476.8s of wall clock; 389.8s of that wall clock (**26%**) has more than one speaker
+active, and 856.5s of speaker-time falls inside those stretches. A system emitting one
+speaker per instant therefore cannot exceed **76.0%** (1476.8 ÷ 1943.4) against the full
+total, however well it performs. That is a property of the metric, not the model, and
+77.0% quoted alone reports a ceiling as if it were an error.
+
+Scored on single-speaker stretches only — the question that actually matters downstream,
+*when one person is talking, do we know who?* — pyannote gets **90.7%**.
+
+Voice activity is close to exact: the hypothesis covers 1477.2s of wall clock against the
+reference's 1476.8s, a 0.4s difference. The system knows when someone is speaking. What it
+gets wrong is which of several simultaneous voices, plus turn boundaries.
+
+`precision` (58.4%) is reported but **is not a probability**: its denominator sums every
+(reference, hypothesis) overlap, so one hypothesis second covering two overlapping
+reference turns counts twice, and on ami-001 that denominator (2561.7s) exceeds all
+referenced speech. Useful for comparing two runs against the same reference; meaningless
+as an absolute.
+
+#### Over-clustering is cosmetic — the constraint made attribution worse
+
+The obvious diagnosis was that 9-speakers-where-4-exist drags accuracy down, and that
+pyannote's `num_speakers` — with the count already sitting in the manifest — was the fix.
+**The run refuted it.** Constraining to 4 gets the count exactly right and runs 26% faster,
+and costs **6.6 points** of single-speaker accuracy (90.7% → 84.1%).
+
+The mechanism is visible in the artefacts: segmentation is *identical* between the two runs
+(1785.5s of hypothesis speech, 618 vs 620 turns) — the constraint changed only the labels.
+Unconstrained, the five phantoms hold 7.9% of speech and map to no reference speaker, so
+they score zero but pollute nothing. Constrained, that same speech is forced into the four
+real clusters, and it lands on the wrong one.
+
+So a wrong speaker count is the *cheaper* error. Left unconstrained by default, now with
+evidence rather than caution as the reason. `--num-speakers` stays in the CLI because the
+comparison should be re-runnable, not because it should be used.
+
+| speaker | share | avg turn | maps to |
+|---|---|---|---|
+| SPEAKER_00 | 38.1% | 4.15s | MEE073 |
+| SPEAKER_06 | 24.4% | 2.89s | FEO072 |
+| SPEAKER_01 | 20.1% | 2.89s | MEE071 |
+| SPEAKER_03 | 9.5% | 2.92s | FEO070 |
+| SPEAKER_07 | 2.4% | 0.66s | — |
+| SPEAKER_05 | 1.6% | 0.91s | — |
+| SPEAKER_08 | 1.5% | 1.88s | — |
+| SPEAKER_04 | 1.4% | 4.87s | — |
+| SPEAKER_02 | 1.0% | 3.59s | — |
+
+#### A filter that looked right on two meetings, and died on the third
+
+Worth recording because the mistake is the instructive part. On mtg-001 and mtg-002 the
+speakers split cleanly by average turn length — real speakers ≥1.84s, phantoms ≤0.86s,
+nothing in between — and a ≥1.5s cut recovered the manifest participant count *exactly*
+in both (8→4, 4→3). It looked like a rule.
+
+On ami-001, the only meeting with ground truth, the same cut keeps **7** speakers, not 4:
+SPEAKER_04 averages 4.87s and SPEAKER_02 3.59s while holding ~1% of speech each. The rule
+was fitted to the two meetings that could not contradict it. A share-based cut (≥5%) fares
+no better — it gets ami-001 and mtg-001 right and puts mtg-002 at 4 against a manifest
+that says 3.
+
+The conclusion is not "find a better threshold". No post-hoc statistic separates real from
+spurious across all three, because the information needed is not in the output.
+
+The D-1c run then made the question moot: dropping the phantoms would not have bought
+accuracy anyway, since they map to nothing and score zero either way. Two hours went into
+chasing a symptom. The reason it is written down is that both wrong turns had the same
+shape — a plausible mechanism, adopted before the one meeting that could test it was
+consulted.
+
+#### What is actually left on the table
+
+Not the speaker count, and not voice activity. The remaining ~9 points on single-speaker
+speech are turn boundaries and confusions between similar voices; the 24% overlapped
+portion needs a system that emits concurrent speakers, which is a different capability
+rather than a tuning knob. Neither is worth Day 2 time: 90.7% single-speaker attribution
+is enough for extraction and citations, which is what Day 3 consumes.
+
+The honest summary for a reader in a hurry: **diarisation works well enough to build on,
+the headline 77% understates it, and the two obvious levers (speaker count, filtering) were
+both tried and both failed.**
 
 ### Chaptering + summarisation (M2X-023) · Vocabulary (M2X-024) — Yash
 
@@ -182,6 +281,22 @@ uv run python eval/wer.py --reference eval/snippets/mtg-002.txt \
 It **refuses** to score a snippet still marked `NOT YET TRANSCRIBED` (exit 2) rather
 than returning a number computed against an empty file.
 
+Diarisation and its score:
+
+```bash
+uv sync --group diarize     # torch; not installed by a plain `uv sync`
+uv run --group diarize m2x diarize data/raw/ami-001.wav \
+    --transcript data/comparison/large-v3-auto/ami-001.json --meeting-id ami-001
+
+uv run python eval/diarization_score.py \
+    --reference eval/ami/ami-001.speakers.json \
+    --hypothesis data/diarization/ami-001.turns.json
+```
+
+The scorer prints the label mapping it chose alongside the accuracy, so the number can be
+checked by hand against the overlap table rather than taken on trust. Add
+`--num-speakers 4` to the `diarize` call for the D-1c row.
+
 ## Open dependency
 
 **The three hand snippets are not written yet.** `eval/snippets/{mtg-001,mtg-002,ami-001}.txt`
@@ -191,7 +306,15 @@ model output measures the system against itself.
 
 Everything not needing a reference is now filled: coverage, word counts, detected
 language, latency, and the adoption decision. The diarisation reference comparison on
-`ami-001` (M2X-022) is likewise unblocked, since AMI ships its own speaker ground truth.
+`ami-001` (M2X-022) is **done** — AMI ships its own speaker ground truth, so that row
+never depended on the snippets.
+
+What the missing snippets still block on the diarisation side is narrower than it looks.
+`mtg-001` and `mtg-002` have no speaker ground truth at all — AMI is the only meeting that
+does — so their accuracy cells are not merely unwritten, they are **unmeasurable from the
+corpus as it stands**. The snippets would give a spot-check, not a score. Treat the 90.7%
+as an English-clean-audio number and assume Hinglish is worse until something measures it —
+mtg-001's 8 detected speakers against 4 participants is the hint that it will be.
 
 One note for whoever writes the `mtg-002` snippet: T-A and T-B **disagree about the
 language of that meeting** (Hindi vs English). The hand reference settles it, and that
