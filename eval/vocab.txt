@@ -7,18 +7,30 @@
 #
 # Rules:
 #   - one term per line; blank lines and #-comments ignored
-#   - NO client names, client contacts, tenant city names, or personal names — this
-#     repo is public. Identifying hotwords that the corpus genuinely needs live in
-#     `eval/vocab.local.txt` (git-ignored), which the loader appends when present.
+#   - NO client names, client contacts, or tenant city names — this repo is public.
+#     Client hotwords that the corpus genuinely needs live in `eval/vocab.local.txt`
+#     (git-ignored), which the loader appends when present. Internal FiftyFive names
+#     are fine here: the speakers are the two authors and their colleagues.
 #   - a term earns its place by actually appearing in the corpus, not by being jargon
 #
 # Format is deliberately plain text: Whisper's prompt parameter takes a comma-joined
 # string, and other strategies want a list. One term per line converts to both.
 
-# --- organisation and projects (identifying names → vocab.local.txt)
+# --- organisation and projects (client names → vocab.local.txt)
 FiftyFive
 FiftyFive Technologies
 M2X
+
+# --- people heard in the recordings (internal only)
+Saurabh
+Saurabh Patel
+Yash
+Yash Pancholi
+Shashank
+Shashank Pathak
+Madhav
+Aman
+Sudiksha
 
 # --- stack and tooling
 NestJS
