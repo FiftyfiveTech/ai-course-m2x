@@ -1,5 +1,10 @@
 # data never enters git — raw meetings, transcripts, sandbox writes
-data/
+# (data/* rather than data/ — git will not re-include a file whose parent directory
+# is excluded, so the negation below only works if the directory itself is not)
+data/*
+# ...except the corpus manifest, which is metadata rather than content: without it a
+# fresh clone has no record of what the audio is supposed to be (M2X-015)
+!data/corpus.json
 # real keys live in ~/.config, only .env.example is tracked
 .env
 # held-out set is Evaluator-only until the gate (blind-labelling rule)

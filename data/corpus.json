@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "generated": "2026-08-04",
+  "note": "Corpus manifest (M2X-015). Audio itself is git-ignored; this file is tracked so a fresh clone knows what the corpus is meant to contain. Participants are recorded as counts and roles, never names — the repo is public.",
+  "format": {
+    "sample_rate": 16000,
+    "channels": 1,
+    "encoding": "pcm_s16le",
+    "produced_by": "scripts/prepare_audio.sh"
+  },
+  "meetings": [
+    {
+      "id": "mtg-001",
+      "file": "data/raw/mtg-001-fe-uiux.wav",
+      "origin": "internal",
+      "date": "2026-07-27",
+      "duration_s": 1054.5,
+      "participants": 4,
+      "language": "hinglish",
+      "screen_share": true,
+      "consent_confirmed": true,
+      "reference": null,
+      "snippet": "eval/snippets/mtg-001.txt",
+      "notes": "Internal product scoping call, no client present. Screen-share is a live CMS and design-tool walkthrough — this is the meeting Phase 5 (M2X-070) runs on."
+    },
+    {
+      "id": "mtg-002",
+      "file": "data/raw/mtg-002-course-scope.wav",
+      "origin": "internal",
+      "date": "2026-07-28",
+      "duration_s": 398.0,
+      "participants": 3,
+      "language": "hinglish",
+      "screen_share": true,
+      "consent_confirmed": true,
+      "reference": null,
+      "snippet": "eval/snippets/mtg-002.txt",
+      "notes": "Course scope alignment between the two course participants and their supervisor. Screen-share is a slide deck."
+    },
+    {
+      "id": "ami-001",
+      "file": "data/raw/ami-001.wav",
+      "origin": "ami",
+      "date": null,
+      "duration_s": 1786.8,
+      "participants": 4,
+      "language": "en",
+      "screen_share": false,
+      "consent_confirmed": true,
+      "reference": "eval/ami/ami-001.speakers.json",
+      "snippet": "eval/snippets/ami-001.txt",
+      "notes": "AMI Meeting Corpus, diarizers-community/ami ihm/test, CC BY 4.0. Ships reference speaker turns."
+    },
+    {
+      "id": "ami-002",
+      "file": "data/raw/ami-002.wav",
+      "origin": "ami",
+      "date": null,
+      "duration_s": 1505.6,
+      "participants": 4,
+      "language": "en",
+      "screen_share": false,
+      "consent_confirmed": true,
+      "reference": "eval/ami/ami-002.speakers.json",
+      "snippet": null,
+      "notes": "AMI Meeting Corpus, diarizers-community/ami ihm/test, CC BY 4.0. Ships reference speaker turns."
+    },
+    {
+      "id": "ami-003",
+      "file": "data/raw/ami-003.wav",
+      "origin": "ami",
+      "date": null,
+      "duration_s": 2334.4,
+      "participants": 4,
+      "language": "en",
+      "screen_share": false,
+      "consent_confirmed": true,
+      "reference": "eval/ami/ami-003.speakers.json",
+      "snippet": null,
+      "notes": "AMI Meeting Corpus, diarizers-community/ami ihm/test, CC BY 4.0. Ships reference speaker turns."
+    }
+  ],
+  "clips": [
+    {
+      "file": "data/clips/clip-mtg-002-5min.wav",
+      "source": "mtg-002",
+      "duration_s": 300,
+      "purpose": "fast iteration — the clip every command is smoke-tested on"
+    }
+  ]
+}
