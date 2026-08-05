@@ -11,6 +11,10 @@ dependencies = [
 ]
 
 [dependency-groups]
+corpus = [
+    "datasets>=3.0",
+    "soundfile>=0.12",
+]
 dev = [
     "pytest>=9.1.1",
 ]
