@@ -1,8 +1,10 @@
 .PHONY: run eval test
 
+# The Phase 0 demo command. CLIP is overridable so the gate can point at any file.
+CLIP ?= data/clips/clip-mtg-002-5min.wav
+
 run:
-	@echo "not implemented — Phase 0 builds this (m2x process <clip>)"
-	@exit 1
+	uv run m2x process $(CLIP)
 
 eval:
 	@echo "not implemented — eval harness lands in Phase 1B"

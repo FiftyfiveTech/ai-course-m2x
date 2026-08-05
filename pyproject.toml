@@ -10,6 +10,10 @@ dependencies = [
     "pydantic-settings>=2.14.2",
 ]
 
+# `uv run m2x process <audio>` — the command the Phase 0 gate is run with.
+[project.scripts]
+m2x = "m2x.cli:main"
+
 [dependency-groups]
 dev = [
     "pytest>=9.1.1",

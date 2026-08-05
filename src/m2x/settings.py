@@ -16,7 +16,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from pydantic import Field, SecretStr
+from pydantic import Field, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from m2x.errors import MissingCredentialError
@@ -64,6 +64,27 @@ class Settings(BaseSettings):
     :class:`~m2x.errors.ProviderNotConfiguredError` rather than falling back
     silently, because a silent fallback would make the demo prove nothing.
     """
+
+    @field_validator("provider_override", mode="before")
+    @classmethod
+    def _blank_override_means_unset(cls, value: object) -> object:
+        """Treat an empty ``M2X_PROVIDER_OVERRIDE=`` as "no override".
+
+        ``.env.example`` ships the key with an empty value, and the documented setup
+        step is to copy that file. Without this, every fresh clone dies on a Pydantic
+        enum error before it can make a single call — the exact failure the Phase 0
+        gate's "zero undocumented steps" criterion is there to catch.
+
+        Args:
+            value: Raw value from the environment or `.env`.
+
+        Returns:
+            ``None`` for an empty or whitespace-only string; the value unchanged
+            otherwise, so a genuinely invalid name still fails loudly.
+        """
+        if isinstance(value, str) and not value.strip():
+            return None
+        return value
 
     ollama_host: str = Field(
         default="http://localhost:11434",

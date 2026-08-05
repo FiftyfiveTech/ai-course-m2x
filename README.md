@@ -11,9 +11,22 @@ git clone https://github.com/FiftyfiveTech/ai-course-m2x
 cd ai-course-m2x
 uv sync
 cp .env.example .env   # fill with your own keys — see .env.example for names
-make test              # placeholder test must pass on a fresh clone
-make run               # Phase 0 target: process one meeting clip end to end
+make test              # full suite, no network required
+make run               # Phase 0: transcribe the corpus clip end to end
 ```
+
+## Processing a meeting
+
+```bash
+uv run m2x process data/clips/clip-mtg-002-5min.wav          # default route (Groq)
+uv run m2x process data/raw/mtg-001-fe-uiux.wav --provider groq
+uv run m2x process <audio> --meeting-id mtg-001 --language en
+```
+
+Writes `data/transcripts/<meeting-id>.json` — a `Transcript` with timestamped segments
+— and appends one record per call to `data/runs/runs.jsonl`. Re-running the same file
+is a content-hash cache hit: no request, no cost, sub-second. The meeting id defaults
+to the audio filename stem. Corpus provenance and consent: `docs/corpus.md`.
 
 ## Architecture (target — PRD §4)
 
