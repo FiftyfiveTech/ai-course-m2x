@@ -84,13 +84,57 @@ def speaking_time(turns: list[Turn]) -> float:
     return sum(end - start for start, end, _ in turns)
 
 
+def solo_intervals(reference: list[Turn]) -> list[Turn]:
+    """Reference stretches where exactly one speaker is active.
+
+    Meetings have people talking over each other — on ``ami-001``, 466.6s of the 1943.4s
+    of referenced speech is simultaneous. Scored against the full total, a system that
+    emits one speaker per instant cannot exceed 76.0% no matter how well it performs,
+    because a quarter of the reference is two voices at once. That ceiling is a property
+    of the metric, not of the model, and reporting only the diluted figure makes a good
+    diarisation look mediocre.
+
+    Splitting the reference on every boundary and keeping the single-speaker instants
+    gives the number that actually answers "when one person is talking, do we know who?".
+    """
+    points = sorted({value for start, end, _ in reference for value in (start, end)})
+    intervals: list[Turn] = []
+    for left, right in zip(points, points[1:]):
+        if right <= left:
+            continue
+        active = {speaker for start, end, speaker in reference if start < right and end > left}
+        if len(active) == 1:
+            intervals.append((left, right, active.pop()))
+    return intervals
+
+
+def attributed_time(intervals: list[Turn], hypothesis: list[Turn], mapping: dict[str, str]) -> float:
+    """Seconds of ``intervals`` covered by a hypothesis turn mapped to the right speaker."""
+    return sum(
+        min(right, end) - max(left, start)
+        for left, right, speaker in intervals
+        for start, end, label in hypothesis
+        if start < right and end > left and mapping.get(label) == speaker
+    )
+
+
 def score(reference: list[Turn], hypothesis: list[Turn]) -> dict[str, object]:
     """Attribution accuracy after label mapping, plus the diagnostics behind it.
 
-    Returns ``correct_s`` (reference time attributed to the right person),
-    ``attributed_s`` (reference time attributed to anyone at all) and
-    ``reference_s``. The three separate the two failure modes: missing the speech
-    entirely, versus hearing it and naming the wrong person.
+    Two accuracy figures, because one of them is misleading on its own:
+
+    ``accuracy`` divides by *all* referenced speech, including stretches where two people
+    talk at once. It is the conservative number and the one to quote if only one is quoted.
+
+    ``solo_accuracy`` divides by single-speaker speech only, and is the number that answers
+    "when one person is talking, do we know who?". On a four-person meeting the two differ
+    by more than ten points, and the gap is overlap, not error.
+
+    ``precision`` is deliberately **not** described as a probability. Its denominator sums
+    every (reference, hypothesis) overlap, so a hypothesis second covering two overlapping
+    reference turns is counted twice — on ``ami-001`` that denominator (2561.7s) exceeds
+    all referenced speech (1943.4s). It is useful for comparing two runs on the same
+    reference and meaningless as an absolute.
     """
     totals = overlap_matrix(reference, hypothesis)
     mapping = best_mapping(totals)
@@ -103,12 +147,23 @@ def score(reference: list[Turn], hypothesis: list[Turn]) -> dict[str, object]:
     attributed = sum(totals.values())
     reference_s = speaking_time(reference)
 
+    solo = solo_intervals(reference)
+    solo_s = sum(end - start for start, end, _ in solo)
+    solo_correct = attributed_time(solo, hypothesis, mapping)
+
     return {
         "accuracy": correct / reference_s if reference_s else None,
+        "solo_accuracy": solo_correct / solo_s if solo_s else None,
         "precision": correct / attributed if attributed else None,
         "correct_s": round(correct, 1),
         "attributed_s": round(attributed, 1),
         "reference_s": round(reference_s, 1),
+        "solo_correct_s": round(solo_correct, 1),
+        "solo_reference_s": round(solo_s, 1),
+        # Speaker-time, not wall-clock: two people talking for one second contribute two
+        # seconds here, the same way they contribute two to reference_s. Naming it
+        # `overlapped_s` invited reading it as a duration, which it is not.
+        "overlapped_speaker_s": round(reference_s - solo_s, 1),
         "reference_speakers": len({speaker for _, _, speaker in reference}),
         "hypothesis_speakers": len({speaker for _, _, speaker in hypothesis}),
         "mapping": mapping,
@@ -132,7 +187,7 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps(result, indent=2))
         return EXIT_OK
 
-    accuracy, precision = result["accuracy"], result["precision"]
+    accuracy, solo, precision = result["accuracy"], result["solo_accuracy"], result["precision"]
     print(f"{args.hypothesis}")
     print(
         f"  speakers   {result['hypothesis_speakers']} found / "
@@ -140,12 +195,18 @@ def main(argv: list[str] | None = None) -> int:
     )
     print(
         f"  accuracy   {accuracy:.1%} "
-        f"({result['correct_s']}s correct of {result['reference_s']}s referenced speech)"
+        f"({result['correct_s']}s of {result['reference_s']}s referenced speech)"
         if accuracy is not None
         else "  accuracy   n/a"
     )
+    if solo is not None:
+        print(
+            f"  solo       {solo:.1%} "
+            f"({result['solo_correct_s']}s of {result['solo_reference_s']}s single-speaker "
+            f"speech; {result['overlapped_speaker_s']}s of speaker-time is simultaneous)"
+        )
     if precision is not None:
-        print(f"  precision  {precision:.1%} of attributed time went to the right speaker")
+        print(f"  precision  {precision:.1%} (run-to-run comparison only, not a probability)")
     print(f"  mapping    {result['mapping']}")
     return EXIT_OK
 

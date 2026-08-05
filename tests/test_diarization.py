@@ -9,7 +9,7 @@ is scored against a reference.
 
 from __future__ import annotations
 
-from diarization_score import best_mapping, overlap_matrix, score
+from diarization_score import best_mapping, overlap_matrix, score, solo_intervals
 from m2x.diarization import SpeakerTurn, assign_speakers, coverage, dominant_speaker
 from m2x.types import Provider, Transcript, TranscriptSegment
 
@@ -137,3 +137,49 @@ class TestScorer:
         )
         assert result["reference_speakers"] == 2
         assert result["hypothesis_speakers"] == 3
+
+
+class TestOverlapHandling:
+    """Overlapping speech is why the headline accuracy understates the model."""
+
+    def test_solo_intervals_exclude_simultaneous_speech(self):
+        # A talks 0-10, B talks 5-10: only 0-5 has a single speaker.
+        assert solo_intervals([(0.0, 10.0, "A"), (5.0, 10.0, "B")]) == [(0.0, 5.0, "A")]
+
+    def test_solo_intervals_keeps_a_wholly_unoverlapped_turn(self):
+        assert solo_intervals([(0.0, 5.0, "A"), (10.0, 15.0, "B")]) == [
+            (0.0, 5.0, "A"),
+            (10.0, 15.0, "B"),
+        ]
+
+    def test_repeated_turns_from_one_speaker_are_not_overlap(self):
+        # The same person twice over is still one voice; excluding it would shrink the
+        # denominator for no reason.
+        assert solo_intervals([(0.0, 10.0, "A"), (5.0, 10.0, "A")]) == [
+            (0.0, 5.0, "A"),
+            (5.0, 10.0, "A"),
+        ]
+
+    def test_solo_accuracy_exceeds_diluted_accuracy_when_reference_overlaps(self):
+        # One speaker per instant is the best such a system can emit, so the full-reference
+        # figure is capped below 100% by the overlap alone. Quoting only that number would
+        # report a ceiling as if it were an error.
+        reference = [(0.0, 10.0, "A"), (5.0, 10.0, "B")]
+        hypothesis = [(0.0, 10.0, "S0")]
+        result = score(reference, hypothesis)
+        assert result["solo_accuracy"] == 1.0
+        assert result["accuracy"] < result["solo_accuracy"]
+        # Speaker-time, not duration: A and B each contribute 5s across 5s of wall clock.
+        assert result["overlapped_speaker_s"] == 10.0
+
+    def test_precision_denominator_can_exceed_referenced_speech(self):
+        # Documents the reason precision is not reported as a probability: one hypothesis
+        # second covering two overlapping reference turns is counted twice.
+        result = score([(0.0, 10.0, "A"), (0.0, 10.0, "B")], [(0.0, 10.0, "S0")])
+        assert result["attributed_s"] > result["reference_s"] / 2
+        assert result["precision"] < 1.0
+
+    def test_no_overlap_leaves_the_two_accuracies_equal(self):
+        result = score([(0.0, 10.0, "A"), (10.0, 20.0, "B")], [(0.0, 10.0, "S0")])
+        assert result["accuracy"] == result["solo_accuracy"]
+        assert result["overlapped_speaker_s"] == 0.0
