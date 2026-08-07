@@ -7,6 +7,26 @@ person who wrote the thing under review is not a review.
 Entries are written after the conversation happens. A pending marker stays pending until
 then; it is never filled in from what the review was expected to conclude.
 
+## Day 3 — 2026-08-05 (M2X-030)
+
+**AM — schema-design pairing.** *Not held.* M2X-031 needed the schema, so it was drafted
+rather than paired: `docs/design/day3-schema.md` carries the shapes, the nullability and
+evidence decisions, and the open point below. Drafting is not agreeing — this needs
+Yash's answer before he labels anything:
+
+1. **Does the schema hold as frozen?** Specifically: four item kinds (decision / action /
+   risk / open question); `owner` and `deadline` nullable, with *null as the correct
+   answer* when the meeting named neither; `deadline` restricted to `YYYY-MM-DD`; every
+   item citing exactly one segment, resolved against the transcript. A field renamed
+   after labelling starts costs a relabel of everything already written, not an edit —
+   so this is blocking for M2X-033, not for M2X-031.
+
+*Status: schema drafted and implemented, pairing not yet held.*
+
+**PM — cross-review.** *Pending.* Yash explains the extraction loop and where the
+evidence validator can still be fooled (M2X-031); Saurabh explains the ground-truth
+split and what makes a label consistent (M2X-033).
+
 ## Day 2 — 2026-08-04 (M2X-020)
 
 **AM — comparison matrix.** `docs/design/day2-matrix.md` drafted by Saurabh as the input
