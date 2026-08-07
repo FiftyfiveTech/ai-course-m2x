@@ -248,12 +248,77 @@ both tried and both failed.**
 
 | row | meeting | metric | value | note |
 |---|---|---|---|---|
-| C-1 | | | | |
-| C-2 | | | | |
-| S-1 | | | | |
-| S-2 | | | | |
-| V-1 off | | entity % | | |
-| V-1 on | | entity % | | |
+| C-1 fixed 5-min | ami-001 | chapters · calls · cost | 6 · 0 · $0 | 281–312s each; uniform by construction |
+| C-2 LLM topic-shift | ami-001 | chapters · calls · latency | 13 · 1 · 558 ms | **all 12 boundaries inside the first 9.2 min of 29.7**; final chapter = 69% of the meeting |
+| S-1 single-pass | ami-001 | questions · calls · tokens | **3/5** · 1 · 5538+283 | misses the late-meeting question entirely |
+| S-2 map-reduce | ami-001 | questions · calls · tokens | **3.5/5** · 7 · 6808+775 | +0.5 for 7× the calls and 1.23× the tokens |
+| V-1 off | | entity % | | blocked — no hand snippet (M2X-024) |
+| V-1 on | | entity % | | blocked — no hand snippet (M2X-024) |
+
+Both summarisation rows run the same model (`meta-llama/Llama-3.1-8B-Instruct`) on the
+same provider, so the delta is the strategy and nothing else. Judgement sheet, with the
+quoted evidence line behind every score: `eval/judgement/m2x-023-answers.md` — its five
+questions were committed before any output existed.
+
+#### C-2 does not work, and the failure is positional
+
+The detector was asked for at most 12 boundaries on a 582-segment meeting. It returned
+12 — and put every one inside the first 172 segments. The last 410 segments, 20.5 minutes
+and 69% of the meeting, come back as one chapter. Fixed windows are topic-blind, but
+blind and uniform beats sighted and concentrated: feeding C-2's output to map-reduce
+would give the meeting's whole second half a single summarisation call, which is the
+exact failure map-reduce exists to prevent.
+
+Three iterations, recorded because the shape never changed:
+
+| iteration | chapters | boundaries land in | what changed |
+|---|---|---|---|
+| 1 | 68 | first 75% | outline sent full segment text, overflowed the budget, tail unseen |
+| 2 | 57 | early-weighted | per-segment preview (60 chars) so the whole meeting fits |
+| 3 | 13 | first 31% of segments | prompt caps the answer at 12 |
+
+Iteration 1 was a defect in our code, not the model's fault: the budget silently cut the
+outline, and a detector cannot mark a boundary in text it was never shown. Fixing it
+changed the count and not the distribution. Capping the answer fixed compliance and not
+the distribution either. **The bias is the model's attention over a long numbered list,
+and no prompt in this ticket moved it.**
+
+#### S-2 wins the one question that discriminates, at 7× the calls
+
+The questions were drawn from across the meeting on purpose. Q1/Q3/Q4 — early and middle
+— were answered by both. **Q2, a late-meeting decision about the search-results UI, was
+missed entirely by single-pass and caught in full by map-reduce**: the
+compression-of-the-tail effect showing up exactly where it was predicted to.
+
+Q5 was missed by *both*, which is the useful caveat. Map-reduce buys attention to the
+tail, not comprehension. It is not a completeness guarantee.
+
+The other difference never reaches the score. Single-pass writes "The team will decide to
+use XSLT to transform the XML" where the transcript has "we could probably even use like
+XSLT". The entity is real and its *status* is inflated — a worse failure mode than
+invention, because nothing about the sentence looks wrong. Six of S-1's twenty lines open
+with "The team will decide to…". Map-reduce's short per-section inputs kept a musing
+recognisable as a musing.
+
+#### The free tier picks the provider, not us
+
+Single-pass on this meeting is ~5.5k input tokens and **Groq's free tier refuses it with
+HTTP 413** (6 000 tokens-per-minute cap), so the whole comparison ran on NIM. Worth
+recording as an architectural fact rather than an annoyance: on the free tier the cheap
+single-call strategy is the one that does not fit, while map-reduce's small per-chapter
+calls sail under the same cap. Admissibility is an axis alongside cost.
+
+#### Recommendation
+
+**Chaptering: fixed 5-minute windows (C-1).** Free, deterministic, uniform — and the
+alternative concentrates 12 of 12 boundaries in the first third. Revisit only with a
+model whose attention holds across a long list; this is not a prompt problem.
+
+**Summarisation: map-reduce (S-2), over fixed chapters.** It answers the question
+single-pass loses, stays closer to what was actually said, and fits the free tier where
+single-pass does not. The price is 7 calls against 1 and 1.23× the tokens — on a
+zero-cost tier, latency only (7.8s vs 6.0s). If cost ever becomes real this is the first
+trade to revisit: the margin is one question out of five.
 
 V-1's denominator is the same hand snippet as T-A/T-B, so M2X-021's entity column and
 M2X-024's are directly comparable — the vocabulary delta is readable straight off the
