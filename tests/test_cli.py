@@ -16,7 +16,7 @@ import pytest
 from m2x.adapter import ModelAdapter
 from m2x.cli import EXIT_FAILURE, EXIT_OK, EXIT_USAGE, build_parser, main
 from m2x.pipeline import load_transcript
-from m2x.types import Provider
+from m2x.types import Provider, Transcript, TranscriptSegment
 from conftest import CHAT_MODEL, TRANSCRIBE_MODEL, chat_response, transcription_response
 
 AdapterFactory = Callable[..., ModelAdapter]
@@ -248,3 +248,115 @@ def _run_line(
             "meeting_id": "mtg-002",
         }
     )
+
+
+def _strategy_transcript(path: Path) -> Path:
+    """Persist a twelve-segment transcript for the strategy commands."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        Transcript(
+            model_repo_id=TRANSCRIBE_MODEL,
+            provider=Provider.GROQ,
+            latency_ms=1,
+            text="we agreed to ship",
+            audio_seconds=720.0,
+            segments=[
+                TranscriptSegment(
+                    t_start=index * 60.0,
+                    t_end=(index + 1) * 60.0,
+                    text=f"we agreed point {index + 1}",
+                )
+                for index in range(12)
+            ],
+        ).model_dump_json(),
+        encoding="utf-8",
+    )
+    return path
+
+
+def test_chapter_fixed_needs_no_provider(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """The free strategy must not touch the network — that is the whole point of it."""
+
+    def refuse(_request: httpx.Request) -> httpx.Response:
+        raise AssertionError("fixed chaptering must not call a provider")
+
+    transcript_path = _strategy_transcript(tmp_path / "transcripts" / "mtg-001.json")
+
+    code = main(
+        [
+            "chapter",
+            "mtg-001",
+            "--strategy",
+            "fixed",
+            "--transcript",
+            str(transcript_path),
+            "--chapters-dir",
+            str(tmp_path / "chapters"),
+        ],
+        adapter_factory=lambda: make_adapter(refuse),
+    )
+
+    assert code == EXIT_OK
+    assert (tmp_path / "chapters" / "mtg-001.fixed.json").is_file()
+    assert "3 chapters by fixed" in capsys.readouterr().out
+
+
+def test_map_reduce_without_chapters_is_a_usage_error(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """Better to name the missing step than to silently chapter it a second way."""
+    transcript_path = _strategy_transcript(tmp_path / "transcripts" / "mtg-001.json")
+
+    code = main(
+        [
+            "summarise",
+            "mtg-001",
+            "--strategy",
+            "map-reduce",
+            "--transcript",
+            str(transcript_path),
+            "--chapters",
+            str(tmp_path / "nope.json"),
+        ],
+        adapter_factory=lambda: make_adapter(_ok_handler),
+    )
+
+    assert code == EXIT_USAGE
+    assert "m2x chapter mtg-001" in capsys.readouterr().err
+
+
+def test_summarise_single_pass_writes_a_summary(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    transcript_path = _strategy_transcript(tmp_path / "transcripts" / "mtg-001.json")
+    summaries = tmp_path / "strategies"
+
+    code = main(
+        [
+            "summarise",
+            "mtg-001",
+            "--strategy",
+            "single-pass",
+            "--transcript",
+            str(transcript_path),
+            "--model",
+            CHAT_MODEL,
+            "--summaries-dir",
+            str(summaries),
+        ],
+        adapter_factory=lambda: make_adapter(
+            lambda _request: httpx.Response(200, json=chat_response("- one\n- two"))
+        ),
+    )
+
+    assert code == EXIT_OK
+    assert "single-pass in 1 call" in capsys.readouterr().out
+    assert (summaries / "mtg-001.single-pass.md").is_file()

@@ -41,6 +41,28 @@ make run        # hosted leg  (Groq summary)
 make run-local  # local leg   (Ollama summary, same clip, same model repo id)
 ```
 
+## Chaptering and summarising
+
+```bash
+uv run m2x chapter ami-001 --strategy fixed                 # 5-min windows, free
+uv run m2x chapter ami-001 --strategy llm --provider nim    # LLM topic-shift, one call
+uv run m2x summarise ami-001 --strategy single-pass --provider nim
+uv run m2x summarise ami-001 --strategy map-reduce --provider nim \
+    --chapters data/chapters/ami-001.fixed.json
+```
+
+Chapters land in `data/chapters/<id>.<strategy>.json`, summaries in
+`data/comparison/strategies/<id>.<strategy>.md` — strategy in the filename so running
+both leaves both results on disk.
+
+**Adopted: fixed chaptering + map-reduce summarisation.** LLM topic-shift detection put
+all 12 of its boundaries in the first 9 minutes of a 30-minute meeting, leaving 69% of it
+as one chapter. Map-reduce answered a late-meeting question single-pass missed entirely,
+for 7 calls against 1. Note the `--provider nim`: single-pass on a half-hour meeting is
+~5.5k tokens and **Groq's free tier refuses it with HTTP 413** (6 000 TPM), so the cheap
+strategy is the one that does not fit. Numbers, iterations and recommendation:
+`docs/design/day2-matrix.md`; judgement sheet: `eval/judgement/`.
+
 ## Architecture (target — PRD §4)
 
 ```
