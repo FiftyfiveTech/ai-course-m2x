@@ -50,6 +50,7 @@ from m2x.pipeline import (
     load_transcript,
     process_meeting,
 )
+from m2x.prompts import DEFAULT_PROMPTS_DIR
 from m2x.run_log import RunLogger
 from m2x.run_summary import DEFAULT_RUN_LOG, format_summary, summarise
 from m2x.settings import Settings
@@ -203,6 +204,20 @@ def build_parser() -> argparse.ArgumentParser:
         choices=list(Provider),
         default=None,
         help="backend for extraction; default routes by the model's registry entry",
+    )
+    extract.add_argument(
+        "--prompt-version",
+        default=None,
+        help=(
+            "prompt library version to extract with, e.g. 'v1'; default is the latest "
+            "on disk. Pin it to reproduce a number that was reported with an older one"
+        ),
+    )
+    extract.add_argument(
+        "--prompts-dir",
+        type=Path,
+        default=DEFAULT_PROMPTS_DIR,
+        help=f"root of the prompt library (default: {DEFAULT_PROMPTS_DIR})",
     )
     extract.add_argument(
         "--records-dir",
@@ -474,6 +489,8 @@ def _run_extract(
                 meeting_id=args.meeting_id,
                 model_repo_id=args.model,
                 provider=args.provider,
+                prompt_version=args.prompt_version,
+                prompts_dir=args.prompts_dir,
             )
     except M2XError as error:
         print(f"error: {error}", file=sys.stderr)
@@ -528,6 +545,7 @@ def _format_extraction(outcome: ExtractionOutcome, *, source: Path, written: Pat
         f"  decisions {len(record.decisions)}  actions {len(record.actions)}  "
         f"risks {len(record.risks)}  questions {len(record.open_questions)}",
         f"  model     {outcome.model_repo_id} via {outcome.provider.value}",
+        f"  prompt    {outcome.prompt_name} {outcome.prompt_version}",
         f"  cost      ${outcome.cost_usd:.4f}",
     ]
     if outcome.truncated:
