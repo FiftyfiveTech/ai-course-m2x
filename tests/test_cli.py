@@ -7,6 +7,7 @@ offline.
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Callable
 
@@ -15,8 +16,9 @@ import pytest
 
 from m2x.adapter import ModelAdapter
 from m2x.cli import EXIT_FAILURE, EXIT_OK, EXIT_USAGE, build_parser, main
+from m2x.extraction import load_record
 from m2x.pipeline import load_transcript
-from m2x.types import Provider
+from m2x.types import Provider, Transcript, TranscriptSegment
 from conftest import CHAT_MODEL, TRANSCRIBE_MODEL, chat_response, transcription_response
 
 AdapterFactory = Callable[..., ModelAdapter]
@@ -248,3 +250,116 @@ def _run_line(
             "meeting_id": "mtg-002",
         }
     )
+
+
+def _write_transcript(path: Path) -> Path:
+    """Persist a two-segment transcript for the extract command to read."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        Transcript(
+            model_repo_id=TRANSCRIBE_MODEL,
+            provider=Provider.GROQ,
+            latency_ms=1,
+            text="we ship on friday",
+            audio_seconds=20.0,
+            segments=[
+                TranscriptSegment(t_start=0.0, t_end=10.0, text="we ship on friday"),
+                TranscriptSegment(t_start=10.0, t_end=20.0, text="yash writes the snippets"),
+            ],
+        ).model_dump_json(),
+        encoding="utf-8",
+    )
+    return path
+
+
+def _record_reply(segment_id: str = "seg-0001") -> str:
+    """A model reply carrying one decision citing ``segment_id``."""
+    return json.dumps(
+        {
+            "decisions": [
+                {
+                    "description": "ship on friday",
+                    "evidence": {"segment_id": segment_id, "t_start": 1.0, "t_end": 5.0},
+                }
+            ],
+            "actions": [],
+            "risks": [],
+            "open_questions": [],
+        }
+    )
+
+
+def test_extract_writes_a_record_and_reports_it(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """The happy path: exit 0, record on disk, counts on stdout."""
+    transcript_path = _write_transcript(tmp_path / "transcripts" / "mtg-001.json")
+    records = tmp_path / "records"
+
+    code = main(
+        [
+            "extract",
+            "mtg-001",
+            "--transcript",
+            str(transcript_path),
+            "--model",
+            CHAT_MODEL,
+            "--records-dir",
+            str(records),
+        ],
+        adapter_factory=lambda: make_adapter(
+            lambda _request: httpx.Response(200, json=chat_response(_record_reply()))
+        ),
+    )
+
+    assert code == EXIT_OK
+    assert load_record(records / "mtg-001.json").record.item_count == 1
+    assert "decisions 1" in capsys.readouterr().out
+
+
+def test_extract_on_a_missing_transcript_exits_with_a_usage_code(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    code = main(
+        ["extract", "mtg-404", "--transcript", str(tmp_path / "nope.json")],
+        adapter_factory=lambda: make_adapter(_ok_handler),
+    )
+
+    assert code == EXIT_USAGE
+    assert "nope.json" in capsys.readouterr().err
+
+
+def test_extract_that_never_validates_is_a_run_failure(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """No valid record is a failure to look at, not an empty file to score."""
+    transcript_path = _write_transcript(tmp_path / "transcripts" / "mtg-001.json")
+    records = tmp_path / "records"
+
+    code = main(
+        [
+            "extract",
+            "mtg-001",
+            "--transcript",
+            str(transcript_path),
+            "--model",
+            CHAT_MODEL,
+            "--records-dir",
+            str(records),
+        ],
+        adapter_factory=lambda: make_adapter(
+            lambda _request: httpx.Response(
+                200, json=chat_response(_record_reply(segment_id="seg-9999"))
+            )
+        ),
+    )
+
+    assert code == EXIT_FAILURE
+    assert "never validated" in capsys.readouterr().err
+    assert not (records / "mtg-001.json").exists()
