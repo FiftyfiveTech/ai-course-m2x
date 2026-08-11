@@ -5,10 +5,18 @@ a provider: a call that bypasses the adapter is not logged, and an unlogged call
 the cost report a lie. The log is the input to the cost-attribution report, which
 replays these records against the registry price table.
 
-The record shape below is fixed by agreement — eleven fields, no more. Adding a field
+The record shape below is fixed by agreement — twelve fields, no more. Adding a field
 is a decision to be made deliberately, not a convenience: downstream tooling reads
 positionally-stable JSONL and the report has to be able to parse records written on
 day one.
+
+``prompt_version`` is the twelfth, added for M2X-032 and argued for rather than
+assumed. Phase 1B's number is a property of a model *asked a particular way*, and the
+log is what the cost and latency reports are built from — so a prompt-shaped
+regression ("v3 doubled the retries") is invisible unless the version sits on the log
+line and not only on the artefact. It defaults to ``None``, which keeps day-one records
+parseable and is the honest value for a call made outside a versioned prompt, such as
+transcription.
 
 **Invariant worth stating explicitly.** ``cost_usd`` is money actually spent, so a
 cache hit logs ``0.0``. The ``tokens_in``/``tokens_out`` counters describe the payload
@@ -57,6 +65,14 @@ class RunContext(BaseModel):
     meeting_id: str | None = None
     """Meeting this call relates to, e.g. ``"mtg-001"``. ``None`` for non-meeting work."""
 
+    prompt_version: str | None = None
+    """Prompt library version behind this call, e.g. ``"v1"``.
+
+    Set by the step that resolved it (see :func:`m2x.extraction.extract_record`) rather
+    than by the command, so the record on disk and every log line it produced quote one
+    value. ``None`` where no versioned prompt was involved.
+    """
+
 
 class RunRecord(BaseModel):
     """One auditable line of the run log.
@@ -80,6 +96,7 @@ class RunRecord(BaseModel):
     cost_usd: float = Field(default=0.0, ge=0.0)
     cached: bool = False
     meeting_id: str | None = None
+    prompt_version: str | None = None
 
     @classmethod
     def from_result(
@@ -115,6 +132,7 @@ class RunRecord(BaseModel):
             cost_usd=result.cost_usd,
             cached=result.cached,
             meeting_id=context.meeting_id,
+            prompt_version=context.prompt_version,
         )
 
 

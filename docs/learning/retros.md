@@ -3,6 +3,46 @@
 Newest first. One entry per ticket (or paired tickets), appended at close — same
 content as the Odoo completion comment, kept in-repo so it survives the course.
 
+## M2X-032 — versioned prompt library (2026-08-11)
+
+**Executed**
+
+- `prompts/extraction/v1.md` + `src/m2x/prompts.py`: prompts load by name and version —
+  markdown with `## system` / `## user`, `{{placeholder}}` rendering, numeric version
+  ordering, latest-by-default and pinnable.
+- `v1` carries the old `EXTRACTION_SYSTEM_PROMPT` byte-for-byte, verified against the
+  constant before it was deleted, so numbers either side of the move stay comparable.
+- The resolved version is stamped onto `ExtractionOutcome` *and* every run-log line, both
+  from one value resolved in `extract_record` — callers cannot make them disagree.
+- `prompts/CHANGELOG.md`: one row per version with a content digest. `m2x extract` gained
+  `--prompt-version` / `--prompts-dir` and prints the prompt beside the model.
+- 24 new tests, 335 green (311 on main). Reasoning: `docs/design/day3-prompts.md`.
+
+**Deviations (written down, not implicit)**
+
+1. The run log grew a twelfth field, against a docstring that says eleven and a test that
+   enforces it — argued in the design doc rather than edited quietly. Defaults to `null`,
+   so day-one records still parse and transcription says "no prompt" honestly.
+2. The append-only rule is a failing test, not only the ticket's "convention + review":
+   the changelog digest is compared against the file in both directions. The digest covers
+   the model-visible text, not the file bytes, so prose fixes stay free.
+3. Extraction calls had been reaching the run log as `phase`/`command` "unknown"; they now
+   default to `phase-1b` / `m2x extract`. Outside the ticket's literal scope, but an
+   unattributed line cannot agree with a record, which is the acceptance criterion.
+
+**Lessons**
+
+- Strict rendering has to run in *both* directions. A placeholder with no value is the
+  obvious bug; the expensive one is a value naming no placeholder — a renamed slot hands
+  the model an empty transcript, the empty `MeetingRecord` that comes back is valid, and
+  the eval blames the model for an F1 of 0.0.
+- "Enforced by convention" is a plan to be broken under deadline. The mechanical version
+  cost about fifteen lines of test.
+- Moving a prompt and improving a prompt are two changes. Doing both at once destroys the
+  comparability that motivated the move.
+- A guard is only deliberate if something fails when you cross it: the run log's field-set
+  test is what turned "add a field" into a written argument.
+
 ## M2X-031 — Pydantic schema + Instructor extractor (2026-08-07)
 
 **Executed**

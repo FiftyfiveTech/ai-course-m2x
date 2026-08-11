@@ -18,10 +18,13 @@ from m2x.adapter import ModelAdapter
 from m2x.cli import EXIT_FAILURE, EXIT_OK, EXIT_USAGE, build_parser, main
 from m2x.extraction import load_record
 from m2x.pipeline import load_transcript
+from m2x.prompts import latest_version
+from m2x.run_log import RunLogger
 from m2x.types import Provider, Transcript, TranscriptSegment
 from conftest import CHAT_MODEL, TRANSCRIBE_MODEL, chat_response, transcription_response
 
 AdapterFactory = Callable[..., ModelAdapter]
+REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
 @pytest.fixture
@@ -317,6 +320,112 @@ def test_extract_writes_a_record_and_reports_it(
     assert code == EXIT_OK
     assert load_record(records / "mtg-001.json").record.item_count == 1
     assert "decisions 1" in capsys.readouterr().out
+
+
+def test_extract_agrees_with_the_run_log_on_the_prompt_version(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    settings,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """The acceptance check, run the way the evaluator runs it.
+
+    Record metadata, run log and the printed report all name one version — and it is
+    the version the tracked library actually ships, not a value the command invented.
+    The changelog is the third leg, enforced in ``tests/test_prompts.py``.
+    """
+    transcript_path = _write_transcript(tmp_path / "transcripts" / "mtg-001.json")
+    records = tmp_path / "records"
+    shipped = latest_version("extraction", prompts_dir=REPO_ROOT / "prompts")
+
+    code = main(
+        [
+            "extract",
+            "mtg-001",
+            "--transcript",
+            str(transcript_path),
+            "--model",
+            CHAT_MODEL,
+            "--records-dir",
+            str(records),
+        ],
+        adapter_factory=lambda: make_adapter(
+            lambda _request: httpx.Response(200, json=chat_response(_record_reply()))
+        ),
+    )
+    logged = RunLogger(settings.runs_log_path).read_all()
+
+    assert code == EXIT_OK
+    assert load_record(records / "mtg-001.json").prompt_version == shipped
+    assert [record.prompt_version for record in logged] == [shipped]
+    assert f"prompt    extraction {shipped}" in capsys.readouterr().out
+
+
+def test_extract_can_pin_an_older_prompt_version(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """Switching versions is a file and a flag — no code change, which is the criterion."""
+    transcript_path = _write_transcript(tmp_path / "transcripts" / "mtg-001.json")
+    library = tmp_path / "prompts" / "extraction"
+    library.mkdir(parents=True)
+    for version, system in (("v1", "older wording"), ("v2", "newer wording")):
+        (library / f"{version}.md").write_text(
+            f"## system\n\n{system}\n\n## user\n\n<transcript>\n{{{{transcript}}}}\n</transcript>\n",
+            encoding="utf-8",
+        )
+    sent: list[dict] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        sent.append(json.loads(request.content))
+        return httpx.Response(200, json=chat_response(_record_reply()))
+
+    code = main(
+        [
+            "extract",
+            "mtg-001",
+            "--transcript",
+            str(transcript_path),
+            "--model",
+            CHAT_MODEL,
+            "--records-dir",
+            str(tmp_path / "records"),
+            "--prompts-dir",
+            str(tmp_path / "prompts"),
+            "--prompt-version",
+            "v1",
+        ],
+        adapter_factory=lambda: make_adapter(handler),
+    )
+
+    assert code == EXIT_OK
+    assert sent[0]["messages"][0]["content"].startswith("older wording")
+    assert "prompt    extraction v1" in capsys.readouterr().out
+
+
+def test_extract_with_an_unknown_prompt_version_is_a_run_failure(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """A typo costs one error, not three attempts against the wrong prompt."""
+    transcript_path = _write_transcript(tmp_path / "transcripts" / "mtg-001.json")
+
+    code = main(
+        [
+            "extract",
+            "mtg-001",
+            "--transcript",
+            str(transcript_path),
+            "--prompt-version",
+            "v99",
+        ],
+        adapter_factory=lambda: make_adapter(_ok_handler),
+    )
+
+    assert code == EXIT_FAILURE
+    assert "Cannot read prompt extraction/v99" in capsys.readouterr().err
 
 
 def test_extract_on_a_missing_transcript_exits_with_a_usage_code(

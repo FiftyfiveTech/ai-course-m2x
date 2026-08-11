@@ -83,6 +83,14 @@ an error the model is asked to fix — not an item that quietly enters the eval.
 attempt validates, the command exits 1 rather than writing an empty record. Schema,
 design decisions and deviations: `docs/design/day3-schema.md`.
 
+The prompt itself comes from `prompts/extraction/v<N>.md`, not from the code. The version
+used is stamped into the record and onto every run-log line, so a reported score can name
+the exact text that earned it; `--prompt-version v1` pins an older one, and shipping a
+new version file switches the default with no code change. Versions are append-only —
+editing one an eval has cited fails the suite. Reasoning:
+`docs/design/day3-prompts.md`; what each version changed and scored:
+`prompts/CHANGELOG.md`.
+
 ## Architecture (target — PRD §4)
 
 ```
