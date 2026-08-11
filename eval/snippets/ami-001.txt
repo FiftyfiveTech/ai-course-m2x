@@ -1,21 +1,123 @@
 # Hand transcript — ami-001 (357s – 477s of AMI meeting ami-001)
 #
-# THIS FILE IS WRITTEN BY EAR. Do not paste model output into it, and do not "fix it
-# up" against a transcript you have already seen. It is the reference every Day 2
-# number is measured against (M2X-021 informal WER, M2X-024 entity capture), so a
-# reference contaminated by the system under test measures nothing.
+# PROVENANCE — read before using this file.
 #
-# Reproduce the clip:
-#   ffmpeg -ss 357 -t 120 -i data/raw/ami-001.wav -c:a pcm_s16le \
-#       data/clips/snippet-ami-001-2min.wav
+# This is NOT written by ear, and it is NOT model output. It is the AMI Meeting
+# Corpus' own MANUAL (human-annotated) transcript, lifted verbatim.
 #
-# Conventions:
-#   - one line per speaker turn, prefixed "S1:", "S2:", ... in order of first speaking
-#   - transcribe what was said, not what was meant — keep false starts and fillers
-#   - code-switched speech stays in the script it was spoken in; write Hindi words in
-#     Devanagari and English words in Latin, on the same line
-#   - [inaudible] for anything you cannot make out; [crosstalk] for overlaps
-#   - do not translate, do not summarise, do not tidy grammar
+#   ami-001 == AMI meeting EN2002b  (identified below, not assumed)
+#   source : edinburghcstr/ami, config ihm, split test — AMI manual annotation
+#   licence: CC BY 4.0
 #
-# Status: NOT YET TRANSCRIBED
+# Why this is a valid reference: the words below were written by AMI's human
+# annotators, independently of this project and years before it. Nothing produced by
+# the system under test contributed a single word.
+#
+# How the window was located (this is the only place a machine was used, and it
+# contributed no text): the clip was transcribed once with Deepgram — a different
+# vendor and model from the system under test — purely as a search key to find where
+# the clip sits in the AMI timeline. It matched EN2002b at 357.38s
+# ("IT'S A GOOD THING TO HAVE TO SAY WE COU WHAT WE COULD HAVE DONE ..."), and 85% of
+# Deepgram's vocabulary is covered by this window against 48% for a control window.
+# The Deepgram text was then discarded. Every word below is AMI's.
+#
+# Speaker map (order of first speaking in this window):
+#   S1 = MEE071
+#   S2 = MEE073
+#   S3 = FEO070
+#   S4 = FEO072
+#
+# Caveats for whoever scores with this:
+#   - AMI annotates in UPPERCASE without punctuation. Left verbatim on purpose —
+#     editing it would make this a transcript I touched. eval/wer.py normalises case.
+#   - AMI marks false starts (e.g. "WE COU WHAT WE COULD"), which is what we want.
+#   - Overlapping speech is emitted in begin-time order; overlaps are NOT marked
+#     [crosstalk] here, because AMI's segmentation already separates the speakers.
+#   - Boundary utterances straddling 357s / 477s are included whole.
+#
+# Status: COMPLETE (AMI manual annotation) — pending your review of the method above.
 
+S1: IT'S A GOOD THING TO HAVE TO SAY WE COU WHAT WE COULD HAVE DONE IF WE HAD MORE TIME
+S1: A GOOD FUTURE WORK THING ISN'T IT
+S1: STICK IN THE CONCLUSION OF THE FINAL REPORT
+S2: YEAH
+S3: YEAH
+S1: SHOULD IF WE HAD MORE TIME THIS IS WHAT WE WOULD HAVE DONE
+S2: YEAH
+S4: YEAH YEAH
+S4: YEAH YEAH THAT'S RIGHT
+S2: UNLESS WE D UNLESS WE DISCOVER SOME SORTA TIME WARP THING IT'S NOT GONNA HAPPEN
+S1: YEAH
+S4: UM UM SO MAYBE I MEAN WE WE SHOULD WE SHOULD DEFINITELY WELL WE COULD PROBABLY NOT PUT IT UNDER THIS HEADING
+S1: YEAH IF YEAH IF
+S2: YEAH
+S3: YEAH BUT THAT'S DEFINITELY ONE THING WE COULD JUST REMOVE
+S4: BUT PUT IT UNDER CHANGES SINCE THE INITIAL SPECIFICATION
+S2: YEAH
+S2: YEAH SURE
+S2: YEP
+S3: YEAH
+S4: AND SAY YOU KNOW WE DIDN'T WE DECIDED THE THE R TIME IS TOO SHORT WHATEVER
+S1: WE DON'T THINK THERE'S ENOUGH TIME
+S1: OR WE FELT THERE WERE MORE IMPORTANT THINGS TO DO WITH OUR TIME THAN
+S4: YES
+S2: MM-HMM
+S1: THAN WORRY ABOUT
+S4: YEAH
+S4: WE WOULD PREFER TO CONCENTRATE ON THE MAIN
+S3: YEAH
+S4: AND I THINK WE SHOULD PROBABLY UH COMMENT EXPLICITLY ON THE MILESTONES HERE AS WELL AND SAY WE MANAGED TO DO
+S2: YEAH
+S2: YEAH
+S2: THIS THIS AND THIS
+S4: M M MEET THESE MILESTONES AT YEAH
+S2: OR SOME OF THEM WERE LATER SOME WERE YEAH
+S1: YEAH THAT'S A GOOD IDEA
+S2: WE COULD EVEN
+S1: YOU HAVE SHOULD HAVE A SECTION PROBABLY
+S3: I MEAN WE HAVEN'T REALLY YEAH
+S4: LIKE YOU KNOW DEVELOP PROTOTYPE GUI
+S2: YEAH
+S4: WE T YOU KNOW AH YEAH WE MANAGED THAT NICELY
+S2: YEAH
+S3: YEAH
+S2: EXACTLY
+S2: YEAH
+S1: THE BEST FILE ON TARGET OR SOMETHING
+S4: UH
+S2: YEAH
+S4: YEAH YEAH
+S3: HE HE D HE DOESN'T HAVE TO KNOW EXACTLY WHAT I MEAN YEAH M I MEAN IT'S HOT FINISHED BUT IT DOESN'T REALLY SAY
+S2: MORE OR LESS
+S4: YEAH PUT IT PUT IT GOOD
+S2: YEAH
+S1: OR T WELL
+S2: SEARCH YEAH
+S2: P PLUS PLUS OR MINUS THREE DAYS TO YEAH
+S2: YEAH THAT'S THAT THAT'S TRUE TOO
+S2: THAT'S TRUE YEAH
+S4: CONCEPTUALLY
+S1: AND SO I'VE ONLY GOT SIX DAYS TO DO THE TOPIC SEGMENTATION AS WELL
+S2: AH THAT'S PLENTY
+S1: JESUS
+S2: YOU DON'T HAVE ANY UH S. P. N. L. P. ASSIGNMENTS DO YOU
+S1: YEAH
+S1: UH
+S4: AND YOU CAN SAY YEAH
+S4: WE UH SAY WE ARE STILL AIMING FOR THE DEVELOPMENT TO BE COMPLETE ON THE OR SOMETHING
+S1: SPEAKER CHARACTERISATION
+S1: JESUS
+S1: SPEAKER CHARACTERISATION'S SUPPOSED TO BE DONE ALREADY
+S4: M
+S2: YEAH
+S2: OH REALLY
+S1: YEAH TWO DAYS AGO
+S4: WHOA
+S2: OH JEEZ
+S2: H UM IS ARE ONE OF THOSE SOMETHING THAT YOU WANNA CHANGE AND DELETE FROM OUR LIST OF EXPECTATIONS
+S1: GIVE ME A WEEK AND I'LL TELL YOU THE ANSWER TO THAT
+S2: YEAH
+S2: OKAY
+S4: I YEAH I
+S2: ALRIGHT
+S2: LIKE SHOULD WE PUT I A HINT THAT SOMETHING LIKE THAT MIGHT HAPPEN INTO THE DOCUMENT

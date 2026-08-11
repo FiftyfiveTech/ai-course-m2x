@@ -252,8 +252,8 @@ both tried and both failed.**
 | C-2 LLM topic-shift | ami-001 | chapters · calls · latency | 13 · 1 · 558 ms | **all 12 boundaries inside the first 9.2 min of 29.7**; final chapter = 69% of the meeting |
 | S-1 single-pass | ami-001 | questions · calls · tokens | **3/5** · 1 · 5538+283 | misses the late-meeting question entirely |
 | S-2 map-reduce | ami-001 | questions · calls · tokens | **3.5/5** · 7 · 6808+775 | +0.5 for 7× the calls and 1.23× the tokens |
-| V-1 off | mtg-002, ami-001 | entity % | | hypothesis staged; number blocked — no hand snippet |
-| V-1 on | mtg-002, ami-001 | entity % | | hypothesis staged; number blocked — no hand snippet |
+| V-1 off | ami-001 | WER · entity % | **48.5%** · n/a | sub 54 · del 150 · ins 18 · ref 458 words |
+| V-1 on | ami-001 | WER · entity % | **57.4%** · n/a | sub 91 · del 159 · ins 13 — **+8.9 pts worse**; entity capture undefined, no vocab term is spoken |
 
 Both summarisation rows run the same model (`meta-llama/Llama-3.1-8B-Instruct`) on the
 same provider, so the delta is the strategy and nothing else. Judgement sheet, with the
@@ -324,7 +324,40 @@ V-1's denominator is the same hand snippet as T-A/T-B, so M2X-021's entity colum
 M2X-024's are directly comparable — the vocabulary delta is readable straight off the
 two tables.
 
-#### V-1: both legs are on disk, and the metric still has nowhere to run
+#### V-1 is measurable on `ami-001` now, and the vocabulary makes it worse
+
+`ami-001` has a reference: **AMI's own manual annotation**, not a by-ear snippet. The
+meeting is AMI **EN2002b** and the clip is its 357–477s, verified rather than assumed —
+see the provenance header in `eval/snippets/ami-001.txt`. Nothing from the system under
+test contributed a word.
+
+| leg | WER | sub | del | ins |
+|---|---|---|---|---|
+| V-1 off | **48.5%** | 54 | 150 | 18 |
+| V-1 on | **57.4%** | 91 | 159 | 13 |
+
+**Feeding Whisper the vocabulary costs 8.9 points of WER on the English meeting**, and
+the damage is concentrated in substitutions — 54 → 91, up 68%. The prompt is not adding
+terms the model was missing; it is pulling the decode toward words that were never said.
+That is the same failure `mtg-002` shows in a different currency (780 words → 404, with
+hallucinated all-caps tokens), so the two meetings now agree.
+
+**Entity capture stays undefined here**, and the scorer says so itself: *"no vocabulary
+terms spoken in this window"*. AMI is a third-party corpus about remote-control design;
+none of our 56 terms occur in it.
+
+So on the two meetings where the experiment can run at all, the vocabulary file makes
+transcription worse and cannot be scored on the metric it was built for. **The course
+lesson does not reproduce here.** Whether that is the finding or the experiment needs a
+different corpus is still the evaluator's call.
+
+**Read the absolute numbers with care.** 150 of 458 reference words are deletions because
+AMI's IHM annotation is per-headset: 94% of the utterances in this window overlap another
+speaker, and 48% are one- or two-word backchannels that a mixed recording cannot
+reproduce. That inflates WER for both legs equally — the **off-versus-on delta is the
+trustworthy part**, since the reference, the audio and the model are identical across it.
+
+#### The other two meetings: both legs on disk, metric still with nowhere to run
 
 `--vocab` now exists (M2X-024), so the "on" leg is runnable and was run. Both legs sit
 in `data/comparison/` — `large-v3-auto/` off, `large-v3-vocab/` on — for `mtg-002` and
