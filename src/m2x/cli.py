@@ -76,6 +76,7 @@ from m2x.vector_store import (
     build_index,
     query_index,
 )
+from m2x.vocab import DEFAULT_VOCAB_PATH, as_prompt, load_vocab
 
 EXIT_OK = 0
 EXIT_USAGE = 2
@@ -175,6 +176,15 @@ def build_parser() -> argparse.ArgumentParser:
         "--language",
         default=None,
         help="ISO-639-1 language hint; omit to let the model detect it",
+    )
+    process.add_argument(
+        "--vocab",
+        type=Path,
+        default=None,
+        help=(
+            f"vocabulary file biasing transcription (e.g. {DEFAULT_VOCAB_PATH}); "
+            "omit to transcribe unbiased"
+        ),
     )
     process.add_argument(
         "--transcripts-dir",
@@ -474,6 +484,9 @@ def main(
         return _run_summarise(args, adapter_factory=adapter_factory)
 
     try:
+        # Loaded here, inside the guard: a mistyped --vocab path raises
+        # FileNotFoundError and lands on the same usage exit as a mistyped audio path.
+        prompt = as_prompt(load_vocab(args.vocab)) if args.vocab else None
         with adapter_factory() as adapter:
             outcome = process_meeting(
                 args.audio,
@@ -484,6 +497,7 @@ def main(
                 provider=args.provider,
                 transcribe_provider=args.transcribe_provider,
                 language=args.language,
+                transcribe_prompt=prompt,
                 summarize=not args.no_summary,
                 transcripts_dir=args.transcripts_dir,
                 summaries_dir=args.summaries_dir,

@@ -322,6 +322,20 @@ class TestCaching:
 
         assert handler.call_count == 2
 
+    def test_the_vocabulary_prompt_splits_the_cache(
+        self, make_adapter: AdapterFactory
+    ) -> None:
+        """M2X-024's whole comparison is off-versus-on over the *same* audio. If the
+        prompt were outside the key, the second leg would replay the first leg's
+        transcript and the vocabulary delta would read as exactly zero."""
+        handler = _Recorder(httpx.Response(200, json=transcription_response()))
+        adapter = make_adapter(handler)
+
+        adapter.transcribe(_AUDIO, TRANSCRIBE_MODEL)
+        adapter.transcribe(_AUDIO, TRANSCRIBE_MODEL, prompt="NATS, NestJS")
+
+        assert handler.call_count == 2
+
 
 class TestRetries:
     def test_retries_429_then_succeeds(
@@ -531,6 +545,13 @@ class TestTranscription:
         make_adapter(handler).transcribe(_AUDIO, TRANSCRIBE_MODEL, language="en")
 
         assert b"en" in handler.requests[0].content
+
+    def test_vocabulary_prompt_is_forwarded(self, make_adapter: AdapterFactory) -> None:
+        handler = _Recorder(httpx.Response(200, json=transcription_response()))
+
+        make_adapter(handler).transcribe(_AUDIO, TRANSCRIBE_MODEL, prompt="NATS, NestJS")
+
+        assert b"NATS, NestJS" in handler.requests[0].content
 
     def test_tokens_stay_zero_for_transcription(
         self, make_adapter: AdapterFactory
