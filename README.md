@@ -63,6 +63,26 @@ for 7 calls against 1. Note the `--provider nim`: single-pass on a half-hour mee
 strategy is the one that does not fit. Numbers, iterations and recommendation:
 `docs/design/day2-matrix.md`; judgement sheet: `eval/judgement/`.
 
+## Extracting a record
+
+```bash
+uv run m2x extract mtg-001                              # transcript -> validated JSON
+uv run m2x extract mtg-001 --transcript path/to/it.json # explicit source
+uv run m2x extract mtg-001 --provider ollama            # same schema, local model
+```
+
+Reads the diarised transcript if one exists (`data/diarization/<id>.json`), else the
+plain one, and writes `data/records/<meeting-id>.json`: decisions, actions, risks and
+open questions, each citing the transcript segment it came from. Instructor drives the
+loop — schema into the prompt, reply parsed and validated, and on a validation failure a
+retry with the error fed back (two retries). It runs *over* `ModelAdapter`, so every
+attempt including retries lands in `data/runs/runs.jsonl` with its cost.
+
+A citation to a segment that does not exist, or a deadline that is not `YYYY-MM-DD`, is
+an error the model is asked to fix — not an item that quietly enters the eval. If no
+attempt validates, the command exits 1 rather than writing an empty record. Schema,
+design decisions and deviations: `docs/design/day3-schema.md`.
+
 ## Architecture (target — PRD §4)
 
 ```

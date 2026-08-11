@@ -15,6 +15,7 @@ import sys
 from pathlib import Path
 from typing import Callable, Sequence
 
+from instructor.core import InstructorRetryException
 from pydantic import ValidationError
 
 from m2x.adapter import ModelAdapter
@@ -33,6 +34,13 @@ from m2x.corpus import DEFAULT_MANIFEST, load_corpus
 # `m2x process` still runs where the optional `diarize` group was never installed.
 from m2x.diarization import DEFAULT_DIARIZATION_DIR
 from m2x.errors import M2XError
+from m2x.extraction import (
+    DEFAULT_EXTRACT_MODEL,
+    DEFAULT_RECORDS_DIR,
+    ExtractionOutcome,
+    extract_record,
+    write_record,
+)
 from m2x.pipeline import (
     DEFAULT_CHAT_MODEL,
     DEFAULT_SUMMARIES_DIR,
@@ -170,6 +178,39 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
 
+    extract = subcommands.add_parser(
+        "extract",
+        help="extract a validated meeting record from a transcript",
+    )
+    extract.add_argument("meeting_id", help="meeting id; also the transcript filename stem")
+    extract.add_argument(
+        "--transcript",
+        type=Path,
+        default=None,
+        help=(
+            "transcript JSON to extract from; default prefers the diarised transcript "
+            f"in {DEFAULT_DIARIZATION_DIR} and falls back to {DEFAULT_TRANSCRIPTS_DIR}"
+        ),
+    )
+    extract.add_argument(
+        "--model",
+        default=DEFAULT_EXTRACT_MODEL,
+        help=f"Hugging Face repo id of the extraction model (default: {DEFAULT_EXTRACT_MODEL})",
+    )
+    extract.add_argument(
+        "--provider",
+        type=Provider,
+        choices=list(Provider),
+        default=None,
+        help="backend for extraction; default routes by the model's registry entry",
+    )
+    extract.add_argument(
+        "--records-dir",
+        type=Path,
+        default=DEFAULT_RECORDS_DIR,
+        help=f"where record JSON is written (default: {DEFAULT_RECORDS_DIR})",
+    )
+
     chapter = subcommands.add_parser(
         "chapter",
         help="cut a transcript into chapters by one of two strategies",
@@ -292,6 +333,9 @@ def main(
     if args.command == "diarize":
         return _run_diarize(args)
 
+    if args.command == "extract":
+        return _run_extract(args, adapter_factory=adapter_factory)
+
     if args.command == "chapter":
         return _run_chapter(args, adapter_factory=adapter_factory)
 
@@ -395,11 +439,65 @@ def _run_diarize(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+def _run_extract(
+    args: argparse.Namespace,
+    *,
+    adapter_factory: Callable[[], ModelAdapter],
+) -> int:
+    """Extract one meeting record and write it.
+
+    Args:
+        args: Parsed ``extract`` arguments.
+        adapter_factory: Builds the adapter performing the calls.
+
+    Returns:
+        Process exit code. A record that never validated is a failure, not an empty
+        file — the Phase 1B gate counts schema validity, so a silently empty record
+        would be a failure disguised as a pass.
+    """
+    path = args.transcript or _default_transcript_path(args.meeting_id)
+    if not path.is_file():
+        print(f"error: no such transcript: {path}", file=sys.stderr)
+        return EXIT_USAGE
+
+    try:
+        transcript = load_transcript(path)
+    except (OSError, ValidationError) as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_USAGE
+
+    try:
+        with adapter_factory() as adapter:
+            outcome = extract_record(
+                transcript,
+                adapter=adapter,
+                meeting_id=args.meeting_id,
+                model_repo_id=args.model,
+                provider=args.provider,
+            )
+    except M2XError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_FAILURE
+    except InstructorRetryException as error:
+        # Every attempt failed validation. The last error is the useful one: it names
+        # the field or the citation the model could not get right.
+        print(f"error: extraction never validated after retries: {error}", file=sys.stderr)
+        return EXIT_FAILURE
+
+    record_path = write_record(outcome, args.records_dir)
+    print(_format_extraction(outcome, source=path, written=record_path))
+    return EXIT_OK
+
+
 def _default_transcript_path(meeting_id: str) -> Path:
     """Locate a transcript for a meeting.
 
-    Prefers the diarised transcript: speaker labels are what make a chapter boundary
-    legible to a reader and let a summary say who took the work.
+    Shared by ``extract``, ``chapter`` and ``summarise`` — one rule, so the three commands
+    cannot disagree about which transcript a meeting id means.
+
+    Prefers the diarised transcript: speaker labels are what let the extractor attribute
+    an action to the person who accepted it rather than leaving every owner ``None``, and
+    what makes a chapter boundary legible to a reader.
 
     Args:
         meeting_id: Meeting whose transcript is wanted.
@@ -409,6 +507,33 @@ def _default_transcript_path(meeting_id: str) -> Path:
     """
     diarised = DEFAULT_DIARIZATION_DIR / f"{meeting_id}.json"
     return diarised if diarised.is_file() else DEFAULT_TRANSCRIPTS_DIR / f"{meeting_id}.json"
+
+
+def _format_extraction(outcome: ExtractionOutcome, *, source: Path, written: Path) -> str:
+    """Render a completed extraction as a short human-readable block.
+
+    Args:
+        outcome: The extraction.
+        source: Transcript it was extracted from.
+        written: File the record was written to.
+
+    Returns:
+        Text to print to stdout.
+    """
+    record = outcome.record
+    lines = [
+        f"{outcome.meeting_id}: {record.item_count} items from {source} "
+        f"({outcome.attempts} attempt{'s' if outcome.attempts != 1 else ''}, "
+        f"{outcome.latency_ms} ms)",
+        f"  decisions {len(record.decisions)}  actions {len(record.actions)}  "
+        f"risks {len(record.risks)}  questions {len(record.open_questions)}",
+        f"  model     {outcome.model_repo_id} via {outcome.provider.value}",
+        f"  cost      ${outcome.cost_usd:.4f}",
+    ]
+    if outcome.truncated:
+        lines.append("  warning   transcript truncated; the tail was not extracted from")
+    lines.append(f"  written   {written}")
+    return "\n".join(lines)
 
 
 def _load_transcript_or_exit(path: Path) -> Transcript | int:
