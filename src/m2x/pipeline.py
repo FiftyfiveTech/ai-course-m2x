@@ -105,6 +105,7 @@ def process_meeting(
     transcribe_provider: Provider | None = None,
     chat_model_repo_id: str = DEFAULT_CHAT_MODEL,
     language: str | None = None,
+    transcribe_prompt: str | None = None,
     summarize: bool = True,
     transcripts_dir: Path = DEFAULT_TRANSCRIPTS_DIR,
     summaries_dir: Path = DEFAULT_SUMMARIES_DIR,
@@ -125,6 +126,9 @@ def process_meeting(
             the model's registry entry.
         chat_model_repo_id: Hugging Face repo id of the summarising model.
         language: ISO-639-1 hint, or ``None`` to let the model detect it.
+        transcribe_prompt: Vocabulary bias for the transcription step, as built by
+            :func:`m2x.vocab.as_prompt`. Named for the step it steers, like
+            ``transcribe_provider`` — the summary step's prompting is not this knob.
         summarize: Set false to stop after transcription.
         transcripts_dir: Directory for transcript JSON.
         summaries_dir: Directory for summary text.
@@ -159,6 +163,7 @@ def process_meeting(
         model_repo_id=model_repo_id,
         provider=transcribe_provider,
         language=language,
+        prompt=transcribe_prompt,
         context=context,
         chunks_dir=chunks_dir,
     )
@@ -196,6 +201,7 @@ def transcribe_audio(
     model_repo_id: str = DEFAULT_TRANSCRIBE_MODEL,
     provider: Provider | None = None,
     language: str | None = None,
+    prompt: str | None = None,
     context: RunContext | None = None,
     chunks_dir: Path = DEFAULT_CHUNKS_DIR,
 ) -> Transcript:
@@ -214,6 +220,8 @@ def transcribe_audio(
         model_repo_id: Hugging Face repo id of the transcription model.
         provider: Force a transcription backend.
         language: ISO-639-1 hint, or ``None`` to auto-detect.
+        prompt: Vocabulary bias, applied identically to every chunk so a split meeting
+            is biased the same way end to end.
         context: Provenance for the run log; shared by every chunk of one meeting.
         chunks_dir: Where pieces are written when a split is needed.
 
@@ -232,6 +240,7 @@ def transcribe_audio(
                 model_repo_id,
                 provider=provider,
                 language=language,
+                prompt=prompt,
                 context=context,
             ),
         )

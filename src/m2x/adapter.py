@@ -233,6 +233,7 @@ class ModelAdapter:
         *,
         provider: Provider | None = None,
         language: str | None = None,
+        prompt: str | None = None,
         context: RunContext | None = None,
     ) -> Transcript:
         """Transcribe audio to timestamped segments.
@@ -248,6 +249,9 @@ class ModelAdapter:
             model_repo_id: Canonical Hugging Face repo id of a transcription model.
             provider: Force a backend.
             language: ISO-639-1 hint. ``None`` lets the model auto-detect.
+            prompt: Decoding bias — a comma-joined vocabulary, per :mod:`m2x.vocab`.
+                Part of the cache key, so a run with the vocabulary and one without are
+                separate entries rather than the second silently reading the first.
             context: Provenance override for this one call.
 
         Returns:
@@ -269,7 +273,9 @@ class ModelAdapter:
             payload = audio
             filename = _DEFAULT_AUDIO_FILENAME
 
-        params = _compact({"response_format": "verbose_json", "language": language})
+        params = _compact(
+            {"response_format": "verbose_json", "language": language, "prompt": prompt}
+        )
 
         # Audio is hashed rather than embedded: a ten-minute clip is megabytes, and
         # the digest is a perfectly good content address.

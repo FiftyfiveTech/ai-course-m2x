@@ -103,6 +103,63 @@ def test_repeat_run_reports_the_cache_hit(
     assert "(cache," in capsys.readouterr().out
 
 
+def test_vocab_flag_biases_the_transcription_request(
+    make_adapter: AdapterFactory,
+    audio_file: Path,
+    tmp_path: Path,
+) -> None:
+    """``--vocab`` must reach the provider, or M2X-024's "on" leg is not on."""
+    vocab = tmp_path / "vocab.txt"
+    vocab.write_text("# hints\nNATS\nNestJS\n", encoding="utf-8")
+    seen: list[bytes] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(request.content)
+        return _ok_handler(request)
+
+    code = main(
+        [
+            "process",
+            str(audio_file),
+            "--model",
+            TRANSCRIBE_MODEL,
+            "--no-summary",
+            "--vocab",
+            str(vocab),
+            "--transcripts-dir",
+            str(tmp_path / "transcripts"),
+        ],
+        adapter_factory=lambda: make_adapter(handler),
+    )
+
+    assert code == EXIT_OK
+    assert b"NATS, NestJS" in seen[0]
+
+
+def test_a_missing_vocab_file_exits_with_a_usage_code(
+    make_adapter: AdapterFactory,
+    audio_file: Path,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """Silently transcribing unbiased would put an unlabelled "off" row in the matrix."""
+    code = main(
+        [
+            "process",
+            str(audio_file),
+            "--model",
+            TRANSCRIBE_MODEL,
+            "--no-summary",
+            "--vocab",
+            str(tmp_path / "nope.txt"),
+        ],
+        adapter_factory=lambda: make_adapter(_ok_handler),
+    )
+
+    assert code == EXIT_USAGE
+    assert "nope.txt" in capsys.readouterr().err
+
+
 def test_missing_audio_exits_with_a_usage_code(
     make_adapter: AdapterFactory,
     tmp_path: Path,
