@@ -12,8 +12,9 @@ Two principles hold across every test in this suite:
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from hashlib import sha256
 from pathlib import Path
-from typing import Any, Callable, Iterator
+from typing import Any, Callable, Iterator, Sequence
 
 import httpx
 import pytest
@@ -28,6 +29,10 @@ FIXED_NOW = datetime(2026, 1, 1, 12, 0, 0, tzinfo=UTC)
 
 CHAT_MODEL = "meta-llama/Llama-3.1-8B-Instruct"
 TRANSCRIBE_MODEL = "openai/whisper-large-v3"
+EMBED_MODEL = "nomic-ai/nomic-embed-text-v1.5"
+
+EMBED_DIMENSIONS = 8
+"""Vector width in tests. Small on purpose — the maths does not care, diffs stay readable."""
 
 REGISTRY_DATA: dict[str, Any] = {
     "providers": {
@@ -61,6 +66,15 @@ REGISTRY_DATA: dict[str, Any] = {
             "default_provider": "groq",
             "served_as": {"groq": "whisper-large-v3"},
             "price_per_audio_minute": 0.0,
+        },
+        EMBED_MODEL: {
+            "kind": "embed",
+            # Local by default, like the tracked registry: an index build embeds the
+            # whole corpus, which is the last thing to put on a free tier.
+            "default_provider": "ollama",
+            "served_as": {"ollama": "nomic-embed-text", "nim": "nvidia/nv-embed"},
+            "price_per_1k_tokens_in": 0.0,
+            "price_per_1k_tokens_out": 0.0,
         },
     },
 }
@@ -204,4 +218,49 @@ def transcription_response(
             {"start": 2.5, "end": 4.0, "text": " begins"},
             {"start": 4.0, "text": " dropped: no end timestamp"},
         ],
+    }
+
+
+def fake_vector(text: str, dimensions: int = EMBED_DIMENSIONS) -> list[float]:
+    """Derive a deterministic unit-ish vector from a string.
+
+    Deterministic so the same text always embeds identically — which is what lets a
+    test assert that re-indexing unchanged content is a cache hit rather than a second
+    call. Similar strings land near each other only by accident; tests that care about
+    ranking script the distances instead of hoping.
+    """
+    seed = sha256(text.encode("utf-8")).digest()
+    return [seed[index % len(seed)] / 255.0 for index in range(dimensions)]
+
+
+def embeddings_response(
+    texts: Sequence[str],
+    *,
+    tokens_in: int | None = None,
+    shuffle: bool = False,
+) -> dict[str, Any]:
+    """Build an OpenAI-compatible embeddings payload.
+
+    Args:
+        texts: Texts being embedded; one vector is returned per text.
+        tokens_in: Prompt tokens to report. Defaults to one per text.
+        shuffle: Return the items out of order, with their ``index`` fields intact.
+            Exercises the adapter's re-ordering, which is what stops a vector being
+            attached to the wrong chunk.
+
+    Returns:
+        A JSON-serialisable response body.
+    """
+    items = [
+        {"object": "embedding", "index": position, "embedding": fake_vector(text)}
+        for position, text in enumerate(texts)
+    ]
+    if shuffle:
+        items = list(reversed(items))
+
+    return {
+        "object": "list",
+        "data": items,
+        "model": "nomic-embed-text",
+        "usage": {"prompt_tokens": len(texts) if tokens_in is None else tokens_in},
     }
