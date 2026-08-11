@@ -46,6 +46,19 @@ DEFAULT_COLLECTION = "m2x"
 DEFAULT_EMBED_MODEL = "nomic-ai/nomic-embed-text-v1.5"
 """Hugging Face repo id of the embedding model. Routed to Ollama by the registry."""
 
+DEFAULT_DOCUMENTS = (
+    Path("README.md"),
+    Path("docs/m2x-week1-handbook.md"),
+    Path("docs/corpus.md"),
+)
+"""Project docs indexed alongside the meetings.
+
+Tracked files, so a fresh clone indexes the same corpus. They are the three that answer
+questions a meeting cannot: what the system is meant to do, what the week's plan was,
+and where the recordings came from. Missing ones are reported and skipped rather than
+failing the build, so the list can name a doc that has not been written yet.
+"""
+
 EMBED_BATCH_SIZE = 32
 """Chunks per embedding request.
 

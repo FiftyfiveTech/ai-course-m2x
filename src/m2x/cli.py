@@ -50,6 +50,7 @@ from m2x.pipeline import (
     load_transcript,
     process_meeting,
 )
+from m2x.indexing import SourceType
 from m2x.prompts import DEFAULT_PROMPTS_DIR
 from m2x.run_log import RunLogger
 from m2x.run_summary import DEFAULT_RUN_LOG, format_summary, summarise
@@ -63,10 +64,57 @@ from m2x.summarisation import (
     write_strategy_summary,
 )
 from m2x.types import Provider, Transcript
+from m2x.vector_store import (
+    DEFAULT_COLLECTION,
+    DEFAULT_DOCUMENTS,
+    DEFAULT_EMBED_MODEL,
+    DEFAULT_INDEX_DIR,
+    EMBED_BATCH_SIZE,
+    Hit,
+    IndexOutcome,
+    VectorStore,
+    build_index,
+    query_index,
+)
 
 EXIT_OK = 0
 EXIT_USAGE = 2
 EXIT_FAILURE = 1
+
+
+def _add_index_arguments(parser: argparse.ArgumentParser) -> None:
+    """Attach the flags that both ``index`` actions need.
+
+    Shared rather than duplicated because build and query must agree on where the index
+    lives and which model it speaks — a query pointed at the right store with the wrong
+    model returns plausible nonsense and no error.
+
+    Args:
+        parser: Sub-parser to extend.
+    """
+    parser.add_argument(
+        "--index-dir",
+        type=Path,
+        default=DEFAULT_INDEX_DIR,
+        help=f"directory holding the Chroma database (default: {DEFAULT_INDEX_DIR})",
+    )
+    parser.add_argument(
+        "--collection",
+        default=DEFAULT_COLLECTION,
+        help=f"collection name (default: {DEFAULT_COLLECTION})",
+    )
+    parser.add_argument(
+        "--model",
+        default=DEFAULT_EMBED_MODEL,
+        help=f"Hugging Face repo id of the embedding model (default: {DEFAULT_EMBED_MODEL})",
+    )
+    parser.add_argument(
+        "--provider",
+        type=Provider,
+        choices=list(Provider),
+        default=None,
+        help="backend for embedding; default routes by the model's registry entry",
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -310,6 +358,71 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"where summaries are written (default: {DEFAULT_STRATEGY_SUMMARIES_DIR})",
     )
 
+    index = subcommands.add_parser(
+        "index",
+        help="build and query the retrieval index over transcripts and project docs",
+    )
+    index_actions = index.add_subparsers(dest="action", required=True)
+
+    index_build = index_actions.add_parser(
+        "build",
+        help="chunk, embed and upsert every transcript and document",
+    )
+    index_build.add_argument(
+        "--transcripts-dir",
+        type=Path,
+        default=DEFAULT_TRANSCRIPTS_DIR,
+        help=(
+            "directory of transcript JSON to index; the diarised copy in "
+            f"{DEFAULT_DIARIZATION_DIR} is preferred per meeting "
+            f"(default: {DEFAULT_TRANSCRIPTS_DIR})"
+        ),
+    )
+    index_build.add_argument(
+        "--doc",
+        type=Path,
+        action="append",
+        dest="docs",
+        default=None,
+        help=(
+            "markdown file to index as source_type=doc; repeatable. Defaults to "
+            f"{', '.join(str(path) for path in DEFAULT_DOCUMENTS)}"
+        ),
+    )
+    index_build.add_argument(
+        "--no-docs",
+        action="store_true",
+        help="index transcripts only",
+    )
+    index_build.add_argument(
+        "--batch-size",
+        type=int,
+        default=EMBED_BATCH_SIZE,
+        help=f"texts per embedding request (default: {EMBED_BATCH_SIZE})",
+    )
+    _add_index_arguments(index_build)
+
+    index_query = index_actions.add_parser(
+        "query",
+        help="debug retrieval: top-k chunks with their scores and metadata",
+    )
+    index_query.add_argument("question", help="natural-language query")
+    index_query.add_argument(
+        "-k",
+        "--top-k",
+        type=int,
+        default=5,
+        help="how many chunks to return (default: 5)",
+    )
+    index_query.add_argument(
+        "--source-type",
+        type=SourceType,
+        choices=list(SourceType),
+        default=None,
+        help="restrict to meetings or documents; default searches both",
+    )
+    _add_index_arguments(index_query)
+
     runs = subcommands.add_parser("runs", help="report on the run log")
     run_actions = runs.add_subparsers(dest="action", required=True)
     runs_summary = run_actions.add_parser(
@@ -344,6 +457,9 @@ def main(
 
     if args.command == "runs":
         return _run_summary(args)
+
+    if args.command == "index":
+        return _run_index(args, adapter_factory=adapter_factory)
 
     if args.command == "diarize":
         return _run_diarize(args)
@@ -722,6 +838,191 @@ def _format_summary_outcome(outcome: SummaryOutcome, *, written: Path) -> str:
     if outcome.truncated:
         lines.append("  warning   input truncated; the tail was not summarised")
     lines.append(f"  written   {written}")
+    return "\n".join(lines)
+
+
+def _run_index(
+    args: argparse.Namespace,
+    *,
+    adapter_factory: Callable[[], ModelAdapter],
+) -> int:
+    """Run ``m2x index build`` or ``m2x index query``.
+
+    Args:
+        args: Parsed ``index`` arguments.
+        adapter_factory: Builds the adapter performing the embedding calls.
+
+    Returns:
+        Process exit code.
+    """
+    try:
+        store = VectorStore(
+            args.index_dir,
+            collection=args.collection,
+            embed_model_repo_id=args.model,
+        )
+    except M2XError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_FAILURE
+
+    if args.action == "query":
+        return _run_index_query(args, store, adapter_factory=adapter_factory)
+    return _run_index_build(args, store, adapter_factory=adapter_factory)
+
+
+def _run_index_build(
+    args: argparse.Namespace,
+    store: VectorStore,
+    *,
+    adapter_factory: Callable[[], ModelAdapter],
+) -> int:
+    """Chunk, embed and upsert the corpus.
+
+    Args:
+        args: Parsed ``index build`` arguments.
+        store: Destination index.
+        adapter_factory: Builds the adapter performing the embedding calls.
+
+    Returns:
+        Process exit code. An empty corpus is a usage error rather than an empty
+        index — a build that indexed nothing and said "done" is how a gate gets run
+        against a store with no data in it.
+    """
+    transcripts: list[tuple[str, Transcript]] = []
+    unreadable: list[str] = []
+    for path in sorted(args.transcripts_dir.glob("*.json")) if args.transcripts_dir.is_dir() else []:
+        # Prefer the diarised copy of the same meeting: speaker labels ride into the
+        # chunk text, and "who said it" is part of what a reader matches on. Falls back
+        # to the plain transcript, and never leaves the directory that was asked for.
+        diarised = DEFAULT_DIARIZATION_DIR / path.name
+        source = diarised if diarised.is_file() else path
+        try:
+            transcripts.append((path.stem, load_transcript(source)))
+        except (OSError, ValidationError) as error:
+            unreadable.append(f"{source}: {error}")
+
+    documents = [] if args.no_docs else [Path(doc) for doc in (args.docs or DEFAULT_DOCUMENTS)]
+    missing = [path for path in documents if not path.is_file()]
+    documents = [path for path in documents if path.is_file()]
+
+    if not transcripts and not documents:
+        print(
+            f"error: nothing to index — no transcripts in {args.transcripts_dir} "
+            "and no readable documents",
+            file=sys.stderr,
+        )
+        return EXIT_USAGE
+
+    try:
+        with adapter_factory() as adapter:
+            outcome = build_index(
+                store,
+                adapter,
+                transcripts=transcripts,
+                documents=documents,
+                provider=args.provider,
+                batch_size=args.batch_size,
+            )
+    except M2XError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_FAILURE
+    except ValueError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_USAGE
+
+    print(_format_index_build(outcome, index_dir=args.index_dir))
+    for path in missing:
+        print(f"  skipped   {path} (not found)", file=sys.stderr)
+    for problem in unreadable:
+        print(f"  skipped   {problem}", file=sys.stderr)
+    return EXIT_OK
+
+
+def _run_index_query(
+    args: argparse.Namespace,
+    store: VectorStore,
+    *,
+    adapter_factory: Callable[[], ModelAdapter],
+) -> int:
+    """Print the nearest chunks for a question.
+
+    Args:
+        args: Parsed ``index query`` arguments.
+        store: Index to search.
+        adapter_factory: Builds the adapter performing the embedding call.
+
+    Returns:
+        Process exit code. An empty result is exit 0 — "nothing matched" is an answer,
+        and the command exists to show what retrieval actually returns.
+    """
+    try:
+        with adapter_factory() as adapter:
+            hits = query_index(
+                store,
+                adapter,
+                args.question,
+                k=args.top_k,
+                provider=args.provider,
+                source_type=args.source_type,
+            )
+    except M2XError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_FAILURE
+    except ValueError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_USAGE
+
+    print(_format_hits(args.question, hits))
+    return EXIT_OK
+
+
+def _format_index_build(outcome: IndexOutcome, *, index_dir: Path) -> str:
+    """Render an index build as a short human-readable block.
+
+    Args:
+        outcome: What the build wrote.
+        index_dir: Where the index lives.
+
+    Returns:
+        Text to print to stdout.
+    """
+    lines = [
+        f"indexed {outcome.total_chunks} chunks from {len(outcome.sources)} sources "
+        f"({outcome.index_size} in the index)",
+        f"  model     {outcome.embed_model_repo_id}",
+        f"  store     {index_dir}",
+    ]
+    for source, count in sorted(outcome.sources.items()):
+        lines.append(f"  {source:<24} {count} chunks")
+    for source, reason in sorted(outcome.skipped.items()):
+        lines.append(f"  {source:<24} skipped — {reason}")
+    return "\n".join(lines)
+
+
+def _format_hits(question: str, hits: list[Hit]) -> str:
+    """Render retrieval results with their scores and citations.
+
+    Distance is printed rather than hidden behind a similarity percentage: it is what
+    the store actually returns, and treating a rank as a confidence is the mistake
+    ``m2x ask`` has to avoid.
+
+    Args:
+        question: The query.
+        hits: Results, nearest first.
+
+    Returns:
+        Text to print to stdout.
+    """
+    if not hits:
+        return f'no chunks matched "{question}" — is the index built?'
+
+    lines = [f'top {len(hits)} for "{question}":']
+    for rank, hit in enumerate(hits, start=1):
+        snippet = " ".join(hit.text.split())
+        if len(snippet) > 160:
+            snippet = f"{snippet[:157]}..."
+        lines.append(f"  {rank}. {hit.citation}  distance {hit.distance:.4f}")
+        lines.append(f"     {snippet}")
     return "\n".join(lines)
 
 
