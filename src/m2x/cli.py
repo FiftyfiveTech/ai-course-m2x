@@ -19,6 +19,16 @@ from instructor.core import InstructorRetryException
 from pydantic import ValidationError
 
 from m2x.adapter import ModelAdapter
+from m2x.chaptering import (
+    DEFAULT_CHAPTER_MODEL,
+    DEFAULT_CHAPTERS_DIR,
+    DEFAULT_WINDOW_S,
+    ChapterSet,
+    chapter_fixed,
+    chapter_llm,
+    load_chapters,
+    write_chapters,
+)
 from m2x.corpus import DEFAULT_MANIFEST, load_corpus
 # Constants only — this module keeps its torch imports inside the diarize handler, so
 # `m2x process` still runs where the optional `diarize` group was never installed.
@@ -43,6 +53,14 @@ from m2x.pipeline import (
 from m2x.run_log import RunLogger
 from m2x.run_summary import DEFAULT_RUN_LOG, format_summary, summarise
 from m2x.settings import Settings
+from m2x.summarisation import (
+    DEFAULT_STRATEGY_SUMMARIES_DIR,
+    DEFAULT_SUMMARY_MODEL,
+    SummaryOutcome,
+    summarise_map_reduce,
+    summarise_single_pass,
+    write_strategy_summary,
+)
 from m2x.types import Provider, Transcript
 
 EXIT_OK = 0
@@ -193,6 +211,90 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"where record JSON is written (default: {DEFAULT_RECORDS_DIR})",
     )
 
+    chapter = subcommands.add_parser(
+        "chapter",
+        help="cut a transcript into chapters by one of two strategies",
+    )
+    chapter.add_argument("meeting_id", help="meeting id; also the transcript filename stem")
+    chapter.add_argument(
+        "--strategy",
+        choices=("fixed", "llm"),
+        default="fixed",
+        help="fixed windows (free, topic-blind) or LLM topic-shift detection (one call)",
+    )
+    chapter.add_argument(
+        "--transcript",
+        type=Path,
+        default=None,
+        help="transcript JSON; defaults to the diarised one, then the plain one",
+    )
+    chapter.add_argument(
+        "--window",
+        type=float,
+        default=DEFAULT_WINDOW_S,
+        help=f"fixed-window length in seconds (default: {DEFAULT_WINDOW_S:.0f})",
+    )
+    chapter.add_argument(
+        "--model",
+        default=DEFAULT_CHAPTER_MODEL,
+        help=f"Hugging Face repo id for the llm strategy (default: {DEFAULT_CHAPTER_MODEL})",
+    )
+    chapter.add_argument(
+        "--provider",
+        type=Provider,
+        choices=list(Provider),
+        default=None,
+        help="backend for the llm strategy",
+    )
+    chapter.add_argument(
+        "--chapters-dir",
+        type=Path,
+        default=DEFAULT_CHAPTERS_DIR,
+        help=f"where chapter JSON is written (default: {DEFAULT_CHAPTERS_DIR})",
+    )
+
+    summarise_cmd = subcommands.add_parser(
+        "summarise",
+        help="summarise a meeting by one of two strategies",
+    )
+    summarise_cmd.add_argument("meeting_id", help="meeting id; also the transcript filename stem")
+    summarise_cmd.add_argument(
+        "--strategy",
+        choices=("single-pass", "map-reduce"),
+        default="single-pass",
+        help="whole transcript in one call, or per-chapter summaries then a merge",
+    )
+    summarise_cmd.add_argument(
+        "--transcript",
+        type=Path,
+        default=None,
+        help="transcript JSON; defaults to the diarised one, then the plain one",
+    )
+    summarise_cmd.add_argument(
+        "--chapters",
+        type=Path,
+        default=None,
+        help="chapter JSON for map-reduce; defaults to the fixed chaptering of this meeting",
+    )
+    summarise_cmd.add_argument(
+        "--model",
+        default=DEFAULT_SUMMARY_MODEL,
+        help=f"Hugging Face repo id of the summarising model (default: {DEFAULT_SUMMARY_MODEL})",
+    )
+    summarise_cmd.add_argument(
+        "--provider",
+        type=Provider,
+        choices=list(Provider),
+        default=None,
+        help="backend for the summary calls",
+    )
+    summarise_cmd.add_argument(
+        "--summaries-dir",
+        type=Path,
+        default=DEFAULT_STRATEGY_SUMMARIES_DIR,
+        help=f"where summaries are written (default: {DEFAULT_STRATEGY_SUMMARIES_DIR})",
+    )
+
     runs = subcommands.add_parser("runs", help="report on the run log")
     run_actions = runs.add_subparsers(dest="action", required=True)
     runs_summary = run_actions.add_parser(
@@ -233,6 +335,12 @@ def main(
 
     if args.command == "extract":
         return _run_extract(args, adapter_factory=adapter_factory)
+
+    if args.command == "chapter":
+        return _run_chapter(args, adapter_factory=adapter_factory)
+
+    if args.command == "summarise":
+        return _run_summarise(args, adapter_factory=adapter_factory)
 
     try:
         with adapter_factory() as adapter:
@@ -384,8 +492,12 @@ def _run_extract(
 def _default_transcript_path(meeting_id: str) -> Path:
     """Locate a transcript for a meeting.
 
+    Shared by ``extract``, ``chapter`` and ``summarise`` — one rule, so the three commands
+    cannot disagree about which transcript a meeting id means.
+
     Prefers the diarised transcript: speaker labels are what let the extractor attribute
-    an action to the person who accepted it rather than leaving every owner ``None``.
+    an action to the person who accepted it rather than leaving every owner ``None``, and
+    what makes a chapter boundary legible to a reader.
 
     Args:
         meeting_id: Meeting whose transcript is wanted.
@@ -420,6 +532,177 @@ def _format_extraction(outcome: ExtractionOutcome, *, source: Path, written: Pat
     ]
     if outcome.truncated:
         lines.append("  warning   transcript truncated; the tail was not extracted from")
+    lines.append(f"  written   {written}")
+    return "\n".join(lines)
+
+
+def _load_transcript_or_exit(path: Path) -> Transcript | int:
+    """Read a transcript, or return the exit code to use.
+
+    Args:
+        path: Transcript JSON file.
+
+    Returns:
+        The transcript, or an exit code when it could not be read.
+    """
+    if not path.is_file():
+        print(f"error: no such transcript: {path}", file=sys.stderr)
+        return EXIT_USAGE
+    try:
+        return load_transcript(path)
+    except (OSError, ValidationError) as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_USAGE
+
+
+def _run_chapter(
+    args: argparse.Namespace,
+    *,
+    adapter_factory: Callable[[], ModelAdapter],
+) -> int:
+    """Chapter one meeting and write the result.
+
+    Args:
+        args: Parsed ``chapter`` arguments.
+        adapter_factory: Builds the adapter, used only by the ``llm`` strategy.
+
+    Returns:
+        Process exit code.
+    """
+    loaded = _load_transcript_or_exit(args.transcript or _default_transcript_path(args.meeting_id))
+    if isinstance(loaded, int):
+        return loaded
+
+    try:
+        if args.strategy == "fixed":
+            chapters = chapter_fixed(loaded, meeting_id=args.meeting_id, window_s=args.window)
+        else:
+            with adapter_factory() as adapter:
+                chapters = chapter_llm(
+                    loaded,
+                    adapter=adapter,
+                    meeting_id=args.meeting_id,
+                    model_repo_id=args.model,
+                    provider=args.provider,
+                )
+    except ValueError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_USAGE
+    except M2XError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_FAILURE
+
+    path = write_chapters(chapters, args.chapters_dir)
+    print(_format_chapters(chapters, written=path))
+    return EXIT_OK
+
+
+def _run_summarise(
+    args: argparse.Namespace,
+    *,
+    adapter_factory: Callable[[], ModelAdapter],
+) -> int:
+    """Summarise one meeting by the requested strategy.
+
+    Args:
+        args: Parsed ``summarise`` arguments.
+        adapter_factory: Builds the adapter performing the calls.
+
+    Returns:
+        Process exit code.
+    """
+    loaded = _load_transcript_or_exit(args.transcript or _default_transcript_path(args.meeting_id))
+    if isinstance(loaded, int):
+        return loaded
+
+    chapters: ChapterSet | None = None
+    if args.strategy == "map-reduce":
+        chapters_path = args.chapters or DEFAULT_CHAPTERS_DIR / f"{args.meeting_id}.fixed.json"
+        if not chapters_path.is_file():
+            print(
+                f"error: no chapters at {chapters_path}; run `m2x chapter {args.meeting_id}` first",
+                file=sys.stderr,
+            )
+            return EXIT_USAGE
+        try:
+            chapters = load_chapters(chapters_path)
+        except (OSError, ValidationError) as error:
+            print(f"error: {error}", file=sys.stderr)
+            return EXIT_USAGE
+
+    try:
+        with adapter_factory() as adapter:
+            if chapters is None:
+                outcome = summarise_single_pass(
+                    loaded,
+                    adapter=adapter,
+                    meeting_id=args.meeting_id,
+                    model_repo_id=args.model,
+                    provider=args.provider,
+                )
+            else:
+                outcome = summarise_map_reduce(
+                    chapters,
+                    adapter=adapter,
+                    meeting_id=args.meeting_id,
+                    model_repo_id=args.model,
+                    provider=args.provider,
+                )
+    except ValueError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_USAGE
+    except M2XError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_FAILURE
+
+    path = write_strategy_summary(outcome, args.summaries_dir)
+    print(_format_summary_outcome(outcome, written=path))
+    return EXIT_OK
+
+
+def _format_chapters(chapters: ChapterSet, *, written: Path) -> str:
+    """Render a chaptering as a short human-readable block.
+
+    Args:
+        chapters: The chapter set.
+        written: File it was written to.
+
+    Returns:
+        Text to print to stdout.
+    """
+    durations = [chapter.duration_s for chapter in chapters.chapters]
+    lines = [
+        f"{chapters.meeting_id}: {chapters.count} chapters by {chapters.strategy} "
+        f"({chapters.latency_ms} ms)",
+        f"  length    min {min(durations):.0f}s / median {sorted(durations)[len(durations) // 2]:.0f}s "
+        f"/ max {max(durations):.0f}s",
+    ]
+    if chapters.model_repo_id:
+        lines.append(f"  model     {chapters.model_repo_id} via {chapters.provider.value}")
+        lines.append(f"  cost      ${chapters.cost_usd:.4f}")
+    lines.append(f"  written   {written}")
+    return "\n".join(lines)
+
+
+def _format_summary_outcome(outcome: SummaryOutcome, *, written: Path) -> str:
+    """Render a summarisation run as a short human-readable block.
+
+    Args:
+        outcome: The summary.
+        written: File it was written to.
+
+    Returns:
+        Text to print to stdout.
+    """
+    lines = [
+        f"{outcome.meeting_id}: {outcome.strategy} in {outcome.calls} call"
+        f"{'s' if outcome.calls != 1 else ''} ({outcome.latency_ms} ms)",
+        f"  model     {outcome.model_repo_id} via {outcome.provider.value}",
+        f"  tokens    {outcome.tokens_in} in / {outcome.tokens_out} out",
+        f"  cost      ${outcome.cost_usd:.4f}",
+    ]
+    if outcome.truncated:
+        lines.append("  warning   input truncated; the tail was not summarised")
     lines.append(f"  written   {written}")
     return "\n".join(lines)
 
