@@ -252,8 +252,8 @@ both tried and both failed.**
 | C-2 LLM topic-shift | ami-001 | chapters · calls · latency | 13 · 1 · 558 ms | **all 12 boundaries inside the first 9.2 min of 29.7**; final chapter = 69% of the meeting |
 | S-1 single-pass | ami-001 | questions · calls · tokens | **3/5** · 1 · 5538+283 | misses the late-meeting question entirely |
 | S-2 map-reduce | ami-001 | questions · calls · tokens | **3.5/5** · 7 · 6808+775 | +0.5 for 7× the calls and 1.23× the tokens |
-| V-1 off | | entity % | | blocked — no hand snippet (M2X-024) |
-| V-1 on | | entity % | | blocked — no hand snippet (M2X-024) |
+| V-1 off | mtg-002, ami-001 | entity % | | hypothesis staged; number blocked — no hand snippet |
+| V-1 on | mtg-002, ami-001 | entity % | | hypothesis staged; number blocked — no hand snippet |
 
 Both summarisation rows run the same model (`meta-llama/Llama-3.1-8B-Instruct`) on the
 same provider, so the delta is the strategy and nothing else. Judgement sheet, with the
@@ -323,6 +323,49 @@ trade to revisit: the margin is one question out of five.
 V-1's denominator is the same hand snippet as T-A/T-B, so M2X-021's entity column and
 M2X-024's are directly comparable — the vocabulary delta is readable straight off the
 two tables.
+
+#### V-1: both legs are on disk, and the metric still has nowhere to run
+
+`--vocab` now exists (M2X-024), so the "on" leg is runnable and was run. Both legs sit
+in `data/comparison/` — `large-v3-auto/` off, `large-v3-vocab/` on — for `mtg-002` and
+`ami-001`. The scoring command is unchanged; only the hand snippet is missing.
+
+Three things turned up in the staging that change what the number will mean, and none
+of them is fixed by writing the snippets:
+
+1. **The vocabulary is not spoken in `ami-001` at all.** Zero of the 56 terms occur in
+   its 4,404 words — AMI is a third-party scenario corpus about note-taking and
+   drawings, not our stack. Entity capture's denominator there is zero, so the metric is
+   undefined on the one meeting whose script it could read.
+2. **On the Hinglish meetings the terms are spoken but come back in Devanagari.**
+   `mtg-002` off is 1,939 Devanagari characters against 23 Latin tokens, and every Latin
+   token is an ordinary English word (`use`, `next`, `phase`) — not one vocabulary term.
+   A Latin-script term list cannot match transliterated speech, so capture would score
+   near zero for a reason that is script, not entity loss. Same shape as the WER problem
+   that withdrew forced `--language en`.
+3. **The prompt makes `mtg-002` worse, not better.** Same audio, same model, same
+   provider, prompt the only difference: 780 words → 404, Devanagari 1,939 chars → 802,
+   and the Latin tokens that appear are hallucinated shouting — `SCREENSHOT` ×5,
+   `SMILE`, `FLOOR`, `PROMPT`, `ENGINEERING`, `FUELS` — with the final segment reading
+   `STOPS,`. `ami-001` shows no such damage (4,404 → 4,664 words), so this is the
+   prompt interacting with code-switched speech, not a general regression.
+
+So the honest reading available today is that the course lesson does not reproduce on
+this corpus as specified: on our English meeting the vocabulary has nothing to capture,
+and on our own meetings the prompt degrades the transcript. **Whether that is the
+finding, or the experiment needs a different corpus, a Devanagari term list or a
+transliteration-aware matcher, is the evaluator's call** — it is recorded here, not
+resolved, exactly like point 2 above it.
+
+**`mtg-001`'s "on" leg could not be produced.** Its second chunk returns Groq HTTP 500
+whenever a prompt is attached — 5 invocations, up to 8 attempts each, against an
+opaque `{"error":{"message":"Internal Server Error"}}`. The same chunk transcribes fine
+unprompted and fine with a five-term prompt, and the meeting's first chunk accepts the
+full prompt, so this is neither the audio nor the documented 224-token cap (the full
+prompt is ~153 tokens). Failures are not monotonic in prompt length — 50 terms passed
+where 30 failed — which points at provider-side instability on the prompted whisper
+path rather than anything in the request. Recorded as a provider constraint; M2X-024's
+step 1 asks for one meeting, and `mtg-002` is that meeting.
 
 ## Reproducing the numbers
 
