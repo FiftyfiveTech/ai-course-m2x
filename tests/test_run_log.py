@@ -33,6 +33,9 @@ EXPECTED_FIELDS = {
     "cost_usd",
     "cached",
     "meeting_id",
+    # Twelfth field, added deliberately for M2X-032 — the module docstring carries the
+    # argument. This set is the gate that makes "deliberately" mean something.
+    "prompt_version",
 }
 
 FIXED_NOW = datetime(2026, 1, 1, 12, 0, 0, tzinfo=UTC)
@@ -83,6 +86,33 @@ class TestRecordShape:
         assert record.cost_usd == pytest.approx(0.25)
         assert record.cached is False
         assert record.meeting_id == "mtg-001"
+
+    def test_prompt_version_travels_from_the_context(self) -> None:
+        record = RunRecord.from_result(
+            _response(),
+            RunContext(phase="phase-1b", command="m2x extract", prompt_version="v1"),
+        )
+
+        assert record.prompt_version == "v1"
+
+    def test_prompt_version_is_null_for_a_call_with_no_versioned_prompt(self) -> None:
+        """Transcription has no prompt. Null is the honest answer, not a placeholder."""
+        record = RunRecord.from_result(_response(), RunContext(phase="phase-0"))
+
+        assert record.prompt_version is None
+
+    def test_a_record_written_before_the_field_existed_still_reads(self) -> None:
+        """Day-one JSONL has to keep parsing, or the cost report loses its history."""
+        legacy = {
+            "ts": FIXED_NOW.isoformat(),
+            "phase": "phase-0",
+            "command": "m2x process",
+            "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+            "provider": "groq",
+            "latency_ms": 1234,
+        }
+
+        assert RunRecord.model_validate(legacy).prompt_version is None
 
     def test_timestamp_is_timezone_aware_utc(self) -> None:
         """A naive timestamp makes cross-machine run comparison ambiguous."""
