@@ -38,6 +38,7 @@ class ModelKind(StrEnum):
 
     CHAT = "chat"
     TRANSCRIBE = "transcribe"
+    EMBED = "embed"
 
 
 class Role(StrEnum):
@@ -116,6 +117,26 @@ class Response(AdapterResult):
     Worth surfacing because a silently truncated completion (``"length"``) is a
     common cause of downstream JSON-parse failures in the extraction phase.
     """
+
+
+class Embeddings(AdapterResult):
+    """The result of embedding one batch of texts.
+
+    Vectors come back in request order, and the adapter checks that — a provider that
+    reorders or drops one would otherwise attach the wrong vector to the wrong chunk,
+    which is unrecoverable later and looks like bad retrieval rather than a bug.
+    """
+
+    vectors: list[list[float]]
+    """One vector per input text, in the order the texts were submitted."""
+
+    usage: Usage = Field(default_factory=Usage)
+    """Token accounting. Embedding endpoints report input tokens only."""
+
+    @property
+    def dimensions(self) -> int:
+        """Length of each vector. ``0`` for an empty batch."""
+        return len(self.vectors[0]) if self.vectors else 0
 
 
 class TranscriptSegment(BaseModel):

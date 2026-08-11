@@ -47,6 +47,7 @@ from m2x.run_log import RunContext, RunLogger, _utc_now
 from m2x.settings import Settings
 from m2x.types import (
     AdapterResult,
+    Embeddings,
     Message,
     ModelKind,
     Provider,
@@ -58,6 +59,7 @@ from m2x.types import (
 
 _CHAT_PATH = "/chat/completions"
 _TRANSCRIBE_PATH = "/audio/transcriptions"
+_EMBED_PATH = "/embeddings"
 
 _RETRYABLE_STATUS = frozenset({429, 500, 502, 503, 504})
 """Statuses worth retrying.
@@ -298,6 +300,69 @@ class ModelAdapter:
         transcript = self._parse_transcript(target, http_response, latency_ms)
         self._write_cache(key, transcript)
         return self._finish(transcript, context)
+
+    def embed(
+        self,
+        texts: Sequence[str],
+        model_repo_id: str,
+        *,
+        provider: Provider | None = None,
+        context: RunContext | None = None,
+    ) -> Embeddings:
+        """Embed a batch of texts into vectors.
+
+        One request per batch rather than one per text: the wire format takes a list,
+        and a hundred separate round trips to embed a hundred chunks would dominate the
+        index build for no benefit. The batch is also the cache unit — re-indexing an
+        unchanged corpus in the same batches is a hit, not a re-embedding.
+
+        Args:
+            texts: Texts to embed, in the order the vectors are wanted back.
+            model_repo_id: Canonical Hugging Face repo id of an embedding model.
+            provider: Force a backend. ``None`` uses the model's default route.
+            context: Provenance override for this one call.
+
+        Returns:
+            The vectors, in submission order, with cost and latency populated.
+
+        Raises:
+            ValueError: ``texts`` is empty. An empty request is a caller bug, and
+                providers answer it with an unhelpful 400.
+            CapabilityMismatchError: The model is not an embedding model.
+            RateLimitError: Rate limited after every retry.
+            ProviderRequestError: The provider failed, or returned a batch that does
+                not line up with the request.
+        """
+        if not texts:
+            raise ValueError("embed() needs at least one text")
+
+        target = self._resolve(model_repo_id, provider)
+        self._assert_kind(target, ModelKind.EMBED, "embed")
+
+        payload = list(texts)
+        key = build_cache_key(
+            kind=ModelKind.EMBED.value,
+            model_repo_id=target.model.repo_id,
+            provider=target.provider,
+            payload=payload,
+            params={},
+        )
+
+        cached = self._read_cache(key, Embeddings)
+        if cached is not None:
+            return self._finish(cached, context)
+
+        body: dict[str, Any] = {"model": target.served_as, "input": payload}
+
+        started = self._monotonic()
+        http_response = self._send_with_retry(
+            target, lambda: self._build_json_request(target, _EMBED_PATH, body)
+        )
+        latency_ms = self._elapsed_ms(started)
+
+        embeddings = self._parse_embeddings(target, http_response, latency_ms, len(payload))
+        self._write_cache(key, embeddings)
+        return self._finish(embeddings, context)
 
     # -- Routing ---------------------------------------------------------------------
 
@@ -556,6 +621,76 @@ class ModelAdapter:
             text=text,
             usage=usage,
             finish_reason=choice.get("finish_reason"),
+        )
+
+    def _parse_embeddings(
+        self,
+        target: ResolvedTarget,
+        response: httpx.Response,
+        latency_ms: int,
+        expected: int,
+    ) -> Embeddings:
+        """Turn an OpenAI-compatible embeddings payload into :class:`Embeddings`.
+
+        The payload carries an ``index`` per vector, and it is honoured rather than
+        trusted to arrive in order. Vectors are matched to texts positionally by every
+        caller, so a reordered batch would attach each vector to the wrong chunk — and
+        nothing downstream could detect it. The count is checked for the same reason.
+
+        Args:
+            target: Resolved target, supplying the price table and canonical repo id.
+            response: Successful HTTP response.
+            latency_ms: Measured call duration.
+            expected: How many texts were submitted.
+
+        Returns:
+            Vectors in submission order, with cost computed.
+
+        Raises:
+            ProviderRequestError: The payload is not JSON, has no usable ``data``, or
+                does not return exactly one vector per submitted text.
+        """
+        data = _parse_json(target.provider, response)
+
+        raw_items = data.get("data")
+        if not isinstance(raw_items, list) or not raw_items:
+            raise ProviderRequestError(
+                target.provider.value,
+                "embeddings response contained no data",
+                status_code=response.status_code,
+                body=_truncate(response.text),
+            )
+
+        try:
+            ordered = sorted(raw_items, key=lambda item: int(item.get("index", 0)))
+            vectors = [[float(value) for value in item["embedding"]] for item in ordered]
+        except (KeyError, TypeError, ValueError) as exc:
+            raise ProviderRequestError(
+                target.provider.value,
+                f"embeddings response was not usable: {exc}",
+                status_code=response.status_code,
+                body=_truncate(response.text),
+            ) from exc
+
+        if len(vectors) != expected:
+            raise ProviderRequestError(
+                target.provider.value,
+                f"asked for {expected} embeddings and got {len(vectors)}",
+                status_code=response.status_code,
+                body=_truncate(response.text),
+            )
+
+        raw_usage = data.get("usage") or {}
+        usage = Usage(tokens_in=int(raw_usage.get("prompt_tokens") or 0))
+
+        return Embeddings(
+            model_repo_id=target.model.repo_id,
+            provider=target.provider,
+            latency_ms=latency_ms,
+            cached=False,
+            cost_usd=compute_cost(target.model, usage=usage),
+            vectors=vectors,
+            usage=usage,
         )
 
     def _parse_transcript(

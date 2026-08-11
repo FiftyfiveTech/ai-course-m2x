@@ -21,7 +21,14 @@ from m2x.pipeline import load_transcript
 from m2x.prompts import latest_version
 from m2x.run_log import RunLogger
 from m2x.types import Provider, Transcript, TranscriptSegment
-from conftest import CHAT_MODEL, TRANSCRIBE_MODEL, chat_response, transcription_response
+from conftest import (
+    CHAT_MODEL,
+    EMBED_MODEL,
+    TRANSCRIBE_MODEL,
+    chat_response,
+    embeddings_response,
+    transcription_response,
+)
 
 AdapterFactory = Callable[..., ModelAdapter]
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -584,3 +591,171 @@ def test_summarise_single_pass_writes_a_summary(
     assert code == EXIT_OK
     assert "single-pass in 1 call" in capsys.readouterr().out
     assert (summaries / "mtg-001.single-pass.md").is_file()
+
+
+def _index_transcript(path: Path, *, segments: int = 6) -> Path:
+    """Persist a transcript for the index command to read."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        Transcript(
+            model_repo_id=TRANSCRIBE_MODEL,
+            provider=Provider.GROQ,
+            latency_ms=1,
+            text="indexable meeting content",
+            audio_seconds=float(segments * 10),
+            segments=[
+                TranscriptSegment(
+                    t_start=float(index * 10),
+                    t_end=float((index + 1) * 10),
+                    text=f"segment {index} discusses the migration plan in some detail",
+                )
+                for index in range(segments)
+            ],
+        ).model_dump_json(),
+        encoding="utf-8",
+    )
+    return path
+
+
+def _embedding_handler(request: httpx.Request) -> httpx.Response:
+    """Answer any embeddings request with one deterministic vector per input."""
+    return httpx.Response(200, json=embeddings_response(json.loads(request.content)["input"]))
+
+
+def test_index_build_reports_what_it_wrote(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """The command Yash runs before querying anything."""
+    _index_transcript(tmp_path / "transcripts" / "mtg-001.json")
+    doc = tmp_path / "brief.md"
+    doc.write_text("# Brief\n\nThe project indexes meetings.\n", encoding="utf-8")
+
+    code = main(
+        [
+            "index",
+            "build",
+            "--transcripts-dir",
+            str(tmp_path / "transcripts"),
+            "--doc",
+            str(doc),
+            "--index-dir",
+            str(tmp_path / "index"),
+        ],
+        adapter_factory=lambda: make_adapter(_embedding_handler),
+    )
+
+    out = capsys.readouterr().out
+    assert code == EXIT_OK
+    assert "mtg-001" in out and "brief" in out
+    assert EMBED_MODEL in out
+
+
+def test_index_build_twice_leaves_the_same_count(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """The acceptance criterion, run the way it is verified: build, build, compare."""
+    _index_transcript(tmp_path / "transcripts" / "mtg-001.json")
+    argv = [
+        "index",
+        "build",
+        "--transcripts-dir",
+        str(tmp_path / "transcripts"),
+        "--no-docs",
+        "--index-dir",
+        str(tmp_path / "index"),
+    ]
+
+    assert main(argv, adapter_factory=lambda: make_adapter(_embedding_handler)) == EXIT_OK
+    first = capsys.readouterr().out
+    assert main(argv, adapter_factory=lambda: make_adapter(_embedding_handler)) == EXIT_OK
+    second = capsys.readouterr().out
+
+    assert first == second
+
+
+def test_index_build_with_nothing_to_index_is_a_usage_error(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """A build that indexed nothing and exited 0 is how a gate runs against an empty store."""
+    code = main(
+        [
+            "index",
+            "build",
+            "--transcripts-dir",
+            str(tmp_path / "absent"),
+            "--no-docs",
+            "--index-dir",
+            str(tmp_path / "index"),
+        ],
+        adapter_factory=lambda: make_adapter(_embedding_handler),
+    )
+
+    assert code == EXIT_USAGE
+    assert "nothing to index" in capsys.readouterr().err
+
+
+def test_index_query_prints_scores_and_citations(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    _index_transcript(tmp_path / "transcripts" / "mtg-001.json")
+    common = ["--index-dir", str(tmp_path / "index")]
+    main(
+        ["index", "build", "--transcripts-dir", str(tmp_path / "transcripts"), "--no-docs", *common],
+        adapter_factory=lambda: make_adapter(_embedding_handler),
+    )
+    capsys.readouterr()
+
+    code = main(
+        ["index", "query", "what about the migration", "-k", "2", *common],
+        adapter_factory=lambda: make_adapter(_embedding_handler),
+    )
+
+    out = capsys.readouterr().out
+    assert code == EXIT_OK
+    assert "distance" in out
+    assert "mtg-001 0:00" in out
+
+
+def test_index_query_on_an_empty_index_says_so(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    code = main(
+        ["index", "query", "anything", "--index-dir", str(tmp_path / "index")],
+        adapter_factory=lambda: make_adapter(_embedding_handler),
+    )
+
+    assert code == EXIT_OK
+    assert "no chunks matched" in capsys.readouterr().out
+
+
+def test_index_opened_with_the_wrong_model_is_a_run_failure(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """A same-dimension mismatch would otherwise return plausible nonsense, silently."""
+    _index_transcript(tmp_path / "transcripts" / "mtg-001.json")
+    common = ["--index-dir", str(tmp_path / "index")]
+    main(
+        ["index", "build", "--transcripts-dir", str(tmp_path / "transcripts"), "--no-docs", *common],
+        adapter_factory=lambda: make_adapter(_embedding_handler),
+    )
+    capsys.readouterr()
+
+    code = main(
+        ["index", "query", "anything", "--model", "BAAI/bge-small-en-v1.5", *common],
+        adapter_factory=lambda: make_adapter(_embedding_handler),
+    )
+
+    assert code == EXIT_FAILURE
+    assert "was built with" in capsys.readouterr().err

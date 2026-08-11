@@ -87,3 +87,24 @@ price_per_audio_minute = 0.0
 
 [models."openai/whisper-large-v3-turbo".served_as]
 groq = "whisper-large-v3-turbo"
+
+# --------------------------------------------------------------------------------
+# Embedding models
+#
+# Billed per input token where billed at all: embedding endpoints report
+# `prompt_tokens` only, so the output price stays 0.0 by construction.
+#
+# An index is built and queried with the *same* model. Vectors from two models are
+# numerically comparable and semantically unrelated, so mixing them returns confident
+# nonsense rather than an error. Ollama is the default route because a local model is
+# zero-spend and keeps a full-corpus rebuild off anyone's rate limit.
+# --------------------------------------------------------------------------------
+
+[models."nomic-ai/nomic-embed-text-v1.5"]
+kind = "embed"
+default_provider = "ollama"
+price_per_1k_tokens_in = 0.0
+price_per_1k_tokens_out = 0.0
+
+[models."nomic-ai/nomic-embed-text-v1.5".served_as]
+ollama = "nomic-embed-text"

@@ -7,6 +7,7 @@ configuration" without three live accounts.
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any, Callable
 
@@ -26,7 +27,15 @@ from m2x.errors import (
 from m2x.run_log import RunContext, RunLogger
 from m2x.settings import Settings
 from m2x.types import Message, Provider, Role
-from conftest import CHAT_MODEL, TRANSCRIBE_MODEL, chat_response, transcription_response
+from conftest import (
+    CHAT_MODEL,
+    EMBED_MODEL,
+    TRANSCRIBE_MODEL,
+    chat_response,
+    embeddings_response,
+    fake_vector,
+    transcription_response,
+)
 
 AdapterFactory = Callable[..., ModelAdapter]
 
@@ -625,6 +634,95 @@ class TestRunLogging:
         record = RunLogger(settings.runs_log_path).read_all()[0]
         assert record.model_repo_id == TRANSCRIBE_MODEL
         assert record.provider is Provider.GROQ
+
+
+class TestEmbeddings:
+    def test_a_batch_goes_out_as_one_request(self, make_adapter: AdapterFactory) -> None:
+        """One round trip per batch — a call per chunk would dominate an index build."""
+        texts = ["we ship on friday", "yash writes the snippets"]
+        handler = _Recorder(httpx.Response(200, json=embeddings_response(texts)))
+
+        result = make_adapter(handler).embed(texts, EMBED_MODEL)
+
+        assert handler.call_count == 1
+        assert handler.requests[0].url.path.endswith("/embeddings")
+        assert json.loads(handler.requests[0].content)["input"] == texts
+        assert result.vectors == [fake_vector(text) for text in texts]
+        assert result.dimensions == len(result.vectors[0])
+
+    def test_the_local_route_is_the_default(self, make_adapter: AdapterFactory) -> None:
+        """Embedding the whole corpus is the last thing to put on a hosted free tier."""
+        handler = _Recorder(httpx.Response(200, json=embeddings_response(["x"])))
+
+        result = make_adapter(handler).embed(["x"], EMBED_MODEL)
+
+        assert result.provider is Provider.OLLAMA
+        assert handler.requests[0].url.host == "localhost"
+        assert json.loads(handler.requests[0].content)["model"] == "nomic-embed-text"
+
+    def test_vectors_come_back_in_submission_order(self, make_adapter: AdapterFactory) -> None:
+        """A reordered batch would attach each vector to the wrong chunk, undetectably."""
+        texts = ["first", "second", "third"]
+        handler = _Recorder(
+            httpx.Response(200, json=embeddings_response(texts, shuffle=True))
+        )
+
+        result = make_adapter(handler).embed(texts, EMBED_MODEL)
+
+        assert result.vectors == [fake_vector(text) for text in texts]
+
+    def test_a_short_batch_is_a_provider_error(self, make_adapter: AdapterFactory) -> None:
+        """Silently dropping a vector would shift every later chunk onto the wrong text."""
+        payload = embeddings_response(["a", "b"])
+        payload["data"] = payload["data"][:1]
+        handler = _Recorder(httpx.Response(200, json=payload))
+
+        with pytest.raises(ProviderRequestError, match="asked for 2 embeddings and got 1"):
+            make_adapter(handler).embed(["a", "b"], EMBED_MODEL)
+
+    def test_an_empty_batch_never_reaches_the_provider(
+        self, make_adapter: AdapterFactory
+    ) -> None:
+        handler = _Recorder(httpx.Response(200, json=embeddings_response(["x"])))
+
+        with pytest.raises(ValueError, match="at least one text"):
+            make_adapter(handler).embed([], EMBED_MODEL)
+
+        assert handler.call_count == 0
+
+    def test_a_chat_model_cannot_be_embedded_with(self, make_adapter: AdapterFactory) -> None:
+        with pytest.raises(CapabilityMismatchError, match="embed"):
+            make_adapter(_ok()).embed(["x"], CHAT_MODEL)
+
+    def test_an_identical_batch_is_a_cache_hit(self, make_adapter: AdapterFactory) -> None:
+        """Re-indexing unchanged content must not re-embed it."""
+        texts = ["we ship on friday"]
+        handler = _Recorder(httpx.Response(200, json=embeddings_response(texts)))
+        adapter = make_adapter(handler)
+
+        first = adapter.embed(texts, EMBED_MODEL)
+        second = adapter.embed(texts, EMBED_MODEL)
+
+        assert handler.call_count == 1
+        assert second.cached is True
+        assert second.cost_usd == 0.0
+        assert second.vectors == first.vectors
+
+    def test_input_tokens_are_recorded_and_output_stays_zero(
+        self, make_adapter: AdapterFactory, settings: Settings
+    ) -> None:
+        """Embedding endpoints report prompt tokens only; inventing an output count lies."""
+        handler = _Recorder(
+            httpx.Response(200, json=embeddings_response(["a", "b"], tokens_in=42))
+        )
+
+        result = make_adapter(handler).embed(["a", "b"], EMBED_MODEL)
+        record = RunLogger(settings.runs_log_path).read_all()[0]
+
+        assert result.usage.tokens_in == 42
+        assert result.usage.tokens_out == 0
+        assert record.model_repo_id == EMBED_MODEL
+        assert record.tokens_in == 42
 
 
 class TestLifecycle:
