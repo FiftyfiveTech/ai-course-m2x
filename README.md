@@ -91,6 +91,30 @@ editing one an eval has cited fails the suite. Reasoning:
 `docs/design/day3-prompts.md`; what each version changed and scored:
 `prompts/CHANGELOG.md`.
 
+## Building and querying the index
+
+```bash
+uv run m2x index build                              # transcripts + tracked project docs
+uv run m2x index build --no-docs                    # meetings only
+uv run m2x index query "what did we decide about migration" -k 5
+uv run m2x index query "scope" --source-type doc    # documents only
+```
+
+Chunks transcripts into whole segments packed to ~1200 characters with one segment of
+overlap, chunks markdown docs on headings, embeds each chunk through `ModelAdapter`
+(`nomic-ai/nomic-embed-text-v1.5`, served locally by Ollama — zero spend) and upserts
+into Chroma at `data/index/`. Every chunk carries what a citation needs: source, segment
+range, `t_start`/`t_end`, speakers.
+
+**Rebuilds are idempotent.** Chunk ids are hashes of the source and segment range, so
+building twice overwrites in place rather than duplicating; a source that shrank has its
+orphaned chunks deleted. The collection records which embedding model built it and
+refuses to open with another — vectors from two models are comparable and unrelated, so
+mixing them returns confident nonsense rather than an error.
+
+`index query` prints distances, not confidence: the nearest chunk to a question nobody
+discussed is still a chunk. Design and measured results: `docs/design/day4-index.md`.
+
 ## Architecture (target — PRD §4)
 
 ```

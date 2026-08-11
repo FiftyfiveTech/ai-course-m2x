@@ -3,6 +3,47 @@
 Newest first. One entry per ticket (or paired tickets), appended at close — same
 content as the Odoo completion comment, kept in-repo so it survives the course.
 
+## M2X-043 — chunking + Chroma index (2026-08-11)
+
+**Executed**
+
+- `src/m2x/indexing.py`: transcripts chunk into whole segments packed to 1200 chars with
+  one segment of overlap; markdown docs chunk on headings and carry the heading into the
+  text. Chunk ids hash source + range, never text.
+- `src/m2x/vector_store.py`: Chroma at `data/index/`, cosine, telemetry off. A source is
+  written as a unit — upsert, then delete its orphans — so a source that shrank stops
+  serving removed text.
+- `ModelAdapter.embed()` + `ModelKind.EMBED` + registry entry
+  `nomic-ai/nomic-embed-text-v1.5` on Ollama. The parser re-orders by the payload's own
+  `index` field and checks the returned count.
+- `m2x index build` / `m2x index query`. 395 tests green (60 new).
+- Verified live: double build → 80 chunks both times; 11 embedding calls logged under
+  `phase-2`, 4 cache hits on the rebuild, $0.00. Details: `docs/design/day4-index.md`.
+
+**Deviations (recorded in the design doc)**
+
+1. The adapter grew a third capability rather than letting Chroma embed. The ticket did
+   not say through what; going around the adapter would have been shorter and would have
+   broken the project's oldest rule.
+2. `chromadb` is a main dependency, not an optional group like `diarize` — it pulls no
+   deep-learning runtime, and M2X-044 cannot run without it. ~200 MB on a fresh sync.
+3. Chroma's telemetry is explicitly disabled. It phones home by default, and the suite
+   asserts no network happens.
+
+**Lessons**
+
+- The unit that was right for one job is wrong for the next. Fixed five-minute chapters
+  won the summarisation comparison and make a bad retrieval unit for the same reason they
+  won: they cover a lot of meeting.
+- Content-addressed ids turn "rebuild" into "reconcile" — but only for content that still
+  exists. The orphan case (a source that shrank) needs an explicit delete, and it stays
+  invisible until someone edits a document.
+- A test that failed for a *setup* reason still found a real bug: the CLI was resolving
+  transcripts from the default directory and ignoring `--transcripts-dir`.
+- Three hand queries are a smoke test, not a metric. One of the three returned a mediocre
+  top hit; it is written down rather than tuned away — context precision is M2X-045's
+  number to produce.
+
 ## M2X-032 — versioned prompt library (2026-08-11)
 
 **Executed**
