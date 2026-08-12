@@ -38,6 +38,64 @@ content as the Odoo completion comment, kept in-repo so it survives the course.
 4. **Library modes are behaviour, not labels.** `Mode.JSON` and `Mode.MD_JSON` read as a
    formatting nicety and are in fact the entire parsing contract.
 
+## M2X-033 — hand-labelled ground truth, 25 cases (2026-08-12, PR #29)
+
+**Executed**
+
+- **25 cases, 133 items** — 29 decisions, 35 actions (28 with a named owner), 34 risks,
+  35 open questions — across all three tiron corpora. Every citation re-resolved against
+  the segments it was written from, using the validator the extractor is held to.
+- **Transcripts derived from the committed tiron reference pair**, not from pipeline
+  output: `data/` is git-ignored, so a fresh clone has no transcripts and the ground
+  truth could never be rebuilt. `src/m2x/reference_transcript.py`, whose load-bearing
+  part is a turn/line alignment check.
+- **Selection and split are scripts**, both reproducible:
+  `scripts/select_label_cases.py` and `scripts/split_labels.py` (seeded, seed recorded).
+- 472 tests green. `eval/labels/README.md` carries the labelling rules and the
+  independence caveat.
+
+**The finding that changes M2X-034**
+
+Zero of 35 actions carry a deadline. Every deadline spoken anywhere in the corpus is
+relative and no tiron meeting has a date to resolve against — the conditional rule frozen
+in M2X-030, meeting real data. So the `deadline` field has **no positive examples**: it
+can only be scored as "correctly stayed null", any emitted deadline is a false positive,
+and no true positive is available to earn. Averaging it into micro-F1 would fold in a
+field that cannot be earned.
+
+**Deviations**
+
+1. **The labels are not independent** — same author as the prompt and the schema, by the
+   user's explicit and reaffirmed decision. Every Phase 1B number is an upper bound, not
+   a measurement.
+2. **The seal is by convention, not encryption** (the ticket's second option). Held-out
+   plaintext is git-ignored and never committed, so a fresh clone cannot reproduce the
+   M2X-040 gate number, and nothing proves the set went unedited between freeze and gate.
+3. **`extract_record` and friends now accept a bare segment list** as well as a
+   `Transcript`. Human-annotated words have no provider or cost, and `Transcript` is an
+   `AdapterResult` that demands both — inventing one would put a lie in the run log.
+   Touches M2X-031's module from inside this ticket; no call site changed.
+4. **`pythonpath` gains `scripts/`** so the split can be unit-tested.
+
+**Lessons**
+
+- **The near-miss was the seal, and it happened before the seal existed.**
+  `eval/labels/staging/` was not covered by any ignore rule, and committing work in
+  progress would have put the ten held-out cases into git history as plaintext — broken
+  before it was ever applied, with rewriting published history as the only remedy. A
+  protection has to cover the window *before* it is switched on.
+- **Freedom in what you measure is freedom to flatter yourself.** With one author for
+  both labels and prompt, the dangerous degrees of freedom are choosing which passages
+  get labelled and re-rolling the split. Both were removed by making them scripts with
+  recorded parameters — not because a script is more honest, but because it is checkable.
+- **Write the rule down and the corpus will tell you it is unexecutable.** The deadline
+  rule survived design review twice and died on contact with `corpus.json`, which has no
+  dates. Same shape as M2X-030's finding, one layer further in.
+- **Consistency beats correctness on contested calls.** "Announced into the meeting" vs
+  "settled by the meeting" is genuinely arguable; applying one reading to all 25 cases
+  and writing it down beats getting each case individually right, because the extractor
+  is graded against the whole set.
+
 ## M2X-030 — schema freeze and the Day 3 rituals (2026-08-12)
 
 **Executed**

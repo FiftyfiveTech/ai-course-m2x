@@ -1,0 +1,67 @@
+{
+  "case_id": "tiron-Bmr013-c01",
+  "meeting_id": "tiron-Bmr013",
+  "first_turn": 256,
+  "last_turn": 358,
+  "label": {
+    "decisions": [
+      {
+        "description": "Start by hand-marking a small subset of the conversational speech and a small subset of the digits to get a feel for it, rather than running a large programme",
+        "evidence": {
+          "segment_id": "seg-0051",
+          "t_start": 703.7,
+          "t_end": 707.6
+        }
+      }
+    ],
+    "actions": [
+      {
+        "description": "Bring John Ohala in to advise on which articulatory features to mark",
+        "evidence": {
+          "segment_id": "seg-0085",
+          "t_start": 751.9,
+          "t_end": 755.0
+        },
+        "owner": "me013",
+        "deadline": null
+      }
+    ],
+    "risks": [
+      {
+        "description": "People produce very different patterns when reading than when speaking spontaneously, so results from read digits may not transfer",
+        "evidence": {
+          "segment_id": "seg-0037",
+          "t_start": 676.3,
+          "t_end": 680.7
+        }
+      }
+    ],
+    "open_questions": [
+      {
+        "description": "Whether the overlapping-articulation phenomenon occurs as much in read digits as in conversational speech",
+        "evidence": {
+          "segment_id": "seg-0023",
+          "t_start": 651.6,
+          "t_end": 653.7
+        }
+      },
+      {
+        "description": "Whether this corpus is the right one to attempt this on at all",
+        "evidence": {
+          "segment_id": "seg-0047",
+          "t_start": 694.1,
+          "t_end": 696.8
+        }
+      },
+      {
+        "description": "Which acoustic features can realistically be marked by ear, given some such as tense/lax are very difficult",
+        "evidence": {
+          "segment_id": "seg-0070",
+          "t_start": 730.4,
+          "t_end": 733.3
+        }
+      }
+    ]
+  },
+  "notes": "One action, not two, and this is the clearest dedup case in the set: me011 suggests 'we can get Ohala in' (seg-0079) and me013 answers 'like he said, I was gonna bring John in' (seg-0085). Ohala and John are the same person -- John Ohala, the phonetician -- so two turns naming him differently are one commitment, cited where it is actually taken on. An extractor that treats the two names as two people will produce two actions here, which is precisely the over-extraction the dedup rule exists to catch."
+}

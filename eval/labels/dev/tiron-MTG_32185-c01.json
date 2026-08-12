@@ -1,0 +1,111 @@
+{
+  "case_id": "tiron-MTG_32185-c01",
+  "meeting_id": "tiron-MTG_32185",
+  "first_turn": 0,
+  "last_turn": 101,
+  "label": {
+    "decisions": [
+      {
+        "description": "The food served in the food court, and how it ties to the aquarium, is to be covered in detail at the next meeting",
+        "evidence": {
+          "segment_id": "seg-0100",
+          "t_start": 342.3,
+          "t_end": 345.6
+        }
+      }
+    ],
+    "actions": [
+      {
+        "description": "Share the graphs showing how the initiative affects the overall business and the projected budgets",
+        "evidence": {
+          "segment_id": "seg-0043",
+          "t_start": 173.0,
+          "t_end": 177.2
+        },
+        "owner": "Beth",
+        "deadline": null
+      },
+      {
+        "description": "Follow up on the outstanding legal documents problem and report back",
+        "evidence": {
+          "segment_id": "seg-0070",
+          "t_start": 261.7,
+          "t_end": 267.0
+        },
+        "owner": "John",
+        "deadline": null
+      },
+      {
+        "description": "Look out for experienced candidates for the floor manager role, which is the next hire",
+        "evidence": {
+          "segment_id": "seg-0074",
+          "t_start": 276.6,
+          "t_end": 281.9
+        },
+        "owner": null,
+        "deadline": null
+      }
+    ],
+    "risks": [
+      {
+        "description": "A lot of legal documentation is needed to bring in the water and the fish, and it is a big obstacle for the aquarium",
+        "evidence": {
+          "segment_id": "seg-0027",
+          "t_start": 106.7,
+          "t_end": 111.4
+        }
+      },
+      {
+        "description": "The city authorities are not responding about the event and its planned bells and whistles",
+        "evidence": {
+          "segment_id": "seg-0023",
+          "t_start": 93.8,
+          "t_end": 101.0
+        }
+      },
+      {
+        "description": "The only available two-week window for the initiative is one where a lot of staff will be on leave",
+        "evidence": {
+          "segment_id": "seg-0083",
+          "t_start": 301.7,
+          "t_end": 307.8
+        }
+      },
+      {
+        "description": "Doubt that the planned opening ceremonies and events will actually be effective for the shopping mall as a whole",
+        "evidence": {
+          "segment_id": "seg-0062",
+          "t_start": 236.8,
+          "t_end": 240.3
+        }
+      }
+    ],
+    "open_questions": [
+      {
+        "description": "What the aquarium will cost, especially the insurance",
+        "evidence": {
+          "segment_id": "seg-0038",
+          "t_start": 154.1,
+          "t_end": 160.9
+        }
+      },
+      {
+        "description": "The salaries, benefits and cultural values for the newly hired staff are still undecided",
+        "evidence": {
+          "segment_id": "seg-0031",
+          "t_start": 124.8,
+          "t_end": 131.8
+        }
+      },
+      {
+        "description": "When the next meeting is, with two days from now proposed",
+        "evidence": {
+          "segment_id": "seg-0080",
+          "t_start": 294.0,
+          "t_end": 297.6
+        }
+      }
+    ]
+  },
+  "notes": "Two spoken deadlines both stay null: Beth's 'next week' (seg-0043) and John's 'Tuesday' (seg-0070). Neither resolves without a meeting date, and this corpus has none -- the conditional rule in the frozen contract, on real data again. Rachel's insurance worry and her request to hear the aquarium's cost are the same concern in adjacent turns, so they are recorded once, as the open question, rather than double-counted as a risk as well. The floor-manager action has owner null on purpose: it is addressed to the whole room and nobody individually accepts it."
+}

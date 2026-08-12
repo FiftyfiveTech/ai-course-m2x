@@ -1,0 +1,75 @@
+{
+  "case_id": "tiron-Bmr018-c01",
+  "meeting_id": "tiron-Bmr018",
+  "first_turn": 250,
+  "last_turn": 330,
+  "label": {
+    "decisions": [
+      {
+        "description": "Transcribers correct the time boundaries against the mixed signal, dropping to individual channels only where they need to, because it cuts the time down",
+        "evidence": {
+          "segment_id": "seg-0001",
+          "t_start": 479.7,
+          "t_end": 485.6
+        }
+      },
+      {
+        "description": "Reject showing transcribers one channel at a time, because it would cost at least seven times real time for this meeting",
+        "evidence": {
+          "segment_id": "seg-0043",
+          "t_start": 561.7,
+          "t_end": 564.8
+        }
+      }
+    ],
+    "actions": [
+      {
+        "description": "Transcribers manually catch the very short utterances that the automatic segmentation misses",
+        "evidence": {
+          "segment_id": "seg-0030",
+          "t_start": 529.8,
+          "t_end": 533.5
+        },
+        "owner": null,
+        "deadline": null
+      }
+    ],
+    "risks": [
+      {
+        "description": "The automatic segmentation misses most really short items such as back-channel 'uh-huh's",
+        "evidence": {
+          "segment_id": "seg-0019",
+          "t_start": 512.5,
+          "t_end": 519.6
+        }
+      },
+      {
+        "description": "Judging speech from the waveform visually is unreliable because breaths and other non-speech show up on the signal too",
+        "evidence": {
+          "segment_id": "seg-0053",
+          "t_start": 579.4,
+          "t_end": 585.7
+        }
+      }
+    ],
+    "open_questions": [
+      {
+        "description": "Whether transcribers can actually hear the short items from the mixed signal when they fall inside heavy overlap -- explicitly called an empirical question",
+        "evidence": {
+          "segment_id": "seg-0036",
+          "t_start": 542.2,
+          "t_end": 545.5
+        }
+      },
+      {
+        "description": "What automatic markers the transcribers will see on the mixed signal, given no transcription exists yet",
+        "evidence": {
+          "segment_id": "seg-0081",
+          "t_start": 655.5,
+          "t_end": 662.9
+        }
+      }
+    ]
+  },
+  "notes": "The transcriber action has owner null although 'the transcribers' are named: they are not in the room and nobody accepts on their behalf, so naming an owner would be recording an assignment that was never made to anyone present. The breath problem is raised twice (seg-0053 and again at seg-0074) and is one risk cited at the earlier turn. The rejected one-channel interface is recorded as a decision -- a considered 'no' with a stated reason settles the question."
+}

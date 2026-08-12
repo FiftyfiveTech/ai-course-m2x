@@ -1,0 +1,39 @@
+{
+  "case_id": "tiron-Bro021-c02",
+  "meeting_id": "tiron-Bro021",
+  "first_turn": 567,
+  "last_turn": 628,
+  "label": {
+    "decisions": [],
+    "actions": [],
+    "risks": [
+      {
+        "description": "VTS gives no improvement once the voice activity detector is used -- the combined result is not better than the result without VTS at all",
+        "evidence": {
+          "segment_id": "seg-0040",
+          "t_start": 1915.5,
+          "t_end": 1920.8
+        }
+      }
+    ],
+    "open_questions": [
+      {
+        "description": "How much of VTS's lack of effect is down to this particular implementation and tuning, and how much is intrinsic to the method",
+        "evidence": {
+          "segment_id": "seg-0046",
+          "t_start": 1933.2,
+          "t_end": 1938.5
+        }
+      },
+      {
+        "description": "Whether the noise estimation needs standardising, since the things being tested each use a different one",
+        "evidence": {
+          "segment_id": "seg-0061",
+          "t_start": 1967.9,
+          "t_end": 1971.3
+        }
+      }
+    ]
+  },
+  "notes": "No actions, and this case is a good test of that. mn052 says 'I may just use one of those Carlos filters' (seg-0002) and 'maybe I'll just go into that also' (seg-0008) -- hedged intent in a status round, not commitment, so neither is an action under the acceptance rule. 'I'm in the process of building up that stuff' (seg-0015) describes work already underway rather than work taken on here. A status update reads like a list of actions and mostly is not one."
+}

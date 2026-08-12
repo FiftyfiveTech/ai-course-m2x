@@ -1,0 +1,22 @@
+{
+  "case_id": "tiron-TS3003a-c01",
+  "meeting_id": "tiron-TS3003a",
+  "first_turn": 121,
+  "last_turn": 148,
+  "label": {
+    "decisions": [],
+    "actions": [],
+    "risks": [
+      {
+        "description": "Production cost is capped at twelve and a half Euros, which rules out expensive features such as building a small television into the remote",
+        "evidence": {
+          "segment_id": "seg-0028",
+          "t_start": 1151.7,
+          "t_end": 1188.4
+        }
+      }
+    ],
+    "open_questions": []
+  },
+  "notes": "The finance briefing states a twenty-five Euro selling price, a fifty million Euro profit aim and an international focus. None is a decision: they are constraints the project manager reports, not things this meeting settles -- the same call made in tiron-ES2004a-c01 for the same price, kept consistent deliberately. The cost cap is recorded as a risk because it is stated as a threat to what the team may design, matching the budget risk recorded in tiron-ES2004a-c02."
+}

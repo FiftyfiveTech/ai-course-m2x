@@ -1,0 +1,47 @@
+{
+  "case_id": "tiron-Bmr013-c02",
+  "meeting_id": "tiron-Bmr013",
+  "first_turn": 769,
+  "last_turn": 852,
+  "label": {
+    "decisions": [],
+    "actions": [],
+    "risks": [
+      {
+        "description": "The presegmentation cannot be properly evaluated because there are no reference annotations except the one it was trained on",
+        "evidence": {
+          "segment_id": "seg-0073",
+          "t_start": 1627.6,
+          "t_end": 1632.3
+        }
+      },
+      {
+        "description": "Where a speaker barely talks on their channel the normalisation breaks down and the system does not work at all",
+        "evidence": {
+          "segment_id": "seg-0062",
+          "t_start": 1602.8,
+          "t_end": 1606.8
+        }
+      }
+    ],
+    "open_questions": [
+      {
+        "description": "Whether the transcribers can mark speech versus non-speech per channel on some meetings, to give the presegmentation an evaluation reference",
+        "evidence": {
+          "segment_id": "seg-0076",
+          "t_start": 1639.2,
+          "t_end": 1642.6
+        }
+      },
+      {
+        "description": "Whether to run phonetic feature analysis on the nonword vocalisations -- the uh-huhs, hmms, grunts and other interruption devices",
+        "evidence": {
+          "segment_id": "seg-0011",
+          "t_start": 1490.1,
+          "t_end": 1496.1
+        }
+      }
+    ]
+  },
+  "notes": "me011's 'so use ninetieth quartile rather than minimum' (seg-0053) is NOT recorded as a decision. mn014 answers 'Yeah, then I did some things like that' -- me011 is working out what mn014 already built, so it is a description of completed work, not something the meeting settles. The nonword-features suggestion is recorded as an open question even though me013 closes it with 'We should move on' (seg-0024): being deflected is not being answered, and the extractor sees the same deflection."
+}

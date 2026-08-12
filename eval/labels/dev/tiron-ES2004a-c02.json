@@ -1,0 +1,68 @@
+{
+  "case_id": "tiron-ES2004a-c02",
+  "meeting_id": "tiron-ES2004a",
+  "first_turn": 195,
+  "last_turn": 246,
+  "label": {
+    "decisions": [],
+    "actions": [
+      {
+        "description": "Everyone goes away to do their individual work before the next meeting",
+        "evidence": {
+          "segment_id": "seg-0043",
+          "t_start": 971.0,
+          "t_end": 980.0
+        },
+        "owner": null,
+        "deadline": null
+      },
+      {
+        "description": "Prepare another PowerPoint presentation for the next meeting",
+        "evidence": {
+          "segment_id": "seg-0044",
+          "t_start": 981.0,
+          "t_end": 989.6
+        },
+        "owner": "ES2004a.B",
+        "deadline": null
+      }
+    ],
+    "risks": [
+      {
+        "description": "The twelve Euro fifty budget may only stretch to a black and white LCD screen rather than a good one",
+        "evidence": {
+          "segment_id": "seg-0014",
+          "t_start": 885.0,
+          "t_end": 899.3
+        }
+      },
+      {
+        "description": "A flip-top design might have cost implications",
+        "evidence": {
+          "segment_id": "seg-0031",
+          "t_start": 950.7,
+          "t_end": 959.4
+        }
+      }
+    ],
+    "open_questions": [
+      {
+        "description": "Whether to add an extra button giving large print for older users",
+        "evidence": {
+          "segment_id": "seg-0017",
+          "t_start": 898.7,
+          "t_end": 912.4
+        }
+      },
+      {
+        "description": "Whether the remote needs to look fashionable, given the company markets itself as putting the fashion into electronics",
+        "evidence": {
+          "segment_id": "seg-0045",
+          "t_start": 984.9,
+          "t_end": 1014.8
+        }
+      }
+    ]
+  },
+  "notes": "No decisions: every feature raised (large-print button, dual function, flip top, plastic housing) is floated and none is accepted before the meeting breaks. The two actions are process commitments rather than product work, which is what the meeting actually settles -- recorded because they are genuine commitments, with the group action owner-null since nobody individually accepts it. The fashion point at seg-0045 directly contradicts seg-0038 and is left unresolved, so it is an open question rather than a decision either way."
+}

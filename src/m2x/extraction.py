@@ -29,6 +29,7 @@ text that earned it.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from pathlib import Path
 
 import instructor
@@ -40,7 +41,7 @@ from m2x.adapter import ModelAdapter
 from m2x.prompts import DEFAULT_PROMPTS_DIR, Prompt, load_prompt
 from m2x.run_log import RunContext
 from m2x.schema import SEGMENT_CONTEXT_KEY, MeetingRecord
-from m2x.types import Message, Provider, Role, Transcript
+from m2x.types import Message, Provider, Role, Transcript, TranscriptSegment
 
 PHASE = "phase-1b"
 """Run-log phase these calls are attributed to."""
@@ -132,7 +133,30 @@ class ExtractionOutcome(BaseModel):
     """True when the transcript exceeded :data:`TRANSCRIPT_CHAR_LIMIT` and was cut."""
 
 
-def segment_ids(transcript: Transcript) -> dict[str, tuple[float, float]]:
+TranscriptSource = Transcript | Sequence[TranscriptSegment]
+"""What can be extracted from: a whole transcript, or just its segments.
+
+Citable ids and the rendered block depend on the *segments* and on nothing else — not
+on which provider served the audio or what it cost. Accepting a bare segment list lets
+a caller extract from speech that no adapter produced, which is how the eval harness
+reads hand-annotated reference transcripts (M2X-033) without inventing a
+:class:`~m2x.types.Provider` for words a human wrote down.
+"""
+
+
+def _segments_of(source: TranscriptSource) -> Sequence[TranscriptSegment]:
+    """Normalise either accepted form to the segments underneath.
+
+    Args:
+        source: A transcript, or the segments alone.
+
+    Returns:
+        The segments, in transcript order.
+    """
+    return source.segments if isinstance(source, Transcript) else source
+
+
+def segment_ids(source: TranscriptSource) -> dict[str, tuple[float, float]]:
     """Map synthetic segment ids to their time bounds.
 
     The single definition of what ``seg-0007`` means. Both the prompt renderer and the
@@ -140,18 +164,18 @@ def segment_ids(transcript: Transcript) -> dict[str, tuple[float, float]]:
     would eventually disagree and the failure would look like model hallucination.
 
     Args:
-        transcript: Transcript whose segments are being cited.
+        source: Transcript, or segments, being cited.
 
     Returns:
         ``{segment_id: (t_start, t_end)}`` in transcript order.
     """
     return {
         SEGMENT_ID_TEMPLATE.format(index=index): (segment.t_start, segment.t_end)
-        for index, segment in enumerate(transcript.segments, start=1)
+        for index, segment in enumerate(_segments_of(source), start=1)
     }
 
 
-def render_transcript(transcript: Transcript, *, char_limit: int = TRANSCRIPT_CHAR_LIMIT) -> tuple[str, bool]:
+def render_transcript(source: TranscriptSource, *, char_limit: int = TRANSCRIPT_CHAR_LIMIT) -> tuple[str, bool]:
     """Render segments as citable lines.
 
     Each line carries the id and the timestamps the model must echo back as evidence.
@@ -159,7 +183,7 @@ def render_transcript(transcript: Transcript, *, char_limit: int = TRANSCRIPT_CH
     showing the ids makes citing them the path of least resistance.
 
     Args:
-        transcript: Transcript to render.
+        source: Transcript, or segments, to render.
         char_limit: Maximum characters to emit. Whole lines are kept.
 
     Returns:
@@ -168,7 +192,7 @@ def render_transcript(transcript: Transcript, *, char_limit: int = TRANSCRIPT_CH
     lines: list[str] = []
     used = 0
     truncated = False
-    for index, segment in enumerate(transcript.segments, start=1):
+    for index, segment in enumerate(_segments_of(source), start=1):
         speaker = f" {segment.speaker}" if segment.speaker else ""
         line = (
             f"[{SEGMENT_ID_TEMPLATE.format(index=index)} "
@@ -183,7 +207,7 @@ def render_transcript(transcript: Transcript, *, char_limit: int = TRANSCRIPT_CH
 
 
 def build_messages(
-    transcript: Transcript,
+    source: TranscriptSource,
     prompt: Prompt,
     *,
     char_limit: int = TRANSCRIPT_CHAR_LIMIT,
@@ -191,7 +215,7 @@ def build_messages(
     """Build the extraction conversation from a loaded prompt version.
 
     Args:
-        transcript: Transcript to extract from.
+        source: Transcript, or segments, to extract from.
         prompt: Prompt version supplying the system message and the user template.
         char_limit: Passed through to :func:`render_transcript`.
 
@@ -201,7 +225,7 @@ def build_messages(
     Raises:
         ConfigError: The template does not expose exactly the ``{{transcript}}`` slot.
     """
-    block, truncated = render_transcript(transcript, char_limit=char_limit)
+    block, truncated = render_transcript(source, char_limit=char_limit)
     return (
         [
             Message(role=Role.SYSTEM, content=prompt.system),
@@ -212,7 +236,7 @@ def build_messages(
 
 
 def extract_record(
-    transcript: Transcript,
+    transcript: TranscriptSource,
     *,
     adapter: ModelAdapter,
     meeting_id: str,
@@ -227,7 +251,8 @@ def extract_record(
     """Extract a validated record from one transcript.
 
     Args:
-        transcript: Transcript to extract from. Its segments define the citable ids.
+        transcript: Transcript, or segments, to extract from. The segments define the
+            citable ids.
         adapter: Adapter performing every attempt.
         meeting_id: Stable id for this meeting.
         model_repo_id: Hugging Face repo id of the extraction model.

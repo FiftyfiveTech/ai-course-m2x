@@ -1,0 +1,189 @@
+{
+  "case_id": "tiron-MTG_32257-c01",
+  "meeting_id": "tiron-MTG_32257",
+  "first_turn": 0,
+  "last_turn": 341,
+  "label": {
+    "decisions": [
+      {
+        "description": "The show will not be shut down despite the number of problems",
+        "evidence": {
+          "segment_id": "seg-0210",
+          "t_start": 226.4,
+          "t_end": 229.2
+        }
+      },
+      {
+        "description": "The emergency order is the trailers first, then the food and the chef",
+        "evidence": {
+          "segment_id": "seg-0161",
+          "t_start": 172.2,
+          "t_end": 177.9
+        }
+      },
+      {
+        "description": "Signage and actors not knowing which set to be on count as organisation of the shooting, not as maintenance",
+        "evidence": {
+          "segment_id": "seg-0169",
+          "t_start": 184.3,
+          "t_end": 189.7
+        }
+      },
+      {
+        "description": "All outstanding issues are to be fixed by this time next week, despite the request for a faster turnaround",
+        "evidence": {
+          "segment_id": "seg-0303",
+          "t_start": 319.7,
+          "t_end": 326.2
+        }
+      }
+    ],
+    "actions": [
+      {
+        "description": "Talk to everyone who has a trailer and produce a finalised list",
+        "evidence": {
+          "segment_id": "seg-0153",
+          "t_start": 161.8,
+          "t_end": 165.9
+        },
+        "owner": "Brad",
+        "deadline": null
+      },
+      {
+        "description": "Work on the air conditioning this week",
+        "evidence": {
+          "segment_id": "seg-0160",
+          "t_start": 171.9,
+          "t_end": 176.1
+        },
+        "owner": "Tom",
+        "deadline": null
+      },
+      {
+        "description": "Deal with the first three emergency problems immediately after the meeting closes",
+        "evidence": {
+          "segment_id": "seg-0239",
+          "t_start": 258.0,
+          "t_end": 263.6
+        },
+        "owner": "Rachel",
+        "deadline": null
+      },
+      {
+        "description": "Set a follow-up meeting for a week from now and report back on progress",
+        "evidence": {
+          "segment_id": "seg-0270",
+          "t_start": 286.0,
+          "t_end": 291.4
+        },
+        "owner": "Rachel",
+        "deadline": null
+      },
+      {
+        "description": "Bring in a known contractor who can repair the trailers in two days",
+        "evidence": {
+          "segment_id": "seg-0282",
+          "t_start": 298.8,
+          "t_end": 303.3
+        },
+        "owner": "Brad",
+        "deadline": null
+      },
+      {
+        "description": "Send Tom the contractor's contact information and references before he is brought on site",
+        "evidence": {
+          "segment_id": "seg-0290",
+          "t_start": 310.1,
+          "t_end": 312.7
+        },
+        "owner": "Brad",
+        "deadline": null
+      }
+    ],
+    "risks": [
+      {
+        "description": "Five trailers are out of action, with no electricity for the past three days",
+        "evidence": {
+          "segment_id": "seg-0050",
+          "t_start": 58.1,
+          "t_end": 60.7
+        }
+      },
+      {
+        "description": "A trailer was stolen and there has been a break-in -- security is a problem",
+        "evidence": {
+          "segment_id": "seg-0069",
+          "t_start": 81.7,
+          "t_end": 85.0
+        }
+      },
+      {
+        "description": "The wrong props were shipped -- medieval instead of cop -- and have to be switched",
+        "evidence": {
+          "segment_id": "seg-0109",
+          "t_start": 123.1,
+          "t_end": 128.7
+        }
+      },
+      {
+        "description": "The chef quit yesterday for another job",
+        "evidence": {
+          "segment_id": "seg-0118",
+          "t_start": 134.3,
+          "t_end": 138.6
+        }
+      },
+      {
+        "description": "A lot of the stage machines are not working properly",
+        "evidence": {
+          "segment_id": "seg-0108",
+          "t_start": 120.5,
+          "t_end": 124.1
+        }
+      },
+      {
+        "description": "There is no air conditioning",
+        "evidence": {
+          "segment_id": "seg-0154",
+          "t_start": 164.2,
+          "t_end": 171.1
+        }
+      },
+      {
+        "description": "The coffee machine is broken and it is causing serious unrest on set",
+        "evidence": {
+          "segment_id": "seg-0220",
+          "t_start": 237.6,
+          "t_end": 240.3
+        }
+      },
+      {
+        "description": "Filming starts in three days, which is sooner than the agreed fix deadline",
+        "evidence": {
+          "segment_id": "seg-0298",
+          "t_start": 316.2,
+          "t_end": 320.9
+        }
+      }
+    ],
+    "open_questions": [
+      {
+        "description": "Who owns fixing the wrong props shipment -- assigned to Beth and immediately disputed",
+        "evidence": {
+          "segment_id": "seg-0116",
+          "t_start": 130.5,
+          "t_end": 132.6
+        }
+      },
+      {
+        "description": "Whether the vending machine should be free, which the crew are upset about",
+        "evidence": {
+          "segment_id": "seg-0263",
+          "t_start": 278.9,
+          "t_end": 282.4
+        }
+      }
+    ]
+  },
+  "notes": "The densest case in the set and the most useful one for precision. Five relative deadlines are spoken -- 'two days', 'three days', 'this week', 'a week from now', 'by next week this time' -- and every one stays null under the conditional rule.\n\nTom's 'I hired a detective' (seg-0172) is deliberately not an action: it is already done, reported into the meeting, and an extractor that files completed work as outstanding work produces a to-do list nobody can act on. Tom's 'we need to fix his microphone' (seg-0025) is about the meeting-room equipment and is nothing. The props-ownership dispute is an open question rather than an action precisely because the assignment is rejected on the spot -- contrast tiron-MTG_32074-c01, where the assignee objects to the premise but not to the task."
+}

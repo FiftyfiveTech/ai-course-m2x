@@ -1,0 +1,22 @@
+{
+  "case_id": "tiron-ES2004a-c01",
+  "meeting_id": "tiron-ES2004a",
+  "first_turn": 65,
+  "last_turn": 109,
+  "label": {
+    "decisions": [],
+    "actions": [],
+    "risks": [],
+    "open_questions": [
+      {
+        "description": "What the twenty-five Euro selling price converts to in Pounds",
+        "evidence": {
+          "segment_id": "seg-0045",
+          "t_start": 563.1,
+          "t_end": 575.5
+        }
+      }
+    ]
+  },
+  "notes": "Almost the whole case is the AMI icebreaker (each participant draws a favourite animal), which is real speech carrying no project content -- three categories are correctly empty. The twenty-five Euro selling price at seg-0045 is reported as an existing constraint, not settled here, so it is not a decision; the conversion question attached to it is asked and never answered."
+}

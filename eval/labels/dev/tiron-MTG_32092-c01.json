@@ -1,0 +1,51 @@
+{
+  "case_id": "tiron-MTG_32092-c01",
+  "meeting_id": "tiron-MTG_32092",
+  "first_turn": 0,
+  "last_turn": 165,
+  "label": {
+    "decisions": [
+      {
+        "description": "Focus marketing on the US market first, where the company is based, rather than on Japan",
+        "evidence": {
+          "segment_id": "seg-0106",
+          "t_start": 236.3,
+          "t_end": 242.8
+        }
+      }
+    ],
+    "actions": [
+      {
+        "description": "Put together a list of influencers to work with, drawing on sports organisation contacts",
+        "evidence": {
+          "segment_id": "seg-0159",
+          "t_start": 341.3,
+          "t_end": 345.7
+        },
+        "owner": "Donald",
+        "deadline": null
+      }
+    ],
+    "risks": [
+      {
+        "description": "It is late in the season to target sports equipment advertising at the relevant telecast sports",
+        "evidence": {
+          "segment_id": "seg-0041",
+          "t_start": 98.7,
+          "t_end": 100.9
+        }
+      }
+    ],
+    "open_questions": [
+      {
+        "description": "Which products to promote first, and running a market study to find their potential buyers",
+        "evidence": {
+          "segment_id": "seg-0060",
+          "t_start": 133.9,
+          "t_end": 137.3
+        }
+      }
+    ]
+  },
+  "notes": "Sarah asks for the list 'by Monday' (seg-0157) and the deadline is still null: no meeting date, nothing to resolve against. Three concerns raised about Japan -- distributors, Japanese-language marketing, currency, shipping cost -- are all deliberately unrecorded, because the case then decides against Japan and a concern about an abandoned option is not a standing risk. Donald's 'California is probably the best target area' is left out as well: the room builds on it without anyone agreeing to it, which is a proposal, not a decision. These are the judgement calls most likely to differ from another labeller's, so they are written down rather than left to inference."
+}
