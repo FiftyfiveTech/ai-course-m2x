@@ -1,21 +1,27 @@
-# Hand transcript — mtg-001 (211s – 331s of the internal product scoping call)
+# Reference transcript — mtg-001 (211s – 331s of the internal product scoping call)
 #
-# THIS FILE IS WRITTEN BY EAR. Do not paste model output into it, and do not "fix it
-# up" against a transcript you have already seen. It is the reference every Day 2
-# number is measured against (M2X-021 informal WER, M2X-024 entity capture), so a
-# reference contaminated by the system under test measures nothing.
+# THE REFERENCE FOR THIS MEETING IS NOT IN THIS REPOSITORY.
 #
-# Reproduce the clip:
+# It lives at `eval/snippets/mtg-001.local.txt`, which is git-ignored — same rule, and
+# the same reason, as `eval/vocab.local.txt`.
+#
+# Why. This window is an internal engineering discussion of client delivery work: module
+# names, per-tenant configuration, and five colleague first names. This repository is
+# public. A vocabulary file can route those terms to a local sibling and keep working; a
+# verbatim reference transcript cannot be redacted at all, because redacting it destroys
+# the word-for-word correspondence that is the entire point of a WER reference.
+#
+# So the numbers ship and the words do not. Every `mtg-001` WER cell in
+# `docs/design/day2-matrix.md` was measured against the local file, and a fresh clone
+# cannot reproduce those two cells. That is a real reproducibility gap, recorded here
+# rather than hidden by an empty template — see `docs/phase1-comparison.md`.
+#
+# Reproduce the clip (the audio is git-ignored too, per the corpus rules):
 #   ffmpeg -ss 211 -t 120 -i data/raw/mtg-001-fe-uiux.wav -c:a pcm_s16le \
 #       data/clips/snippet-mtg-001-2min.wav
 #
-# Conventions:
-#   - one line per speaker turn, prefixed "S1:", "S2:", ... in order of first speaking
-#   - transcribe what was said, not what was meant — keep false starts and fillers
-#   - code-switched speech stays in the script it was spoken in; write Hindi words in
-#     Devanagari and English words in Latin, on the same line
-#   - [inaudible] for anything you cannot make out; [crosstalk] for overlaps
-#   - do not translate, do not summarise, do not tidy grammar
+# Then score against the local reference:
+#   uv run python eval/wer.py --reference eval/snippets/mtg-001.local.txt \
+#       --hypothesis data/comparison/large-v3-auto/mtg-001.json --window 211 331
 #
-# Status: NOT YET TRANSCRIBED
-
+# Status: reference held locally — see eval/snippets/mtg-001.local.txt

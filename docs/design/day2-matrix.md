@@ -82,23 +82,58 @@ Word counts diverged far more than WER-style error would explain — so **covera
 the discriminating measurement of the whole comparison, and unlike WER it needs no hand
 reference, so it is available today.
 
+### Coverage was partly an artifact — correction, 2026-08-12
+
+Whisper emits segments with a real time range and **empty text**, and duration-based
+coverage counts them. Found while validating the transcripts for the Phase 1 gate:
+`mtg-001` carries 5 such segments spanning **112 seconds** — 10.6% of the meeting — and
+`mtg-002` carries 2 spanning 33s. Subtracting them gives *voiced* coverage:
+
+| route | meeting | coverage as published | voiced | empty segments |
+|---|---|---|---|---|
+| T-A | mtg-001 | 98.8% | **88.2%** | 5 (112s) |
+| T-A | mtg-002 | 97.6% | **89.3%** | 2 (33s) |
+| T-A | ami-001 | 83.7% | 83.7% | 1 (0s) |
+| T-B | mtg-001 | 89.7% | **85.3%** | 1 (47s) |
+| T-B | mtg-002 | 80.3% | 80.3% | 0 |
+| T-B | ami-001 | 80.4% | 80.4% | 0 |
+
+**T-A's lead shrinks by roughly two thirds** — 9.1 → 2.9 points on `mtg-001`, 17.3 → 9.0
+on `mtg-002`. The direction is unchanged and the adoption decision is unaffected, but the
+margin that decision was originally argued on was overstated, and it should not be quoted
+as published again.
+
+Two things follow. The first is that the metric which "turned out to be the discriminating
+measurement of the whole comparison" was measuring, in part, silence with a timestamp on
+it — worth remembering the next time a metric arrives mid-comparison and immediately
+decides it. The second is that WER, which arrived later and was expected only to confirm
+what coverage already showed, is now carrying more of the decision than coverage is: it
+separates the routes by 16.8 and 31.1 points where voiced coverage separates them by 9.0
+and 2.9.
+
+The empty segments are upstream of diarisation — they are present in
+`data/comparison/large-v3-auto/*.json` before any merge — so this is Whisper's behaviour
+on long pauses, not a defect in the join. Left in place rather than filtered: a segment
+that says "these 27 seconds produced no words" is information, and dropping it would
+silently shorten the timeline that every citation indexes into.
+
 ## Matrix
 
 ### Transcription (M2X-021)
 
 Run 2026-08-05, `data/comparison/<route>-<mode>/<meeting>.json`, all legs live (no cache
-hits), $0.0000 throughout. WER and entity columns stay empty — the hand snippets are not
-written yet, and a number computed against an empty reference would look identical to a
-real one.
+hits), $0.0000 throughout. WER and entity cells were filled 2026-08-12, once references
+existed — see **Reference provenance** below for what each number is measured against,
+because the three references are not all the same kind of thing.
 
 | route | meeting | lang mode | detected | coverage % | words | WER-ish % | entity % | latency ms/audio-min |
 |---|---|---|---|---|---|---|---|---|
-| T-A | mtg-001 | auto | Hindi | **99** | 1956 | | | 1197 |
-| T-A | mtg-002 | auto | Hindi | **98** | 780 | | | 1918 |
-| T-A | ami-001 | auto | English | 84 | 4404 | | | 462 |
-| T-B | mtg-001 | auto | Hindi | 90 | 1211 | | | 440 |
-| T-B | mtg-002 | auto | English | 80 | 261 | | | 372 |
-| T-B | ami-001 | auto | English | 80 | 4324 | | | 331 |
+| T-A | mtg-001 | auto | Hindi | **99** | 1956 | **63.5** | n/a | 1197 |
+| T-A | mtg-002 | auto | Hindi | **98** | 780 | **64.0** | 0% (0/2) | 1918 |
+| T-A | ami-001 | auto | English | 84 | 4404 | **48.5** | n/a | 462 |
+| T-B | mtg-001 | auto | Hindi | 90 | 1211 | **94.6** | n/a | 440 |
+| T-B | mtg-002 | auto | English | 80 | 261 | **80.8** | 0% (0/2) | 372 |
+| T-B | ami-001 | auto | English | 80 | 4324 | **48.9** | n/a | 331 |
 | T-A | mtg-001 | forced en | English | 93 | 1948 | withdrawn — translates | | 360 |
 | T-A | mtg-002 | forced en | English | 88 | 764 | withdrawn — translates | | 428 |
 | T-B | mtg-001 | forced en | English | 89 | 1203 | withdrawn — translates | | 374 |
@@ -118,6 +153,48 @@ real one.
   every later leg amortised. Worth one re-run before anyone cites it.
 - Latency separates the routes by ~2–3× while quality separates them by a third of the
   content. Per the decision rule, latency does not get a vote here.
+- **WER agrees with coverage, and sharpens it.** The Hinglish gap is 16.8 pts on
+  `mtg-002` and 31.1 pts on `mtg-001`; on English the two routes are a tie (48.5 vs
+  48.9, +0.4). T-B's loss is almost entirely **deletions** — 190 of `mtg-001`'s 260
+  reference words and 187 of `mtg-002`'s 328 — which is the same finding coverage
+  reported, now with a denominator. A route whose error is deletion does not produce a
+  worse sentence; it produces no sentence.
+
+#### Reference provenance — three references, two kinds
+
+The WER cells above are not all measured against the same quality of ground truth, and
+the difference matters more than the numbers do.
+
+| reference | kind | in the repo? | what a WER against it means |
+|---|---|---|---|
+| `ami-001` | AMI's own **manual human annotation**, verbatim | yes | Whisper vs. truth |
+| `mtg-002` | **Deepgram `nova-3`** (language=multi), reviewed and accepted 2026-08-12, no by-ear pass | yes | Whisper vs. Deepgram **agreement** |
+| `mtg-001` | same | **no — `eval/snippets/mtg-001.local.txt`, git-ignored** | same |
+
+**`mtg-001`'s reference is not in this repository, and its two WER cells are therefore not
+reproducible from a fresh clone.** That window is an internal discussion of client delivery
+work — module names, per-tenant configuration, five colleague first names — and this repo is
+public. `eval/vocab.local.txt` already establishes the rule for terms that cannot ship; a
+verbatim reference is the same exposure with no redaction available, because redacting a
+reference destroys the word-for-word correspondence that makes it a reference. The numbers
+ship, the words do not. The tracked `eval/snippets/mtg-001.txt` is a stub that says so and
+exits 2 rather than scoring nothing.
+
+For the two internal meetings this measures inter-vendor agreement, not accuracy. Where
+Deepgram and Whisper share a failure mode — and on code-switched Hinglish they plausibly
+do — the error is invisible to the metric. Deepgram is at least not the system under
+test (`openai/whisper-large-v3` via Groq and Ollama), so the one circularity it avoids is
+measuring the pipeline against itself.
+
+**Read the deltas, not the absolutes.** A shared bias cancels in T-A vs T-B and in V-1
+off vs on; it does not cancel in "64.0%". Two independent reasons the absolute numbers
+are inflated anyway: `ami-001` is AMI IHM, per-headset audio where 94% of utterances
+overlap, and the Hinglish references are mixed-script, so a Devanagari/Latin spelling
+disagreement scores as a substitution whether or not the word was heard correctly.
+
+Correcting the two internal references by ear later would make their absolutes
+meaningful and would move every cell scored against them. That is a known open
+improvement, not a defect in the table.
 
 **Adoption decision.** The pipeline stays on **`openai/whisper-large-v3` with language
 auto-detection** (T-A, auto). Turbo is 1.4–2.7× faster and costs the same $0.00, but it
@@ -128,9 +205,12 @@ citations, contradiction detection) inherits whatever it dropped. The forced-`en
 is rejected outright: it translates rather than transcribes, which would fabricate
 evidence. Turbo remains a reasonable choice for English-only audio and is worth
 revisiting if the corpus ever shifts that way; the run records are on disk to re-check
-against. This decision is provisional in one respect — it rests on coverage and
-inspection, not WER, because the hand references do not exist yet. WER could still
-change the *margin*; it is very unlikely to reverse a one-third content gap.
+against. **The provisional caveat is now discharged.** This decision was recorded on
+coverage and inspection alone because no reference existed; the 2026-08-12 WER run
+confirms it and widens it — T-A leads by 16.8 and 31.1 points on the Hinglish meetings
+and ties on English, which is the coverage story with a denominator rather than a
+different story. What WER did *not* do is upgrade the confidence to accuracy: see
+Reference provenance above.
 
 ### Diarisation (M2X-022)
 
@@ -254,6 +334,8 @@ both tried and both failed.**
 | S-2 map-reduce | ami-001 | questions · calls · tokens | **3.5/5** · 7 · 6808+775 | +0.5 for 7× the calls and 1.23× the tokens |
 | V-1 off | ami-001 | WER · entity % | **48.5%** · n/a | sub 54 · del 150 · ins 18 · ref 458 words |
 | V-1 on | ami-001 | WER · entity % | **57.4%** · n/a | sub 91 · del 159 · ins 13 — **+8.9 pts worse**; entity capture undefined, no vocab term is spoken |
+| V-1 off | mtg-002 | WER · entity % | **64.0%** · **0%** (0/2) | sub 68 · del 132 · ins 10 · ref 328 words; missed `RAG`, `PRD` |
+| V-1 on | mtg-002 | WER · entity % | **83.8%** · **0%** (0/2) | sub 111 · del 161 · ins 3 — **+19.8 pts worse**; the same two terms still missed |
 
 Both summarisation rows run the same model (`meta-llama/Llama-3.1-8B-Instruct`) on the
 same provider, so the delta is the strategy and nothing else. Judgement sheet, with the
@@ -357,14 +439,29 @@ speaker, and 48% are one- or two-word backchannels that a mixed recording cannot
 reproduce. That inflates WER for both legs equally — the **off-versus-on delta is the
 trustworthy part**, since the reference, the audio and the model are identical across it.
 
-#### The other two meetings: both legs on disk, metric still with nowhere to run
+#### `mtg-002` scored 2026-08-12: same verdict, twice the damage
 
-`--vocab` now exists (M2X-024), so the "on" leg is runnable and was run. Both legs sit
-in `data/comparison/` — `large-v3-auto/` off, `large-v3-vocab/` on — for `mtg-002` and
-`ami-001`. The scoring command is unchanged; only the hand snippet is missing.
+With a reference in place the Hinglish meeting runs, and it reproduces `ami-001`'s
+result in a stronger form:
 
-Three things turned up in the staging that change what the number will mean, and none
-of them is fixed by writing the snippets:
+| leg | WER | sub | del | ins | entity capture |
+|---|---|---|---|---|---|
+| V-1 off | **64.0%** | 68 | 132 | 10 | **0%** (0/2) |
+| V-1 on | **83.8%** | 111 | 161 | 3 | **0%** (0/2) |
+
+**+19.8 points worse**, against +8.9 on English — and again concentrated in
+substitutions (68 → 111, up 63%), the signature of a decode pulled toward words that
+were never said. Two meetings, two languages, same direction, larger on the harder one.
+
+**Entity capture is 0% on both legs, and that is the experiment's actual answer.** Only
+two vocabulary terms are spoken in the window — `RAG` and `PRD` — and Whisper misses
+both **with the vocabulary file attached**. This is the metric M2X-024 exists to move,
+measured on the one meeting where its denominator is non-zero, and the file moved it by
+nothing. A 0/2 denominator is thin: it supports "no evidence the vocabulary helps", not
+"proof it cannot".
+
+Three things from the staging still shape what the number means, and none is fixed by
+having a reference:
 
 1. **The vocabulary is not spoken in `ami-001` at all.** Zero of the 56 terms occur in
    its 4,404 words — AMI is a third-party scenario corpus about note-taking and
@@ -373,9 +470,16 @@ of them is fixed by writing the snippets:
 2. **On the Hinglish meetings the terms are spoken but come back in Devanagari.**
    `mtg-002` off is 1,939 Devanagari characters against 23 Latin tokens, and every Latin
    token is an ordinary English word (`use`, `next`, `phase`) — not one vocabulary term.
-   A Latin-script term list cannot match transliterated speech, so capture would score
-   near zero for a reason that is script, not entity loss. Same shape as the WER problem
-   that withdrew forced `--language en`.
+   A Latin-script term list cannot match transliterated speech, so capture scores near
+   zero for a reason that is script, not entity loss. Same shape as the WER problem that
+   withdrew forced `--language en`.
+
+   **Partly answered by the 2026-08-12 reference.** Deepgram `nova-3` transcribed the
+   same audio with `RAG` and `PRD` in Latin, so the reference proves both terms were
+   spoken *and* that a transcriber can emit them in the script the vocabulary file uses.
+   Whisper produces neither, prompted or not. On these two terms the failure is
+   therefore capture, not script — which is a narrower and more damning result than the
+   script confound alone. It does not clear the confound for the other 54 terms.
 3. **The prompt makes `mtg-002` worse, not better.** Same audio, same model, same
    provider, prompt the only difference: 780 words → 404, Devanagari 1,939 chars → 802,
    and the Latin tokens that appear are hallucinated shouting — `SCREENSHOT` ×5,
@@ -383,12 +487,33 @@ of them is fixed by writing the snippets:
    `STOPS,`. `ami-001` shows no such damage (4,404 → 4,664 words), so this is the
    prompt interacting with code-switched speech, not a general regression.
 
-So the honest reading available today is that the course lesson does not reproduce on
-this corpus as specified: on our English meeting the vocabulary has nothing to capture,
-and on our own meetings the prompt degrades the transcript. **Whether that is the
-finding, or the experiment needs a different corpus, a Devanagari term list or a
-transliteration-aware matcher, is the evaluator's call** — it is recorded here, not
-resolved, exactly like point 2 above it.
+So the honest reading is that the course lesson does not reproduce on this corpus as
+specified: on our English meeting the vocabulary has nothing to capture, and on our own
+meetings the prompt degrades the transcript.
+
+**Adoption decision (V-1): the vocabulary file is NOT adopted as a default pipeline
+input.** `--vocab` stays an opt-in flag and no route passes it by default. Three
+independent measurements point the same way and none points the other:
+
+| evidence | off | on | direction |
+|---|---|---|---|
+| WER, `ami-001` (English, human reference) | 48.5% | 57.4% | −8.9 |
+| WER, `mtg-002` (Hinglish) | 64.0% | 83.8% | −19.8 |
+| entity capture, `mtg-002` | 0% (0/2) | 0% (0/2) | no change |
+| `mtg-001` "on" leg | — | unobtainable (Groq 500) | n/a |
+
+The metric the file exists to move did not move, the metric it was not supposed to touch
+got worse on both meetings, and the one meeting left is blocked by the provider. Adopting
+a default that costs 9–20 WER points to buy nothing measurable is not a close call.
+
+**What stays open, and it is a real question, not a formality.** This decides the
+*default*, not the *lesson*. Whether the experiment as specified was a fair test of
+"pipeline beats model tuning" is the evaluator's call: our corpus is half code-switched
+Hinglish, our only English meeting is third-party and contains none of our terms, and
+the entity denominator that survived is 2. A Devanagari term list, a
+transliteration-aware matcher, or a corpus whose English half is our own would each be a
+different experiment — and a defensible one. Recorded here as unresolved rather than
+folded into the adoption decision, because the two questions have different answers.
 
 **`mtg-001`'s "on" leg could not be produced.** Its second chunk returns Groq HTTP 500
 whenever a prompt is attached — 5 invocations, up to 8 attempts each, against an
@@ -412,7 +537,9 @@ uv run m2x process data/raw/mtg-002-course-scope.wav --model openai/whisper-larg
 Re-runs are cache hits, so the *first* run is the one that produces a latency number.
 `m2x runs summary` groups the run log by model and provider.
 
-Once a snippet exists, WER and entity capture come from the scorer:
+WER and entity capture come from the scorer. The window must match the reference's
+window, which differs per meeting (`mtg-001` 211–331, `mtg-002` 80–200, `ami-001`
+357–477):
 
 ```bash
 uv run python eval/wer.py --reference eval/snippets/mtg-002.txt \
@@ -421,6 +548,18 @@ uv run python eval/wer.py --reference eval/snippets/mtg-002.txt \
 
 It **refuses** to score a snippet still marked `NOT YET TRANSCRIBED` (exit 2) rather
 than returning a number computed against an empty file.
+
+The Deepgram references were produced with:
+
+```bash
+curl -s -X POST "https://api.deepgram.com/v1/listen?model=nova-3&language=multi\
+&diarize=true&utterances=true&punctuate=true&smart_format=true" \
+    -H "Authorization: Token $DEEPGRAM_API_KEY" \
+    -H "Content-Type: audio/wav" \
+    --data-binary @data/clips/snippet-mtg-002-2min.wav
+```
+
+Utterances renumbered `S1`/`S2` in order of first speaking; nothing else changed.
 
 Diarisation and its score:
 
@@ -438,25 +577,28 @@ The scorer prints the label mapping it chose alongside the accuracy, so the numb
 checked by hand against the overlap table rather than taken on trust. Add
 `--num-speakers 4` to the `diarize` call for the D-1c row.
 
-## Open dependency
+## Open dependency — closed 2026-08-12, with a named substitution
 
-**The three hand snippets are not written yet.** `eval/snippets/{mtg-001,mtg-002,ami-001}.txt`
-are still templates marked `NOT YET TRANSCRIBED`. Every WER cell and every entity cell
-above is blocked on them, and they must be written **by ear** — a reference derived from
-model output measures the system against itself.
+**All three references now exist and every WER and entity cell above is filled.** The
+dependency did not close the way it was written, and the difference is recorded rather
+than glossed: the plan called for three by-ear snippets, and what shipped is one human
+annotation (`ami-001`, AMI's own) plus two accepted Deepgram `nova-3` transcripts
+(`mtg-001`, `mtg-002`). Whisper-vs-Deepgram agreement is not Whisper-vs-truth — see
+**Reference provenance** under the transcription matrix for what that costs and which
+numbers survive it. A by-ear pass over the two internal references remains the open
+improvement.
 
-Everything not needing a reference is now filled: coverage, word counts, detected
-language, latency, and the adoption decision. The diarisation reference comparison on
-`ami-001` (M2X-022) is **done** — AMI ships its own speaker ground truth, so that row
-never depended on the snippets.
+**T-A and T-B disagreed about the language of `mtg-002`** (Hindi vs English). The
+reference settles it: the meeting is **code-switched**, Hindi in Devanagari with English
+technical vocabulary in Latin, in the same sentence. Neither route was right. T-B's
+"English" detection is the label it puts on a decode that dropped two thirds of the
+words.
 
-What the missing snippets still block on the diarisation side is narrower than it looks.
-`mtg-001` and `mtg-002` have no speaker ground truth at all — AMI is the only meeting that
-does — so their accuracy cells are not merely unwritten, they are **unmeasurable from the
-corpus as it stands**. The snippets would give a spot-check, not a score. Treat the 90.7%
-as an English-clean-audio number and assume Hinglish is worse until something measures it —
-mtg-001's 8 detected speakers against 4 participants is the hint that it will be.
-
-One note for whoever writes the `mtg-002` snippet: T-A and T-B **disagree about the
-language of that meeting** (Hindi vs English). The hand reference settles it, and that
-alone makes it worth the twenty minutes.
+**Diarisation on the internal meetings stays unmeasurable, and the references do not
+change that.** `mtg-001` and `mtg-002` have no speaker ground truth — AMI is the only
+meeting that does. Deepgram supplied speaker turns, but a diarisation reference produced
+by a diariser scores agreement between two diarisers, which is not what the cell claims.
+The references give a spot-check, not a score. Treat the 90.7% as an English-clean-audio
+number and assume Hinglish is worse until something measures it — `mtg-001`'s 8 detected
+speakers against 4 participants is the hint that it will be, and the reference's own
+2-speaker read of that window says the same thing from the other side.
