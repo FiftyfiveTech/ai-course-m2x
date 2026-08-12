@@ -63,6 +63,11 @@ from m2x.eval_extraction import (
     format_report,
     run_extraction_eval,
 )
+from m2x.eval_injections import (
+    DEFAULT_INJECTIONS_DIR,
+    format_verdicts,
+    run_injection_eval,
+)
 from m2x.indexing import SourceType
 from m2x.labels import DEFAULT_LABELS_DIR
 from m2x.prompts import DEFAULT_PROMPTS_DIR
@@ -563,6 +568,40 @@ def build_parser() -> argparse.ArgumentParser:
         "--no-record",
         action="store_true",
         help="print the table without appending to the results log",
+    )
+
+    eval_injections = eval_actions.add_parser(
+        "injections",
+        help="check that instructions inside a transcript stay data",
+    )
+    eval_injections.add_argument(
+        "--injections-dir",
+        type=Path,
+        default=DEFAULT_INJECTIONS_DIR,
+        help=f"directory of attack cases (default: {DEFAULT_INJECTIONS_DIR})",
+    )
+    eval_injections.add_argument(
+        "--labels-dir",
+        type=Path,
+        default=DEFAULT_LABELS_DIR,
+        help=f"root holding dev/, for the base cases' ground truth (default: {DEFAULT_LABELS_DIR})",
+    )
+    eval_injections.add_argument(
+        "--model",
+        default=DEFAULT_EXTRACT_MODEL,
+        help=f"Hugging Face repo id of the extraction model (default: {DEFAULT_EXTRACT_MODEL})",
+    )
+    eval_injections.add_argument(
+        "--provider",
+        type=Provider,
+        choices=list(Provider),
+        default=None,
+        help="force a backend; default routes by the model's registry entry",
+    )
+    eval_injections.add_argument(
+        "--prompt-version",
+        default=None,
+        help="prompt version to test, e.g. v2; default is the latest on disk",
     )
 
     runs = subcommands.add_parser("runs", help="report on the run log")
@@ -1293,6 +1332,9 @@ def _run_eval(
         case produced no valid record still prints its table and exits 0, because the
         failure count is part of the measurement rather than a crash.
     """
+    if args.action == "injections":
+        return _run_injections(args, adapter_factory=adapter_factory)
+
     if args.set_name == "heldout":
         print(
             "opening the SEALED held-out set. It certifies exactly one run (M2X-040) "
@@ -1330,6 +1372,39 @@ def _run_eval(
         print(f"recorded -> {written}")
 
     return EXIT_OK
+
+
+def _run_injections(
+    args: argparse.Namespace,
+    *,
+    adapter_factory: Callable[[], ModelAdapter],
+) -> int:
+    """Run the adversarial injection suite.
+
+    Args:
+        args: Parsed ``eval injections`` arguments.
+        adapter_factory: Builds the adapter.
+
+    Returns:
+        Process exit code. **Non-zero when any case fails**, unlike the extraction eval:
+        a steerable extractor is a gate failure, not a number to report and move past.
+    """
+    try:
+        with adapter_factory() as adapter:
+            verdicts = run_injection_eval(
+                adapter=adapter,
+                injections_dir=args.injections_dir,
+                labels_dir=args.labels_dir,
+                model_repo_id=args.model,
+                provider=args.provider,
+                prompt_version=args.prompt_version,
+            )
+    except M2XError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_FAILURE
+
+    print(format_verdicts(verdicts))
+    return EXIT_OK if all(verdict.passed for verdict in verdicts) else EXIT_FAILURE
 
 
 def _format_outcome(outcome: ProcessOutcome) -> str:
