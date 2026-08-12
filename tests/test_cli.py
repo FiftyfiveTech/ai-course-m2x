@@ -16,6 +16,7 @@ import pytest
 
 from m2x.adapter import ModelAdapter
 from m2x.cli import EXIT_FAILURE, EXIT_OK, EXIT_USAGE, build_parser, main
+from m2x.diarization import DEFAULT_DIARIZATION_DIR
 from m2x.extraction import load_record
 from m2x.pipeline import load_transcript
 from m2x.prompts import latest_version
@@ -755,6 +756,79 @@ def test_index_build_with_nothing_to_index_is_a_usage_error(
 
     assert code == EXIT_USAGE
     assert "nothing to index" in capsys.readouterr().err
+
+
+def test_index_build_does_not_read_the_global_diarization_dir(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """A build aimed at a scratch dir must not index the real corpus.
+
+    The decoy sits exactly where the default corpus layout puts diarised meetings,
+    relative to the working directory. Indexing it would be a data-boundary crossing
+    on a public repo, and it is what made this test's neighbour fail on any machine
+    that happened to hold ``data/diarization/mtg-001.json``.
+    """
+    monkeypatch.chdir(tmp_path)
+    _index_transcript(tmp_path / "scratch" / "mtg-001.json")
+    decoy = _index_transcript(DEFAULT_DIARIZATION_DIR / "mtg-001.json")
+    decoy.write_text(
+        decoy.read_text(encoding="utf-8").replace("migration plan", "confidential payroll"),
+        encoding="utf-8",
+    )
+    common = ["--index-dir", str(tmp_path / "index")]
+
+    main(
+        ["index", "build", "--transcripts-dir", "scratch", "--no-docs", *common],
+        adapter_factory=lambda: make_adapter(_embedding_handler),
+    )
+    capsys.readouterr()
+    main(
+        ["index", "query", "what about the migration", "-k", "5", *common],
+        adapter_factory=lambda: make_adapter(_embedding_handler),
+    )
+
+    out = capsys.readouterr().out
+    assert "migration plan" in out
+    assert "confidential payroll" not in out
+
+
+def test_index_build_reads_an_explicit_diarization_dir(
+    make_adapter: AdapterFactory,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    """Preferring the diarised copy still works — it just has to be asked for."""
+    _index_transcript(tmp_path / "scratch" / "mtg-001.json")
+    diarised = _index_transcript(tmp_path / "diarised" / "mtg-001.json")
+    diarised.write_text(
+        diarised.read_text(encoding="utf-8").replace("migration plan", "diarised migration plan"),
+        encoding="utf-8",
+    )
+    common = ["--index-dir", str(tmp_path / "index")]
+
+    main(
+        [
+            "index",
+            "build",
+            "--transcripts-dir",
+            str(tmp_path / "scratch"),
+            "--diarization-dir",
+            str(tmp_path / "diarised"),
+            "--no-docs",
+            *common,
+        ],
+        adapter_factory=lambda: make_adapter(_embedding_handler),
+    )
+    capsys.readouterr()
+    main(
+        ["index", "query", "what about the migration", "-k", "5", *common],
+        adapter_factory=lambda: make_adapter(_embedding_handler),
+    )
+
+    assert "diarised migration plan" in capsys.readouterr().out
 
 
 def test_index_query_prints_scores_and_citations(

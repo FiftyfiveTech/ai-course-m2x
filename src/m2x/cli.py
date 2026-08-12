@@ -383,9 +383,19 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=DEFAULT_TRANSCRIPTS_DIR,
         help=(
-            "directory of transcript JSON to index; the diarised copy in "
-            f"{DEFAULT_DIARIZATION_DIR} is preferred per meeting "
+            "directory of transcript JSON to index; the diarised copy of the same "
+            "meeting is preferred when --diarization-dir holds one "
             f"(default: {DEFAULT_TRANSCRIPTS_DIR})"
+        ),
+    )
+    index_build.add_argument(
+        "--diarization-dir",
+        type=Path,
+        default=None,
+        help=(
+            "directory of diarised transcripts to prefer per meeting; defaults to the "
+            f"'{DEFAULT_DIARIZATION_DIR.name}' directory beside --transcripts-dir, which "
+            f"is {DEFAULT_DIARIZATION_DIR} for the default corpus layout"
         ),
     )
     index_build.add_argument(
@@ -904,11 +914,16 @@ def _run_index_build(
     """
     transcripts: list[tuple[str, Transcript]] = []
     unreadable: list[str] = []
+    # Resolved next to whatever dir was asked for, never from a global: a build pointed
+    # at a scratch dir must not read the real corpus (see docs/design/day4-index.md).
+    diarization_dir = args.diarization_dir or (
+        args.transcripts_dir.parent / DEFAULT_DIARIZATION_DIR.name
+    )
     for path in sorted(args.transcripts_dir.glob("*.json")) if args.transcripts_dir.is_dir() else []:
         # Prefer the diarised copy of the same meeting: speaker labels ride into the
         # chunk text, and "who said it" is part of what a reader matches on. Falls back
-        # to the plain transcript, and never leaves the directory that was asked for.
-        diarised = DEFAULT_DIARIZATION_DIR / path.name
+        # to the plain transcript.
+        diarised = diarization_dir / path.name
         source = diarised if diarised.is_file() else path
         try:
             transcripts.append((path.stem, load_transcript(source)))
