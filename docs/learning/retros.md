@@ -3,6 +3,69 @@
 Newest first. One entry per ticket (or paired tickets), appended at close — same
 content as the Odoo completion comment, kept in-repo so it survives the course.
 
+## M2X-024 + M2X-025 — vocabulary experiment and the Phase 1 gate (2026-08-12, PR #23)
+
+**Executed**
+
+- References for all three pilot meetings, so every WER and entity cell in
+  `docs/design/day2-matrix.md` is filled. `ami-001` is AMI's own human annotation;
+  `mtg-001` and `mtg-002` are Deepgram `nova-3` transcripts, reviewed and accepted
+  without a by-ear pass.
+- **M2X-024:** the vocabulary file is not adopted as a pipeline default. `mtg-002` WER
+  64.0% → 83.8% with the prompt attached, against `ami-001`'s 48.5% → 57.4%; entity
+  capture 0% (0/2) on both legs.
+- **M2X-025:** Phase 1 gate PASS. `eval/validate_transcripts.py` (12 tests, exits 1 on
+  failure) reports 3/3 speaker-attributed and schema-valid; adopted pipeline run
+  end-to-end from a cold cache. `docs/phase1-comparison.md` + a `gates.md` record.
+
+**What the experiment actually found**
+
+The lesson under test was "pipeline beats model tuning" — a vocabulary file moving entity
+capture 76.2% → 90.5% on a prior project. It does not reproduce here, and the sharpest
+evidence is not the WER regression. Only two vocabulary terms are spoken anywhere in the
+`mtg-002` window, `RAG` and `PRD`, and Whisper misses both *with the file attached*. The
+Deepgram reference transcribed both in Latin script, which rules out the script confound
+that was expected to explain a zero: on these two terms the failure is capture.
+
+A 0/2 denominator supports "no evidence the vocabulary helps", not "proof it cannot" — so
+the adoption decision (don't make it a default) and the lesson (is the experiment fair on
+this corpus?) were recorded as **two questions with two answers**, rather than one
+verdict. Our corpus is half code-switched and our only English meeting contains none of
+our 56 terms; that is a fact about the test, not about the technique.
+
+**Three published numbers came out weaker, and none of them was the ticket's job**
+
+1. **Coverage was partly an artifact.** Whisper emits segments with a real time range and
+   empty text; duration-based coverage counted them. `mtg-001` carries 112 seconds of
+   them — 10.6% of the meeting. Voiced coverage cuts T-A's published lead by roughly two
+   thirds (9.1 → 2.9 points).
+2. **The pipeline is not reproducible run-to-run.** The cold gate run returned 53 segments
+   / 629 words where the 2026-08-05 leg returned 64 / 780: same audio, model, provider,
+   flags, one week apart. WER moved only 64.0% → 64.9%.
+3. **Two of three references are inter-vendor agreement, not accuracy.**
+
+**The lesson**
+
+*A metric invented mid-comparison and promoted the same day deserves the most scrutiny,
+not the least.* Coverage was added on Day 2 because word counts diverged more than error
+could explain, was immediately called "the discriminating measurement of the whole
+comparison", and was partly counting silence with a timestamp on it. Nothing in the
+comparison caught that — it took a **different** metric arriving a week later, on a
+reference the comparison had been waiting for all along.
+
+The corollary is the more useful half. Word count and coverage swing 19% run-to-run while
+WER moves 0.9 points on the same audio, so the metric that needed the expensive missing
+input was the stable one, and the two cheap proxies that filled in for it while it was
+unavailable were the noisy ones. Cheap proxies are not free; they are borrowing against a
+number you have not measured yet.
+
+**Deviation recorded rather than resolved:** M2X-025 asks that "every segment has …
+speaker". Six segments across the corpus have none, because `dominant_speaker` returns
+`None` rather than guessing when no diarisation turn overlaps. The literal reading fails a
+corpus that is working correctly, so the validator checks a 95% floor and the gate record
+says so. Writing a checker that passes is easy; writing one that fails for the right
+reasons is the work.
+
 ## M2X-044 — citation-based Q&A with abstention (2026-08-12, PR #21)
 
 **Executed**
