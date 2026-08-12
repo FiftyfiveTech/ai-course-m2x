@@ -115,6 +115,40 @@ mixing them returns confident nonsense rather than an error.
 `index query` prints distances, not confidence: the nearest chunk to a question nobody
 discussed is still a chunk. Design and measured results: `docs/design/day4-index.md`.
 
+## Asking a question
+
+```bash
+uv run m2x ask "what are the three RAG gate metrics"
+uv run m2x ask "what did we decide about migration" -k 8 --source-type meeting
+uv run m2x ask "who owns the audit" --max-distance 0.55   # widen the abstention gate
+uv run m2x ask "..." --prompt-version v1                  # pin the prompt
+```
+
+Retrieves the top-k chunks, hands them to the model inside a delimited data block —
+retrieved content is untrusted data, exactly like a transcript — and returns an answer
+whose every claim cites the passage it came from:
+
+```
+Context precision, Faithfulness, and Citation accuracy
+
+  [m2x-week1-handbook · § 4.4 RAGAS and the three gate metrics]  distance 0.2979
+     "Citation accuracy (≥0.90): does the cited segment actually contain the claim?"
+  prompt    rag/v2
+```
+
+**Fabricated citations are structurally impossible.** The model cites passage labels
+(`C1`), never timestamps, so the `[meeting · speaker · mm:ss–mm:ss]` reference is rendered
+from the chunk's stored metadata rather than typed by the model. Each citation also carries
+a quote that must appear verbatim in the passage it cites, which catches a real passage
+cited for a claim it does not support. Both checks run inside the retry loop; one retry,
+then the answer abstains.
+
+**Abstention is a feature, and exits 0.** When nothing is retrieved, nothing is retrieved
+nearer than `--max-distance`, or the model cannot ground an answer, the command prints
+`Not found in the meeting corpus` and the reason. Never a guess. The default threshold
+(0.48) is **provisional** and measured on this corpus with this embedding model — see
+`docs/design/day4-ask.md`.
+
 ## Architecture (target — PRD §4)
 
 ```
