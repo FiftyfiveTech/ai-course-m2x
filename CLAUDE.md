@@ -6,9 +6,14 @@ Yash (Evaluator). Claude acts as project manager for tickets.
 
 ## Ticket workflow (Odoo)
 
-- Work is tracked in Odoo project **73 — "AI Dev Course"**
+- Work is tracked in the Odoo project named **"AI Dev Course"**
   (`fiftyfive-technologies-pvt-ltd.odoo.com`). Ticket titles use an `M2X-NNN` prefix.
-  Task URL pattern: `https://fiftyfive-technologies-pvt-ltd.odoo.com/odoo/project/73/task/<id>`.
+  Task URL pattern: `https://fiftyfive-technologies-pvt-ltd.odoo.com/odoo/project/<project>/task/<id>`.
+- **Never hardcode the project or task ids.** The board is periodically duplicated, and
+  each copy renumbers every task and strips its chatter — 73 (this file's previous value)
+  is already deleted, and its tasks with it. Resolve the live board by name before any
+  ticket operation (highest id among the `AI Dev Course` matches; **75** as of
+  2026-08-12), and join tickets across copies on the `M2X-NNN` ref, which is stable.
 - **One ticket at a time.** Never start, expand into, or implement a second ticket in
   the same session without explicit consent — even when tickets declare dependencies
   on each other. Finish (or pause) the current ticket first, then ask.
