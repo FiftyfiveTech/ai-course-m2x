@@ -21,7 +21,8 @@ Used by `m2x extract` (`src/m2x/extraction.py`).
 
 | version | date | digest | what changed | why | dev-F1 |
 |---|---|---|---|---|---|
-| v1 | 2026-08-11 | `c25354a2dc6e` | First version. Lifted byte-for-byte out of the `EXTRACTION_SYSTEM_PROMPT` constant: injection boundary, the four categories, and the citation / owner / deadline / empty-list rules. | A prompt that lives in code cannot be cited by an eval number. Moved unchanged so the numbers either side of the move stay comparable. | not yet run — first F1 lands with M2X-036 |
+| v1 | 2026-08-11 | `c25354a2dc6e` | First version. Lifted byte-for-byte out of the `EXTRACTION_SYSTEM_PROMPT` constant: injection boundary, the four categories, and the citation / owner / deadline / empty-list rules. | A prompt that lives in code cannot be cited by an eval number. Moved unchanged so the numbers either side of the move stay comparable. | **0.0312** (dev, nim, 13/15 schema-valid) |
+| v2 | 2026-08-12 | `cc09b2a2b129` | Descriptions must be summaries in the model's own words, never verbatim transcript. Sharper tests for the four kinds (a proposal nobody accepted is not a decision; a rejection is). An explicit not-an-item list: back-channels, fragments, room/recording talk, completed work. Dedup rules for a restated or revised commitment. Citation rule now says to copy the two printed numbers exactly and never span two segments. Injection paragraph unchanged byte for byte. | v1 scored 0.0312 because it quoted the transcript instead of summarising it, so almost nothing matched however correct the finding was. It also returned fragments as items, confused decisions with actions, and drifted citations by one segment — burning the retry budget on two cases. Each change targets one of those four classes. | see `eval/results/extraction.jsonl` |
 
 ## rag
 
