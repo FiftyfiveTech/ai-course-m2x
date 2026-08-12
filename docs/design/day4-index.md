@@ -107,3 +107,18 @@ number; context precision arrives with the RAG eval set and RAGAS (M2X-045, M2X-
   how a gate ends up running against an empty store.
 - Rebuilding one source leaves the others alone, so a re-index after one new meeting
   costs one meeting's embeddings.
+
+## Defect fixed after merge: `index build` ignored `--transcripts-dir` for content
+
+As merged, the build took transcript *filenames* from `--transcripts-dir` but loaded each
+meeting's *content* from the hardcoded global `data/diarization/`. A build aimed at a
+scratch directory silently indexed the real meeting corpus — a data-boundary crossing on
+a public repo — and `test_index_query_prints_scores_and_citations` failed on any machine
+that happened to hold `data/diarization/mtg-001.json`. The comment above the code claimed
+it "never leaves the directory that was asked for"; that was false.
+
+The diarised copy is now looked up in `--diarization-dir`, which defaults to the
+`diarization/` directory **beside** `--transcripts-dir`. The default corpus layout is
+unchanged (`data/transcripts` → `data/diarization`), a scratch build resolves inside its
+own tree, and a caller who wants to mix the two has to say so. Preferring the diarised
+copy was never the bug — reading it from a directory nobody asked for was.
