@@ -19,6 +19,13 @@ from instructor.core import InstructorRetryException
 from pydantic import ValidationError
 
 from m2x.adapter import ModelAdapter
+from m2x.ask import (
+    DEFAULT_ASK_MODEL,
+    DEFAULT_MAX_DISTANCE,
+    DEFAULT_TOP_K,
+    AskOutcome,
+    ask,
+)
 from m2x.chaptering import (
     DEFAULT_CHAPTER_MODEL,
     DEFAULT_CHAPTERS_DIR,
@@ -443,6 +450,63 @@ def build_parser() -> argparse.ArgumentParser:
     )
     _add_index_arguments(index_query)
 
+    ask_cmd = subcommands.add_parser(
+        "ask",
+        help="answer a question from the index with citations, or abstain",
+    )
+    ask_cmd.add_argument("question", help="natural-language question")
+    ask_cmd.add_argument(
+        "-k",
+        "--top-k",
+        type=int,
+        default=DEFAULT_TOP_K,
+        help=f"passages to retrieve (default: {DEFAULT_TOP_K})",
+    )
+    ask_cmd.add_argument(
+        "--source-type",
+        type=SourceType,
+        choices=list(SourceType),
+        default=None,
+        help="restrict retrieval to meetings or documents; default searches both",
+    )
+    ask_cmd.add_argument(
+        "--answer-model",
+        default=DEFAULT_ASK_MODEL,
+        help=f"Hugging Face repo id of the answering model (default: {DEFAULT_ASK_MODEL})",
+    )
+    ask_cmd.add_argument(
+        "--answer-provider",
+        type=Provider,
+        choices=list(Provider),
+        default=None,
+        help="backend for the answering call; default routes by the model's registry entry",
+    )
+    ask_cmd.add_argument(
+        "--max-distance",
+        type=float,
+        default=DEFAULT_MAX_DISTANCE,
+        help=(
+            "abstain without calling the model when the nearest passage is further than "
+            f"this cosine distance (default: {DEFAULT_MAX_DISTANCE}, provisional — it is a "
+            "property of this corpus and embedding model, not a constant)"
+        ),
+    )
+    ask_cmd.add_argument(
+        "--prompt-version",
+        default=None,
+        help=(
+            "RAG prompt version to answer with, e.g. 'v1'; default is the latest on disk. "
+            "Pin it to reproduce an abstention rate reported with an older one"
+        ),
+    )
+    ask_cmd.add_argument(
+        "--prompts-dir",
+        type=Path,
+        default=DEFAULT_PROMPTS_DIR,
+        help=f"root of the prompt library (default: {DEFAULT_PROMPTS_DIR})",
+    )
+    _add_index_arguments(ask_cmd)
+
     runs = subcommands.add_parser("runs", help="report on the run log")
     run_actions = runs.add_subparsers(dest="action", required=True)
     runs_summary = run_actions.add_parser(
@@ -480,6 +544,9 @@ def main(
 
     if args.command == "index":
         return _run_index(args, adapter_factory=adapter_factory)
+
+    if args.command == "ask":
+        return _run_ask(args, adapter_factory=adapter_factory)
 
     if args.command == "diarize":
         return _run_diarize(args)
@@ -1003,6 +1070,80 @@ def _run_index_query(
 
     print(_format_hits(args.question, hits))
     return EXIT_OK
+
+
+def _run_ask(
+    args: argparse.Namespace,
+    *,
+    adapter_factory: Callable[[], ModelAdapter],
+) -> int:
+    """Answer a question from the index, or print an abstention.
+
+    Args:
+        args: Parsed ``ask`` arguments.
+        adapter_factory: Builds the adapter performing the embedding and answering calls.
+
+    Returns:
+        Process exit code. An abstention is exit 0: "the corpus does not answer this" is a
+        result the ticket grades, not a failure to report.
+    """
+    try:
+        store = VectorStore(
+            args.index_dir,
+            collection=args.collection,
+            embed_model_repo_id=args.model,
+        )
+        with adapter_factory() as adapter:
+            outcome = ask(
+                args.question,
+                store=store,
+                adapter=adapter,
+                k=args.top_k,
+                model_repo_id=args.answer_model,
+                provider=args.answer_provider,
+                embed_provider=args.provider,
+                source_type=args.source_type,
+                max_distance=args.max_distance,
+                prompt_version=args.prompt_version,
+                prompts_dir=args.prompts_dir,
+            )
+    except M2XError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_FAILURE
+    except ValueError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_USAGE
+
+    print(_format_answer(outcome))
+    return EXIT_OK
+
+
+def _format_answer(outcome: AskOutcome) -> str:
+    """Render an answer with its citations, or an abstention with its reason.
+
+    Args:
+        outcome: What ``ask`` returned.
+
+    Returns:
+        Text to print to stdout.
+    """
+    lines = [outcome.answer]
+    if outcome.abstained:
+        nearest = (
+            f"{outcome.nearest_distance:.4f}" if outcome.nearest_distance is not None else "none"
+        )
+        lines.append(
+            f"  abstained {outcome.abstention_reason}  "
+            f"(nearest {nearest}, threshold {outcome.max_distance:.4f})"
+        )
+    else:
+        lines.append("")
+        for citation in outcome.citations:
+            lines.append(f"  {citation.reference}  distance {citation.distance:.4f}")
+            lines.append(f'     "{" ".join(citation.quote.split())}"')
+
+    lines.append(f"  prompt    {outcome.prompt_name}/{outcome.prompt_version}")
+    return "\n".join(lines)
 
 
 def _format_index_build(outcome: IndexOutcome, *, index_dir: Path) -> str:
