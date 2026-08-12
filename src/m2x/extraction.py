@@ -317,7 +317,10 @@ def extract_record(
         )
 
     validation_context = {SEGMENT_CONTEXT_KEY: segment_ids(transcript)}
-    client = instructor.from_litellm(create, mode=instructor.Mode.JSON)
+    # MD_JSON, not JSON: providers wrap the record in a ```json fence, sometimes behind a
+    # sentence. MD_JSON extracts the first balanced JSON span; JSON hands the raw content
+    # to Pydantic, which dies on the backtick identically on every attempt.
+    client = instructor.from_litellm(create, mode=instructor.Mode.MD_JSON)
     returned = client.create(
         model=model_repo_id,
         messages=[{"role": turn.role.value, "content": turn.content} for turn in messages],
