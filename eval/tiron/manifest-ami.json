@@ -14,6 +14,45 @@
       "segments": 260,
       "sampling_rate": 16000,
       "unknown_spans": []
+    },
+    {
+      "meeting_id": "tiron-IS1009a",
+      "corpus": "ami",
+      "source_meeting_id": "IS1009a",
+      "file": "data/raw/tiron-IS1009a.wav",
+      "reference": "eval/tiron/tiron-IS1009a.speakers.json",
+      "reference_text": "eval/tiron/tiron-IS1009a.txt",
+      "duration_s": 839.0,
+      "speakers": 4,
+      "segments": 195,
+      "sampling_rate": 16000,
+      "unknown_spans": []
+    },
+    {
+      "meeting_id": "tiron-TS3003a",
+      "corpus": "ami",
+      "source_meeting_id": "TS3003a",
+      "file": "data/raw/tiron-TS3003a.wav",
+      "reference": "eval/tiron/tiron-TS3003a.speakers.json",
+      "reference_text": "eval/tiron/tiron-TS3003a.txt",
+      "duration_s": 1505.6,
+      "speakers": 4,
+      "segments": 242,
+      "sampling_rate": 16000,
+      "unknown_spans": []
+    },
+    {
+      "meeting_id": "tiron-EN2002a",
+      "corpus": "ami",
+      "source_meeting_id": "EN2002a",
+      "file": "data/raw/tiron-EN2002a.wav",
+      "reference": "eval/tiron/tiron-EN2002a.speakers.json",
+      "reference_text": "eval/tiron/tiron-EN2002a.txt",
+      "duration_s": 2142.7,
+      "speakers": 4,
+      "segments": 746,
+      "sampling_rate": 16000,
+      "unknown_spans": []
     }
   ]
 }

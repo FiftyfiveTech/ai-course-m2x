@@ -1,0 +1,45 @@
+{
+  "dataset": "Trelis/tiron-eval-meetings",
+  "split": "icsi",
+  "meetings": [
+    {
+      "meeting_id": "tiron-Bmr013",
+      "corpus": "icsi",
+      "source_meeting_id": "Bmr013",
+      "file": "data/raw/tiron-Bmr013.wav",
+      "reference": "eval/tiron/tiron-Bmr013.speakers.json",
+      "reference_text": "eval/tiron/tiron-Bmr013.txt",
+      "duration_s": 2907.4,
+      "speakers": 7,
+      "segments": 1538,
+      "sampling_rate": 16000,
+      "unknown_spans": []
+    },
+    {
+      "meeting_id": "tiron-Bmr018",
+      "corpus": "icsi",
+      "source_meeting_id": "Bmr018",
+      "file": "data/raw/tiron-Bmr018.wav",
+      "reference": "eval/tiron/tiron-Bmr018.speakers.json",
+      "reference_text": "eval/tiron/tiron-Bmr018.txt",
+      "duration_s": 3421.9,
+      "speakers": 7,
+      "segments": 1503,
+      "sampling_rate": 16000,
+      "unknown_spans": []
+    },
+    {
+      "meeting_id": "tiron-Bro021",
+      "corpus": "icsi",
+      "source_meeting_id": "Bro021",
+      "file": "data/raw/tiron-Bro021.wav",
+      "reference": "eval/tiron/tiron-Bro021.speakers.json",
+      "reference_text": "eval/tiron/tiron-Bro021.txt",
+      "duration_s": 3628.6,
+      "speakers": 7,
+      "segments": 1135,
+      "sampling_rate": 16000,
+      "unknown_spans": []
+    }
+  ]
+}

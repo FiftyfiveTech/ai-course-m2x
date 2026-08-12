@@ -1,0 +1,1215 @@
+{
+  "meeting_id": "tiron-TS3003a",
+  "segments": [
+    {
+      "t_start": 13.32,
+      "t_end": 27.181,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 15.055,
+      "t_end": 15.856,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 15.344,
+      "t_end": 15.568,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 16.304,
+      "t_end": 16.736,
+      "speaker": "TS3003a.C"
+    },
+    {
+      "t_start": 19.605,
+      "t_end": 20.197,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 32.351,
+      "t_end": 33.44,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 35.619,
+      "t_end": 48.784,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 40.527,
+      "t_end": 41.563,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 42.944,
+      "t_end": 43.76,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 48.08,
+      "t_end": 48.48,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 50.08,
+      "t_end": 58.144,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 61.875,
+      "t_end": 62.987,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 65.35,
+      "t_end": 101.488,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 106.775,
+      "t_end": 114.096,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 109.472,
+      "t_end": 113.722,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 116.64,
+      "t_end": 139.296,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 140.608,
+      "t_end": 141.856,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 142.902,
+      "t_end": 148.336,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 149.648,
+      "t_end": 159.424,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 161.216,
+      "t_end": 190.928,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 163.696,
+      "t_end": 164.48,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 182.432,
+      "t_end": 184.329,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 182.672,
+      "t_end": 182.896,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 189.401,
+      "t_end": 189.952,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 190.8,
+      "t_end": 192.672,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 193.072,
+      "t_end": 194.016,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 195.968,
+      "t_end": 252.192,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 212.144,
+      "t_end": 212.72,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 216.025,
+      "t_end": 216.95,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 238.129,
+      "t_end": 238.721,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 252.983,
+      "t_end": 258.992,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 256.939,
+      "t_end": 257.36,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 260.352,
+      "t_end": 262.096,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 263.136,
+      "t_end": 279.968,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 281.136,
+      "t_end": 286.976,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 288.032,
+      "t_end": 329.072,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 332.144,
+      "t_end": 362.544,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 363.856,
+      "t_end": 408.8,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 380.095,
+      "t_end": 380.761,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 392.592,
+      "t_end": 392.832,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 409.655,
+      "t_end": 410.864,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 412.208,
+      "t_end": 437.456,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 435.232,
+      "t_end": 435.696,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 436.091,
+      "t_end": 436.461,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 439.392,
+      "t_end": 449.616,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 452.49,
+      "t_end": 454.928,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 455.92,
+      "t_end": 469.6,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 468.943,
+      "t_end": 470.16,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 470.768,
+      "t_end": 477.264,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 473.114,
+      "t_end": 475.962,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 477.934,
+      "t_end": 508.048,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 506.192,
+      "t_end": 506.608,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 506.72,
+      "t_end": 506.96,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 509.28,
+      "t_end": 541.936,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 543.6,
+      "t_end": 545.856,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 554.336,
+      "t_end": 555.6,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 569.792,
+      "t_end": 570.32,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 571.104,
+      "t_end": 578.102,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 577.112,
+      "t_end": 578.96,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 579.6,
+      "t_end": 583.36,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 579.713,
+      "t_end": 580.806,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 583.648,
+      "t_end": 586.016,
+      "speaker": "TS3003a.C"
+    },
+    {
+      "t_start": 584.736,
+      "t_end": 592.0,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 593.488,
+      "t_end": 595.792,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 595.386,
+      "t_end": 596.0,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 596.784,
+      "t_end": 607.442,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 612.147,
+      "t_end": 614.992,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 617.52,
+      "t_end": 617.824,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 627.184,
+      "t_end": 637.968,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 633.797,
+      "t_end": 635.712,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 639.872,
+      "t_end": 641.104,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 642.976,
+      "t_end": 653.552,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 655.68,
+      "t_end": 663.2,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 661.2,
+      "t_end": 661.536,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 670.784,
+      "t_end": 672.272,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 683.568,
+      "t_end": 690.208,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 691.552,
+      "t_end": 693.28,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 694.944,
+      "t_end": 695.799,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 700.224,
+      "t_end": 714.192,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 704.544,
+      "t_end": 705.626,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 704.63,
+      "t_end": 705.592,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 711.652,
+      "t_end": 712.8,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 714.32,
+      "t_end": 716.496,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 721.051,
+      "t_end": 722.576,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 724.438,
+      "t_end": 726.288,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 729.3,
+      "t_end": 735.952,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 743.218,
+      "t_end": 751.5,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 748.176,
+      "t_end": 748.432,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 766.96,
+      "t_end": 767.552,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 783.088,
+      "t_end": 783.584,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 801.392,
+      "t_end": 808.416,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 812.192,
+      "t_end": 812.64,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 818.196,
+      "t_end": 820.12,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 820.48,
+      "t_end": 821.68,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 829.832,
+      "t_end": 833.232,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 829.841,
+      "t_end": 830.544,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 833.968,
+      "t_end": 840.896,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 834.998,
+      "t_end": 836.224,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 836.224,
+      "t_end": 837.63,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 842.992,
+      "t_end": 846.288,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 843.397,
+      "t_end": 844.026,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 846.464,
+      "t_end": 847.056,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 849.328,
+      "t_end": 849.808,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 858.8,
+      "t_end": 860.528,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 861.536,
+      "t_end": 862.608,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 879.424,
+      "t_end": 883.248,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 884.432,
+      "t_end": 884.848,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 888.528,
+      "t_end": 892.512,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 889.584,
+      "t_end": 895.952,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 889.631,
+      "t_end": 890.256,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 897.824,
+      "t_end": 898.448,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 903.04,
+      "t_end": 903.28,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 915.136,
+      "t_end": 915.616,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 965.024,
+      "t_end": 967.872,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 967.952,
+      "t_end": 969.317,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 968.16,
+      "t_end": 972.448,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 971.504,
+      "t_end": 973.744,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 974.112,
+      "t_end": 978.08,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 975.008,
+      "t_end": 975.424,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 975.696,
+      "t_end": 976.352,
+      "speaker": "TS3003a.C"
+    },
+    {
+      "t_start": 976.48,
+      "t_end": 977.773,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 978.4,
+      "t_end": 978.944,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 982.912,
+      "t_end": 984.336,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 986.416,
+      "t_end": 988.036,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 990.072,
+      "t_end": 992.049,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 993.044,
+      "t_end": 995.398,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 994.944,
+      "t_end": 996.816,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 996.22,
+      "t_end": 997.33,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1009.218,
+      "t_end": 1021.296,
+      "speaker": "TS3003a.C"
+    },
+    {
+      "t_start": 1017.349,
+      "t_end": 1017.728,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1039.824,
+      "t_end": 1042.56,
+      "speaker": "TS3003a.C"
+    },
+    {
+      "t_start": 1041.104,
+      "t_end": 1043.792,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1041.488,
+      "t_end": 1042.523,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1042.56,
+      "t_end": 1045.536,
+      "speaker": "TS3003a.C"
+    },
+    {
+      "t_start": 1045.664,
+      "t_end": 1047.376,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1048.4,
+      "t_end": 1053.472,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1056.88,
+      "t_end": 1061.36,
+      "speaker": "TS3003a.C"
+    },
+    {
+      "t_start": 1062.992,
+      "t_end": 1064.688,
+      "speaker": "TS3003a.C"
+    },
+    {
+      "t_start": 1067.504,
+      "t_end": 1068.521,
+      "speaker": "TS3003a.C"
+    },
+    {
+      "t_start": 1071.216,
+      "t_end": 1072.128,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1074.88,
+      "t_end": 1075.392,
+      "speaker": "TS3003a.C"
+    },
+    {
+      "t_start": 1080.433,
+      "t_end": 1081.579,
+      "speaker": "TS3003a.C"
+    },
+    {
+      "t_start": 1081.52,
+      "t_end": 1097.36,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1088.772,
+      "t_end": 1089.326,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1090.222,
+      "t_end": 1091.184,
+      "speaker": "TS3003a.C"
+    },
+    {
+      "t_start": 1098.96,
+      "t_end": 1110.176,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1102.128,
+      "t_end": 1103.087,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1111.232,
+      "t_end": 1151.722,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1151.722,
+      "t_end": 1188.384,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1189.456,
+      "t_end": 1211.248,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1201.952,
+      "t_end": 1202.992,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1206.944,
+      "t_end": 1208.297,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1210.032,
+      "t_end": 1214.192,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1214.512,
+      "t_end": 1214.816,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1215.168,
+      "t_end": 1219.648,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1217.904,
+      "t_end": 1220.016,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1220.944,
+      "t_end": 1222.256,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1222.72,
+      "t_end": 1223.024,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1223.392,
+      "t_end": 1225.584,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1227.792,
+      "t_end": 1229.264,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1233.936,
+      "t_end": 1236.0,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1236.096,
+      "t_end": 1236.704,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1237.312,
+      "t_end": 1241.392,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1240.512,
+      "t_end": 1241.6,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1243.392,
+      "t_end": 1247.136,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1247.056,
+      "t_end": 1247.824,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1248.352,
+      "t_end": 1267.511,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1261.968,
+      "t_end": 1262.384,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1264.208,
+      "t_end": 1264.784,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1265.984,
+      "t_end": 1266.272,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1267.008,
+      "t_end": 1268.346,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1267.451,
+      "t_end": 1268.496,
+      "speaker": "TS3003a.C"
+    },
+    {
+      "t_start": 1267.753,
+      "t_end": 1268.751,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1268.79,
+      "t_end": 1284.464,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1278.938,
+      "t_end": 1279.68,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1284.656,
+      "t_end": 1318.96,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1285.024,
+      "t_end": 1286.464,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1294.768,
+      "t_end": 1296.156,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1306.177,
+      "t_end": 1307.697,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1308.032,
+      "t_end": 1308.56,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1308.787,
+      "t_end": 1309.268,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1313.633,
+      "t_end": 1314.336,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1316.736,
+      "t_end": 1317.024,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1317.101,
+      "t_end": 1317.702,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1320.096,
+      "t_end": 1320.576,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1321.394,
+      "t_end": 1324.656,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1325.664,
+      "t_end": 1334.816,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1333.959,
+      "t_end": 1334.661,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1335.088,
+      "t_end": 1335.328,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1336.432,
+      "t_end": 1337.779,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1337.728,
+      "t_end": 1339.712,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1339.689,
+      "t_end": 1345.011,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1341.486,
+      "t_end": 1342.432,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1346.064,
+      "t_end": 1346.352,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1346.736,
+      "t_end": 1360.24,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1357.08,
+      "t_end": 1357.635,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1360.48,
+      "t_end": 1365.008,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1365.872,
+      "t_end": 1368.96,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1370.384,
+      "t_end": 1373.328,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1370.802,
+      "t_end": 1371.584,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1371.433,
+      "t_end": 1372.062,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1374.224,
+      "t_end": 1375.376,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1376.016,
+      "t_end": 1376.76,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1376.608,
+      "t_end": 1376.96,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1377.216,
+      "t_end": 1378.208,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1378.384,
+      "t_end": 1380.48,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1379.68,
+      "t_end": 1381.104,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1381.024,
+      "t_end": 1382.877,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1381.84,
+      "t_end": 1382.24,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1382.16,
+      "t_end": 1384.944,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1386.848,
+      "t_end": 1387.889,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1389.51,
+      "t_end": 1400.336,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1401.312,
+      "t_end": 1401.552,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1401.472,
+      "t_end": 1407.68,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1408.72,
+      "t_end": 1409.456,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1408.736,
+      "t_end": 1410.432,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1410.352,
+      "t_end": 1411.391,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1410.832,
+      "t_end": 1412.16,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1414.304,
+      "t_end": 1420.0,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1418.57,
+      "t_end": 1419.162,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1420.288,
+      "t_end": 1420.608,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1421.552,
+      "t_end": 1421.888,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1422.144,
+      "t_end": 1424.4,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1425.6,
+      "t_end": 1427.952,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1429.264,
+      "t_end": 1429.936,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1430.384,
+      "t_end": 1432.56,
+      "speaker": "TS3003a.C"
+    },
+    {
+      "t_start": 1431.576,
+      "t_end": 1432.094,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1432.448,
+      "t_end": 1437.968,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1432.464,
+      "t_end": 1432.8,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1438.448,
+      "t_end": 1438.928,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1440.672,
+      "t_end": 1441.856,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1442.432,
+      "t_end": 1442.704,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1443.744,
+      "t_end": 1447.936,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1449.328,
+      "t_end": 1450.512,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1451.664,
+      "t_end": 1459.647,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1453.696,
+      "t_end": 1454.112,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1455.204,
+      "t_end": 1456.387,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1468.16,
+      "t_end": 1476.479,
+      "speaker": "TS3003a.A"
+    },
+    {
+      "t_start": 1471.92,
+      "t_end": 1472.608,
+      "speaker": "TS3003a.D"
+    },
+    {
+      "t_start": 1473.952,
+      "t_end": 1474.336,
+      "speaker": "TS3003a.C"
+    },
+    {
+      "t_start": 1474.185,
+      "t_end": 1475.665,
+      "speaker": "TS3003a.B"
+    },
+    {
+      "t_start": 1474.256,
+      "t_end": 1475.328,
+      "speaker": "TS3003a.D"
+    }
+  ]
+}
