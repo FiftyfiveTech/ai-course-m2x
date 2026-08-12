@@ -1,0 +1,1155 @@
+{
+  "meeting_id": "tiron-MTG_32074",
+  "segments": [
+    {
+      "t_start": 6.65,
+      "t_end": 8.61,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 10.95,
+      "t_end": 18.09,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 17.19,
+      "t_end": 22.51,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 22.61,
+      "t_end": 25.85,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 24.66,
+      "t_end": 25.63,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 26.29,
+      "t_end": 29.6,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 26.55,
+      "t_end": 27.01,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 27.22,
+      "t_end": 27.52,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 29.74,
+      "t_end": 35.18,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 35.39,
+      "t_end": 36.56,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 36.57,
+      "t_end": 37.54,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 37.32,
+      "t_end": 38.08,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 37.67,
+      "t_end": 39.25,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 37.68,
+      "t_end": 39.39,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 38.41,
+      "t_end": 40.69,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 39.6,
+      "t_end": 44.18,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 40.96,
+      "t_end": 41.49,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 42.04,
+      "t_end": 44.64,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 42.21,
+      "t_end": 42.62,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 43.71,
+      "t_end": 46.48,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 46.17,
+      "t_end": 47.71,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 47.75,
+      "t_end": 48.97,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 48.19,
+      "t_end": 49.22,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 49.13,
+      "t_end": 55.89,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 49.54,
+      "t_end": 50.01,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 54.8,
+      "t_end": 60.82,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 56.3,
+      "t_end": 56.72,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 61.01,
+      "t_end": 61.86,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 61.51,
+      "t_end": 62.0,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 61.66,
+      "t_end": 62.64,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 61.87,
+      "t_end": 65.26,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 63.77,
+      "t_end": 64.56,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 64.78,
+      "t_end": 67.39,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 65.32,
+      "t_end": 66.05,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 65.67,
+      "t_end": 66.56,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 66.1,
+      "t_end": 67.42,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 67.1,
+      "t_end": 67.55,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 67.49,
+      "t_end": 72.89,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 67.79,
+      "t_end": 69.15,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 72.02,
+      "t_end": 74.74,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 74.03,
+      "t_end": 75.44,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 74.66,
+      "t_end": 78.54,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 75.02,
+      "t_end": 75.8,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 76.44,
+      "t_end": 78.18,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 76.81,
+      "t_end": 77.18,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 78.31,
+      "t_end": 81.57,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 80.72,
+      "t_end": 81.03,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 81.67,
+      "t_end": 87.99,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 86.78,
+      "t_end": 90.82,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 88.63,
+      "t_end": 92.28,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 91.82,
+      "t_end": 98.13,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 92.45,
+      "t_end": 92.88,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 93.36,
+      "t_end": 93.74,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 98.75,
+      "t_end": 99.26,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 98.9,
+      "t_end": 101.61,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 101.75,
+      "t_end": 103.87,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 103.06,
+      "t_end": 104.05,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 103.86,
+      "t_end": 110.46,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 109.5,
+      "t_end": 114.78,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 111.09,
+      "t_end": 112.09,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 112.46,
+      "t_end": 112.94,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 114.88,
+      "t_end": 118.47,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 117.24,
+      "t_end": 123.43,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 118.54,
+      "t_end": 118.84,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 123.93,
+      "t_end": 126.26,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 126.0,
+      "t_end": 130.09,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 126.11,
+      "t_end": 126.62,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 126.48,
+      "t_end": 127.31,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 129.52,
+      "t_end": 133.04,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 130.27,
+      "t_end": 134.22,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 133.14,
+      "t_end": 141.08,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 134.54,
+      "t_end": 135.05,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 138.23,
+      "t_end": 138.56,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 139.31,
+      "t_end": 139.68,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 140.69,
+      "t_end": 144.91,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 141.23,
+      "t_end": 142.26,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 142.58,
+      "t_end": 145.79,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 145.01,
+      "t_end": 148.9,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 146.74,
+      "t_end": 147.68,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 148.57,
+      "t_end": 151.48,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 149.0,
+      "t_end": 151.01,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 150.65,
+      "t_end": 154.96,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 153.56,
+      "t_end": 156.83,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 154.78,
+      "t_end": 160.19,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 155.26,
+      "t_end": 155.6,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 156.01,
+      "t_end": 156.35,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 157.07,
+      "t_end": 157.55,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 157.92,
+      "t_end": 158.4,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 158.56,
+      "t_end": 158.97,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 159.27,
+      "t_end": 164.85,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 159.84,
+      "t_end": 160.2,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 164.12,
+      "t_end": 165.43,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 165.27,
+      "t_end": 169.509,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 167.16,
+      "t_end": 169.6,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 169.15,
+      "t_end": 176.12,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 170.57,
+      "t_end": 172.46,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 173.03,
+      "t_end": 174.56,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 173.3,
+      "t_end": 174.66,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 175.15,
+      "t_end": 177.05,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 176.22,
+      "t_end": 179.02,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 176.27,
+      "t_end": 178.08,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 177.44,
+      "t_end": 180.2,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 178.7,
+      "t_end": 182.25,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 180.84,
+      "t_end": 187.78,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 182.78,
+      "t_end": 183.11,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 183.1,
+      "t_end": 184.73,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 186.64,
+      "t_end": 187.18,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 186.86,
+      "t_end": 189.74,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 187.56,
+      "t_end": 191.71,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 191.47,
+      "t_end": 191.74,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 191.87,
+      "t_end": 198.83,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 192.91,
+      "t_end": 193.53,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 194.82,
+      "t_end": 195.3,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 195.55,
+      "t_end": 196.15,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 195.71,
+      "t_end": 196.5,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 196.48,
+      "t_end": 197.01,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 196.76,
+      "t_end": 197.2,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 198.06,
+      "t_end": 198.47,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 199.16,
+      "t_end": 202.81,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 199.17,
+      "t_end": 199.71,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 199.8,
+      "t_end": 200.5,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 200.29,
+      "t_end": 200.89,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 202.1,
+      "t_end": 206.24,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 203.25,
+      "t_end": 203.59,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 204.94,
+      "t_end": 207.05,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 205.88,
+      "t_end": 207.55,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 207.03,
+      "t_end": 208.71,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 208.2,
+      "t_end": 209.48,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 208.2,
+      "t_end": 210.67,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 209.5,
+      "t_end": 210.31,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 209.89,
+      "t_end": 214.26,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 210.94,
+      "t_end": 211.82,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 211.93,
+      "t_end": 213.24,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 213.58,
+      "t_end": 219.22,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 217.76,
+      "t_end": 223.21,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 219.55,
+      "t_end": 226.71,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 219.82,
+      "t_end": 222.27,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 223.08,
+      "t_end": 224.53,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 225.95,
+      "t_end": 227.26,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 227.09,
+      "t_end": 229.48,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 227.5,
+      "t_end": 234.49,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 229.93,
+      "t_end": 231.09,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 231.88,
+      "t_end": 232.21,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 232.91,
+      "t_end": 239.86,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 234.81,
+      "t_end": 235.45,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 238.97,
+      "t_end": 239.5,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 239.69,
+      "t_end": 240.04,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 239.8,
+      "t_end": 240.55,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 239.99,
+      "t_end": 245.06,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 240.85,
+      "t_end": 242.87,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 240.98,
+      "t_end": 241.33,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 243.52,
+      "t_end": 244.75,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 244.11,
+      "t_end": 246.18,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 245.09,
+      "t_end": 247.35,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 245.34,
+      "t_end": 249.13,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 246.57,
+      "t_end": 251.34,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 248.07,
+      "t_end": 249.88,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 249.39,
+      "t_end": 250.45,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 250.1,
+      "t_end": 253.37,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 250.75,
+      "t_end": 258.46,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 253.48,
+      "t_end": 254.13,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 254.48,
+      "t_end": 257.32,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 257.35,
+      "t_end": 262.7,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 259.65,
+      "t_end": 260.12,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 261.64,
+      "t_end": 263.67,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 263.05,
+      "t_end": 267.89,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 264.37,
+      "t_end": 266.26,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 266.45,
+      "t_end": 267.31,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 267.21,
+      "t_end": 273.28,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 267.43,
+      "t_end": 270.78,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 268.02,
+      "t_end": 268.35,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 269.61,
+      "t_end": 271.14,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 272.52,
+      "t_end": 276.24,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 272.79,
+      "t_end": 274.239,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 274.87,
+      "t_end": 275.27,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 276.23,
+      "t_end": 276.75,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 276.56,
+      "t_end": 278.98,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 277.15,
+      "t_end": 279.83,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 279.17,
+      "t_end": 281.19,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 281.32,
+      "t_end": 285.09,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 283.22,
+      "t_end": 283.64,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 283.63,
+      "t_end": 290.77,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 284.54,
+      "t_end": 285.27,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 285.36,
+      "t_end": 286.36,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 285.44,
+      "t_end": 285.91,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 286.61,
+      "t_end": 289.78,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 289.48,
+      "t_end": 295.66,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 289.98,
+      "t_end": 290.74,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 291.45,
+      "t_end": 293.64,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 293.93,
+      "t_end": 294.57,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 295.33,
+      "t_end": 299.32,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 298.01,
+      "t_end": 298.58,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 299.42,
+      "t_end": 304.59,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 302.11,
+      "t_end": 302.4,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 302.62,
+      "t_end": 304.99,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 304.75,
+      "t_end": 310.17,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 306.03,
+      "t_end": 306.38,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 306.54,
+      "t_end": 309.3,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 309.49,
+      "t_end": 311.29,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 310.58,
+      "t_end": 312.03,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 312.01,
+      "t_end": 319.86,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 313.51,
+      "t_end": 318.73,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 315.54,
+      "t_end": 316.09,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 317.52,
+      "t_end": 318.86,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 319.52,
+      "t_end": 325.36,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 319.78,
+      "t_end": 320.57,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 322.42,
+      "t_end": 322.83,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 324.07,
+      "t_end": 324.71,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 325.25,
+      "t_end": 332.21,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 325.8,
+      "t_end": 326.24,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 330.45,
+      "t_end": 336.43,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 332.86,
+      "t_end": 333.29,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 335.72,
+      "t_end": 337.09,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 336.64,
+      "t_end": 340.6,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 337.79,
+      "t_end": 340.41,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 338.1,
+      "t_end": 338.56,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 339.11,
+      "t_end": 339.64,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 340.51,
+      "t_end": 346.19,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 345.06,
+      "t_end": 347.85,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 346.49,
+      "t_end": 347.32,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 347.56,
+      "t_end": 349.64,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 349.77,
+      "t_end": 351.01,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 350.13,
+      "t_end": 352.59,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 351.25,
+      "t_end": 351.71,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 351.39,
+      "t_end": 352.95,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 352.6,
+      "t_end": 353.63,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 353.15,
+      "t_end": 355.05,
+      "speaker": "Rachel"
+    },
+    {
+      "t_start": 353.64,
+      "t_end": 355.47,
+      "speaker": "Beth"
+    },
+    {
+      "t_start": 355.33,
+      "t_end": 356.1,
+      "speaker": "Linda"
+    },
+    {
+      "t_start": 356.27,
+      "t_end": 357.52,
+      "speaker": "Linda"
+    }
+  ]
+}

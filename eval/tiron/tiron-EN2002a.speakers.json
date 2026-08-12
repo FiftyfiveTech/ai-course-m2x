@@ -1,0 +1,3735 @@
+{
+  "meeting_id": "tiron-EN2002a",
+  "segments": [
+    {
+      "t_start": 0.0,
+      "t_end": 1.901,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 0.944,
+      "t_end": 7.068,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 3.492,
+      "t_end": 5.446,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 3.612,
+      "t_end": 12.288,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 7.891,
+      "t_end": 9.005,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 12.133,
+      "t_end": 15.434,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 13.12,
+      "t_end": 13.722,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 14.959,
+      "t_end": 15.625,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 15.109,
+      "t_end": 25.264,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 19.008,
+      "t_end": 23.804,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 21.4,
+      "t_end": 23.328,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 25.344,
+      "t_end": 30.166,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 25.658,
+      "t_end": 26.208,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 27.792,
+      "t_end": 30.281,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 27.879,
+      "t_end": 34.652,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 28.016,
+      "t_end": 30.737,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 32.416,
+      "t_end": 32.807,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 32.484,
+      "t_end": 32.871,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 34.048,
+      "t_end": 45.728,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 36.272,
+      "t_end": 36.73,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 40.912,
+      "t_end": 44.309,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 41.523,
+      "t_end": 43.57,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 48.256,
+      "t_end": 50.252,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 48.704,
+      "t_end": 49.128,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 50.192,
+      "t_end": 66.96,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 68.208,
+      "t_end": 68.674,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 68.768,
+      "t_end": 84.808,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 86.464,
+      "t_end": 87.104,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 88.576,
+      "t_end": 103.984,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 106.167,
+      "t_end": 134.894,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 106.183,
+      "t_end": 106.808,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 106.656,
+      "t_end": 107.034,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 136.526,
+      "t_end": 160.784,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 138.752,
+      "t_end": 140.615,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 140.852,
+      "t_end": 141.176,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 142.112,
+      "t_end": 142.608,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 142.533,
+      "t_end": 144.113,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 152.304,
+      "t_end": 152.832,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 162.621,
+      "t_end": 168.784,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 169.395,
+      "t_end": 170.967,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 170.603,
+      "t_end": 176.744,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 176.896,
+      "t_end": 179.888,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 180.031,
+      "t_end": 183.686,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 181.36,
+      "t_end": 186.992,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 181.896,
+      "t_end": 186.554,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 182.382,
+      "t_end": 186.625,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 185.003,
+      "t_end": 197.929,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 190.064,
+      "t_end": 190.803,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 192.244,
+      "t_end": 198.112,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 192.969,
+      "t_end": 193.426,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 194.801,
+      "t_end": 202.672,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 202.096,
+      "t_end": 202.609,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 203.232,
+      "t_end": 203.625,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 203.904,
+      "t_end": 204.32,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 204.624,
+      "t_end": 206.656,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 207.584,
+      "t_end": 207.904,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 207.682,
+      "t_end": 220.594,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 218.249,
+      "t_end": 221.616,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 218.336,
+      "t_end": 218.879,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 218.906,
+      "t_end": 221.491,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 223.005,
+      "t_end": 231.402,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 224.884,
+      "t_end": 225.682,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 225.046,
+      "t_end": 232.465,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 228.144,
+      "t_end": 229.592,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 228.148,
+      "t_end": 240.528,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 231.168,
+      "t_end": 233.12,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 234.4,
+      "t_end": 236.816,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 234.539,
+      "t_end": 235.428,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 238.816,
+      "t_end": 252.335,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 242.876,
+      "t_end": 249.289,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 245.6,
+      "t_end": 260.229,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 261.12,
+      "t_end": 261.561,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 261.264,
+      "t_end": 266.88,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 263.392,
+      "t_end": 264.112,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 267.6,
+      "t_end": 273.063,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 272.688,
+      "t_end": 279.184,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 280.064,
+      "t_end": 280.816,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 284.064,
+      "t_end": 285.389,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 285.016,
+      "t_end": 290.366,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 286.0,
+      "t_end": 289.072,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 291.744,
+      "t_end": 302.538,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 296.794,
+      "t_end": 299.576,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 298.614,
+      "t_end": 299.906,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 300.992,
+      "t_end": 304.04,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 301.431,
+      "t_end": 302.44,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 303.344,
+      "t_end": 319.577,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 316.592,
+      "t_end": 319.848,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 321.36,
+      "t_end": 332.498,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 325.882,
+      "t_end": 326.302,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 332.72,
+      "t_end": 333.36,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 333.28,
+      "t_end": 333.641,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 333.824,
+      "t_end": 334.234,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 334.064,
+      "t_end": 335.554,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 335.36,
+      "t_end": 356.421,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 354.576,
+      "t_end": 364.288,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 358.816,
+      "t_end": 359.915,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 359.409,
+      "t_end": 360.175,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 364.24,
+      "t_end": 370.759,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 366.855,
+      "t_end": 372.016,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 367.28,
+      "t_end": 369.297,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 374.704,
+      "t_end": 376.368,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 376.205,
+      "t_end": 376.554,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 376.216,
+      "t_end": 388.011,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 377.846,
+      "t_end": 378.25,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 378.096,
+      "t_end": 379.472,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 385.648,
+      "t_end": 405.007,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 397.648,
+      "t_end": 399.278,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 398.16,
+      "t_end": 398.613,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 399.945,
+      "t_end": 404.982,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 402.256,
+      "t_end": 403.119,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 404.174,
+      "t_end": 406.818,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 406.128,
+      "t_end": 406.528,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 406.816,
+      "t_end": 408.288,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 409.584,
+      "t_end": 424.16,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 410.294,
+      "t_end": 411.934,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 424.512,
+      "t_end": 424.904,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 426.08,
+      "t_end": 462.768,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 435.34,
+      "t_end": 436.016,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 440.665,
+      "t_end": 441.241,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 452.518,
+      "t_end": 454.72,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 458.988,
+      "t_end": 460.033,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 462.768,
+      "t_end": 466.992,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 462.856,
+      "t_end": 463.388,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 466.0,
+      "t_end": 469.36,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 469.392,
+      "t_end": 469.793,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 469.459,
+      "t_end": 471.681,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 471.379,
+      "t_end": 482.852,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 471.824,
+      "t_end": 472.702,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 473.664,
+      "t_end": 474.26,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 478.192,
+      "t_end": 484.12,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 478.578,
+      "t_end": 478.985,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 481.549,
+      "t_end": 481.965,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 483.601,
+      "t_end": 487.892,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 486.064,
+      "t_end": 486.507,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 486.295,
+      "t_end": 493.992,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 486.521,
+      "t_end": 486.968,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 491.552,
+      "t_end": 492.113,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 494.528,
+      "t_end": 497.348,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 496.24,
+      "t_end": 502.08,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 501.696,
+      "t_end": 502.213,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 502.313,
+      "t_end": 504.618,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 503.408,
+      "t_end": 505.244,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 504.502,
+      "t_end": 518.886,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 506.512,
+      "t_end": 510.387,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 506.611,
+      "t_end": 530.592,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 506.729,
+      "t_end": 512.746,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 513.659,
+      "t_end": 517.922,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 521.6,
+      "t_end": 527.339,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 521.733,
+      "t_end": 522.235,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 526.731,
+      "t_end": 527.406,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 532.304,
+      "t_end": 533.737,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 537.152,
+      "t_end": 537.632,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 538.656,
+      "t_end": 539.276,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 542.304,
+      "t_end": 544.691,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 546.256,
+      "t_end": 549.296,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 548.592,
+      "t_end": 556.644,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 549.808,
+      "t_end": 550.17,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 558.608,
+      "t_end": 561.76,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 561.661,
+      "t_end": 565.392,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 561.906,
+      "t_end": 562.619,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 562.539,
+      "t_end": 563.14,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 565.792,
+      "t_end": 575.046,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 566.937,
+      "t_end": 567.428,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 569.198,
+      "t_end": 578.369,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 569.255,
+      "t_end": 571.56,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 577.746,
+      "t_end": 581.096,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 581.267,
+      "t_end": 585.772,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 581.904,
+      "t_end": 582.944,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 585.04,
+      "t_end": 589.912,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 590.904,
+      "t_end": 594.016,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 592.819,
+      "t_end": 594.696,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 595.936,
+      "t_end": 596.393,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 596.784,
+      "t_end": 603.344,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 601.52,
+      "t_end": 601.952,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 604.304,
+      "t_end": 604.736,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 606.676,
+      "t_end": 607.491,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 609.792,
+      "t_end": 616.338,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 615.253,
+      "t_end": 620.774,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 618.025,
+      "t_end": 626.249,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 625.056,
+      "t_end": 625.428,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 626.326,
+      "t_end": 636.583,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 630.976,
+      "t_end": 647.933,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 639.861,
+      "t_end": 640.24,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 646.151,
+      "t_end": 649.938,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 646.564,
+      "t_end": 647.647,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 646.921,
+      "t_end": 647.445,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 648.32,
+      "t_end": 656.432,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 657.536,
+      "t_end": 663.521,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 661.93,
+      "t_end": 662.448,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 663.52,
+      "t_end": 666.865,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 664.656,
+      "t_end": 667.211,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 665.296,
+      "t_end": 673.569,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 669.12,
+      "t_end": 671.56,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 669.391,
+      "t_end": 669.704,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 670.123,
+      "t_end": 675.128,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 674.86,
+      "t_end": 678.218,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 675.132,
+      "t_end": 681.784,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 676.193,
+      "t_end": 682.624,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 677.073,
+      "t_end": 683.52,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 680.673,
+      "t_end": 681.232,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 682.862,
+      "t_end": 683.502,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 682.912,
+      "t_end": 690.656,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 689.685,
+      "t_end": 690.352,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 690.902,
+      "t_end": 691.343,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 691.904,
+      "t_end": 692.864,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 694.112,
+      "t_end": 694.512,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 694.816,
+      "t_end": 703.402,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 696.904,
+      "t_end": 698.839,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 701.76,
+      "t_end": 702.488,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 704.304,
+      "t_end": 704.811,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 704.5,
+      "t_end": 705.263,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 706.24,
+      "t_end": 706.608,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 707.744,
+      "t_end": 712.583,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 713.12,
+      "t_end": 713.625,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 714.416,
+      "t_end": 715.106,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 715.926,
+      "t_end": 717.298,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 716.004,
+      "t_end": 720.854,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 719.008,
+      "t_end": 725.689,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 721.872,
+      "t_end": 722.97,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 723.888,
+      "t_end": 724.4,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 725.053,
+      "t_end": 729.632,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 726.128,
+      "t_end": 738.452,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 727.077,
+      "t_end": 727.546,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 736.143,
+      "t_end": 738.201,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 739.008,
+      "t_end": 740.912,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 740.24,
+      "t_end": 748.788,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 741.328,
+      "t_end": 741.663,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 747.664,
+      "t_end": 749.811,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 747.764,
+      "t_end": 748.217,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 749.361,
+      "t_end": 749.798,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 751.776,
+      "t_end": 752.168,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 752.032,
+      "t_end": 762.991,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 753.794,
+      "t_end": 754.892,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 756.24,
+      "t_end": 758.32,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 756.281,
+      "t_end": 758.825,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 761.26,
+      "t_end": 779.632,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 762.263,
+      "t_end": 762.745,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 769.696,
+      "t_end": 771.808,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 773.104,
+      "t_end": 775.314,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 777.744,
+      "t_end": 778.284,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 778.181,
+      "t_end": 782.768,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 781.888,
+      "t_end": 782.298,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 784.016,
+      "t_end": 789.259,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 790.224,
+      "t_end": 791.456,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 790.752,
+      "t_end": 803.904,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 795.712,
+      "t_end": 796.169,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 800.336,
+      "t_end": 800.794,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 803.184,
+      "t_end": 806.72,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 804.448,
+      "t_end": 805.904,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 805.888,
+      "t_end": 806.369,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 806.848,
+      "t_end": 808.048,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 810.224,
+      "t_end": 811.64,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 816.528,
+      "t_end": 822.415,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 823.056,
+      "t_end": 824.04,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 824.248,
+      "t_end": 836.571,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 828.703,
+      "t_end": 830.246,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 837.76,
+      "t_end": 839.04,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 841.452,
+      "t_end": 846.866,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 844.864,
+      "t_end": 845.218,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 846.608,
+      "t_end": 856.546,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 854.529,
+      "t_end": 856.233,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 854.627,
+      "t_end": 860.291,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 856.427,
+      "t_end": 856.912,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 858.448,
+      "t_end": 858.975,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 858.495,
+      "t_end": 859.888,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 858.8,
+      "t_end": 864.877,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 865.017,
+      "t_end": 865.881,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 865.344,
+      "t_end": 866.528,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 866.816,
+      "t_end": 867.517,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 868.432,
+      "t_end": 868.944,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 868.864,
+      "t_end": 871.094,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 870.913,
+      "t_end": 876.278,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 872.741,
+      "t_end": 873.165,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 876.256,
+      "t_end": 877.52,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 877.632,
+      "t_end": 878.113,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 878.0,
+      "t_end": 879.376,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 879.296,
+      "t_end": 888.788,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 886.384,
+      "t_end": 890.096,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 887.171,
+      "t_end": 887.657,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 890.697,
+      "t_end": 891.392,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 891.952,
+      "t_end": 906.018,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 900.352,
+      "t_end": 905.264,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 904.988,
+      "t_end": 907.902,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 907.296,
+      "t_end": 912.782,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 910.427,
+      "t_end": 910.921,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 912.432,
+      "t_end": 917.435,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 913.6,
+      "t_end": 915.128,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 916.453,
+      "t_end": 920.284,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 916.769,
+      "t_end": 925.552,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 918.171,
+      "t_end": 918.695,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 920.1,
+      "t_end": 920.566,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 922.452,
+      "t_end": 924.24,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 923.504,
+      "t_end": 924.354,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 925.52,
+      "t_end": 932.511,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 925.623,
+      "t_end": 926.646,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 927.808,
+      "t_end": 928.325,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 927.925,
+      "t_end": 928.51,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 932.56,
+      "t_end": 936.306,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 934.597,
+      "t_end": 946.848,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 936.402,
+      "t_end": 937.703,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 937.277,
+      "t_end": 937.861,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 939.101,
+      "t_end": 943.968,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 939.747,
+      "t_end": 941.64,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 943.856,
+      "t_end": 944.455,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 948.496,
+      "t_end": 949.28,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 949.76,
+      "t_end": 951.039,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 950.635,
+      "t_end": 952.736,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 952.944,
+      "t_end": 953.888,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 954.865,
+      "t_end": 958.448,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 958.592,
+      "t_end": 959.44,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 959.52,
+      "t_end": 962.032,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 962.464,
+      "t_end": 964.838,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 963.696,
+      "t_end": 966.972,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 963.964,
+      "t_end": 966.178,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 966.037,
+      "t_end": 982.736,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 967.436,
+      "t_end": 967.809,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 969.883,
+      "t_end": 976.032,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 975.534,
+      "t_end": 976.176,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 981.456,
+      "t_end": 982.202,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 984.784,
+      "t_end": 985.168,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 986.183,
+      "t_end": 989.377,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 986.224,
+      "t_end": 986.871,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 991.853,
+      "t_end": 994.841,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 994.048,
+      "t_end": 997.209,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 996.506,
+      "t_end": 998.944,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 996.643,
+      "t_end": 999.328,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 999.852,
+      "t_end": 1011.632,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1009.827,
+      "t_end": 1010.272,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1011.27,
+      "t_end": 1013.155,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1012.749,
+      "t_end": 1019.754,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1012.88,
+      "t_end": 1024.863,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1013.83,
+      "t_end": 1017.814,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1014.982,
+      "t_end": 1016.299,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1018.96,
+      "t_end": 1019.378,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1022.528,
+      "t_end": 1031.671,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1024.22,
+      "t_end": 1024.854,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1027.12,
+      "t_end": 1029.076,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1028.032,
+      "t_end": 1028.849,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1030.06,
+      "t_end": 1032.488,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1030.854,
+      "t_end": 1031.224,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1030.864,
+      "t_end": 1033.673,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1032.794,
+      "t_end": 1041.595,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1032.845,
+      "t_end": 1034.063,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1035.481,
+      "t_end": 1038.045,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1035.74,
+      "t_end": 1036.382,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1037.936,
+      "t_end": 1038.924,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1039.685,
+      "t_end": 1045.06,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1040.688,
+      "t_end": 1041.463,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1040.799,
+      "t_end": 1041.482,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1044.133,
+      "t_end": 1050.399,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1044.56,
+      "t_end": 1045.424,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1048.232,
+      "t_end": 1052.348,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1050.543,
+      "t_end": 1051.042,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1051.965,
+      "t_end": 1052.496,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1052.013,
+      "t_end": 1052.498,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1053.12,
+      "t_end": 1053.993,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1053.768,
+      "t_end": 1055.629,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1054.336,
+      "t_end": 1056.929,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1056.432,
+      "t_end": 1058.129,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1059.789,
+      "t_end": 1077.815,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1076.032,
+      "t_end": 1076.442,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1077.904,
+      "t_end": 1082.752,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1079.6,
+      "t_end": 1080.212,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1082.548,
+      "t_end": 1082.968,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1083.408,
+      "t_end": 1103.665,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1092.395,
+      "t_end": 1096.165,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1093.861,
+      "t_end": 1096.33,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1099.6,
+      "t_end": 1105.112,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1101.088,
+      "t_end": 1101.689,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1103.872,
+      "t_end": 1104.211,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1104.704,
+      "t_end": 1105.232,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1106.16,
+      "t_end": 1108.448,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1106.542,
+      "t_end": 1116.416,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1114.384,
+      "t_end": 1117.6,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1118.368,
+      "t_end": 1119.168,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1119.344,
+      "t_end": 1130.624,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1133.844,
+      "t_end": 1148.486,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1142.211,
+      "t_end": 1142.663,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1145.696,
+      "t_end": 1147.552,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1148.829,
+      "t_end": 1150.332,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1150.157,
+      "t_end": 1150.791,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1150.736,
+      "t_end": 1152.392,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1152.704,
+      "t_end": 1153.264,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1153.325,
+      "t_end": 1156.496,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1153.454,
+      "t_end": 1153.816,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1158.272,
+      "t_end": 1169.808,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1164.608,
+      "t_end": 1165.149,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1164.615,
+      "t_end": 1171.992,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1167.22,
+      "t_end": 1186.732,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1173.427,
+      "t_end": 1175.772,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1173.467,
+      "t_end": 1180.637,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1175.054,
+      "t_end": 1177.917,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1178.036,
+      "t_end": 1180.647,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1178.867,
+      "t_end": 1180.645,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1184.088,
+      "t_end": 1184.45,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1185.76,
+      "t_end": 1190.042,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1188.192,
+      "t_end": 1196.064,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1188.52,
+      "t_end": 1188.93,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1193.869,
+      "t_end": 1194.347,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1196.48,
+      "t_end": 1197.76,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1196.88,
+      "t_end": 1201.949,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1197.782,
+      "t_end": 1210.466,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1205.84,
+      "t_end": 1207.961,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1207.335,
+      "t_end": 1210.42,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1209.296,
+      "t_end": 1209.68,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1210.896,
+      "t_end": 1226.177,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1211.785,
+      "t_end": 1212.358,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1214.144,
+      "t_end": 1215.472,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1216.016,
+      "t_end": 1216.508,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1223.056,
+      "t_end": 1223.536,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1223.888,
+      "t_end": 1224.216,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1224.768,
+      "t_end": 1243.84,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1225.186,
+      "t_end": 1226.042,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1236.872,
+      "t_end": 1238.271,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1244.704,
+      "t_end": 1246.425,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1247.203,
+      "t_end": 1255.863,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1256.379,
+      "t_end": 1259.61,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1257.52,
+      "t_end": 1258.251,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1261.6,
+      "t_end": 1262.896,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1263.627,
+      "t_end": 1269.192,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1267.136,
+      "t_end": 1268.648,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1270.464,
+      "t_end": 1271.632,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1272.752,
+      "t_end": 1281.314,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1274.464,
+      "t_end": 1279.408,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1275.992,
+      "t_end": 1283.088,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1279.408,
+      "t_end": 1291.596,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1289.12,
+      "t_end": 1306.858,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1295.104,
+      "t_end": 1295.44,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1296.96,
+      "t_end": 1297.296,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1305.648,
+      "t_end": 1305.987,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1306.016,
+      "t_end": 1306.441,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1306.944,
+      "t_end": 1313.808,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1310.513,
+      "t_end": 1311.057,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1313.194,
+      "t_end": 1320.833,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1319.488,
+      "t_end": 1326.944,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1319.587,
+      "t_end": 1319.978,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1319.677,
+      "t_end": 1320.212,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1323.799,
+      "t_end": 1330.189,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1331.392,
+      "t_end": 1341.672,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1342.352,
+      "t_end": 1342.818,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1342.848,
+      "t_end": 1343.507,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1343.205,
+      "t_end": 1343.756,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1345.568,
+      "t_end": 1358.314,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1345.599,
+      "t_end": 1346.118,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1349.865,
+      "t_end": 1350.424,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1357.472,
+      "t_end": 1370.501,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1361.172,
+      "t_end": 1361.638,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1364.912,
+      "t_end": 1365.354,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1371.968,
+      "t_end": 1376.608,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1371.984,
+      "t_end": 1373.233,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1376.592,
+      "t_end": 1379.376,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1379.261,
+      "t_end": 1383.128,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1383.408,
+      "t_end": 1383.88,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1385.159,
+      "t_end": 1392.4,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1385.232,
+      "t_end": 1385.884,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1391.312,
+      "t_end": 1393.315,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1393.06,
+      "t_end": 1393.559,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1396.656,
+      "t_end": 1405.612,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1396.941,
+      "t_end": 1397.565,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1405.696,
+      "t_end": 1406.081,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1406.816,
+      "t_end": 1407.777,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1408.224,
+      "t_end": 1408.692,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1408.816,
+      "t_end": 1413.642,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1410.208,
+      "t_end": 1413.23,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1410.688,
+      "t_end": 1436.085,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1424.752,
+      "t_end": 1429.759,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1424.994,
+      "t_end": 1426.56,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1436.272,
+      "t_end": 1447.184,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1439.264,
+      "t_end": 1443.467,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1439.659,
+      "t_end": 1441.639,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1444.364,
+      "t_end": 1445.054,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1446.61,
+      "t_end": 1447.084,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1448.574,
+      "t_end": 1449.48,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1448.775,
+      "t_end": 1449.186,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1451.928,
+      "t_end": 1452.427,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1452.01,
+      "t_end": 1458.276,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1453.971,
+      "t_end": 1456.16,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1454.48,
+      "t_end": 1463.326,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1458.088,
+      "t_end": 1458.992,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1460.02,
+      "t_end": 1468.499,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1461.097,
+      "t_end": 1466.16,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1464.842,
+      "t_end": 1465.78,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1467.436,
+      "t_end": 1468.572,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1467.452,
+      "t_end": 1469.592,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1469.888,
+      "t_end": 1484.281,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1470.734,
+      "t_end": 1476.077,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1471.141,
+      "t_end": 1476.17,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1471.205,
+      "t_end": 1474.761,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1480.096,
+      "t_end": 1483.119,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1480.336,
+      "t_end": 1487.644,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1488.704,
+      "t_end": 1489.296,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1492.928,
+      "t_end": 1494.535,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1493.984,
+      "t_end": 1494.394,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1495.52,
+      "t_end": 1496.197,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1498.8,
+      "t_end": 1500.201,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1499.296,
+      "t_end": 1503.095,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1500.226,
+      "t_end": 1504.949,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1500.429,
+      "t_end": 1502.503,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1500.554,
+      "t_end": 1501.039,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1501.787,
+      "t_end": 1502.814,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1502.814,
+      "t_end": 1512.322,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1504.305,
+      "t_end": 1505.916,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1506.981,
+      "t_end": 1507.936,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1512.352,
+      "t_end": 1513.6,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1516.112,
+      "t_end": 1516.521,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1516.88,
+      "t_end": 1521.573,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1518.932,
+      "t_end": 1524.338,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1520.387,
+      "t_end": 1531.018,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1527.664,
+      "t_end": 1528.03,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1530.195,
+      "t_end": 1537.875,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1532.854,
+      "t_end": 1537.698,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1533.082,
+      "t_end": 1533.593,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1537.776,
+      "t_end": 1539.087,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1538.992,
+      "t_end": 1547.896,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1539.712,
+      "t_end": 1540.025,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1544.192,
+      "t_end": 1544.592,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1550.351,
+      "t_end": 1557.759,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1553.607,
+      "t_end": 1556.702,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1556.56,
+      "t_end": 1562.291,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1558.256,
+      "t_end": 1559.936,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1561.587,
+      "t_end": 1565.403,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1561.617,
+      "t_end": 1565.7,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1564.112,
+      "t_end": 1570.747,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1564.468,
+      "t_end": 1565.201,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1567.104,
+      "t_end": 1574.73,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1571.76,
+      "t_end": 1572.208,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1574.226,
+      "t_end": 1574.983,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1576.496,
+      "t_end": 1580.762,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1582.96,
+      "t_end": 1591.024,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1586.586,
+      "t_end": 1587.201,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1592.286,
+      "t_end": 1600.016,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1593.408,
+      "t_end": 1594.457,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1593.815,
+      "t_end": 1596.424,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1595.664,
+      "t_end": 1596.032,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1600.304,
+      "t_end": 1624.315,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1601.408,
+      "t_end": 1605.858,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1603.168,
+      "t_end": 1606.096,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1607.6,
+      "t_end": 1608.051,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1616.335,
+      "t_end": 1616.809,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1620.613,
+      "t_end": 1621.033,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1630.96,
+      "t_end": 1633.521,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1633.28,
+      "t_end": 1633.984,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1638.208,
+      "t_end": 1638.592,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1638.832,
+      "t_end": 1642.976,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1639.12,
+      "t_end": 1639.603,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1641.953,
+      "t_end": 1642.365,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1644.832,
+      "t_end": 1645.376,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1647.2,
+      "t_end": 1655.893,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1647.695,
+      "t_end": 1649.07,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1656.992,
+      "t_end": 1658.368,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1660.763,
+      "t_end": 1661.488,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1661.44,
+      "t_end": 1664.368,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1663.879,
+      "t_end": 1666.128,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1667.73,
+      "t_end": 1674.336,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1672.904,
+      "t_end": 1673.424,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1674.688,
+      "t_end": 1675.201,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1675.328,
+      "t_end": 1677.679,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1677.28,
+      "t_end": 1678.992,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1678.912,
+      "t_end": 1681.888,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1682.768,
+      "t_end": 1684.192,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1684.416,
+      "t_end": 1689.792,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1687.746,
+      "t_end": 1688.237,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1687.805,
+      "t_end": 1690.688,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1696.96,
+      "t_end": 1697.505,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1699.136,
+      "t_end": 1706.497,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1704.21,
+      "t_end": 1708.336,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1710.832,
+      "t_end": 1723.984,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1717.184,
+      "t_end": 1717.523,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1724.464,
+      "t_end": 1731.916,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1728.467,
+      "t_end": 1729.093,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1730.242,
+      "t_end": 1754.993,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1733.103,
+      "t_end": 1736.445,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1736.109,
+      "t_end": 1737.923,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1739.104,
+      "t_end": 1746.288,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1740.208,
+      "t_end": 1744.304,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1740.242,
+      "t_end": 1743.691,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1752.003,
+      "t_end": 1753.273,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1755.04,
+      "t_end": 1755.984,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1756.672,
+      "t_end": 1763.264,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1756.792,
+      "t_end": 1776.56,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1756.82,
+      "t_end": 1762.837,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1776.286,
+      "t_end": 1777.712,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1776.468,
+      "t_end": 1779.664,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1777.744,
+      "t_end": 1778.401,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1779.776,
+      "t_end": 1789.376,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1781.088,
+      "t_end": 1781.419,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1784.99,
+      "t_end": 1785.472,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1791.136,
+      "t_end": 1791.492,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1791.304,
+      "t_end": 1796.08,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1794.928,
+      "t_end": 1795.72,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1796.432,
+      "t_end": 1796.858,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1798.176,
+      "t_end": 1809.904,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1810.16,
+      "t_end": 1813.952,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1810.588,
+      "t_end": 1811.131,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1812.08,
+      "t_end": 1813.129,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1813.888,
+      "t_end": 1817.504,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1816.256,
+      "t_end": 1816.81,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1816.83,
+      "t_end": 1833.376,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1823.04,
+      "t_end": 1828.52,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1823.361,
+      "t_end": 1823.78,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1824.559,
+      "t_end": 1828.292,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1829.576,
+      "t_end": 1831.346,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1831.41,
+      "t_end": 1831.888,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1832.448,
+      "t_end": 1834.433,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1834.4,
+      "t_end": 1834.756,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1835.719,
+      "t_end": 1843.379,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1835.92,
+      "t_end": 1838.868,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1835.95,
+      "t_end": 1836.337,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1840.624,
+      "t_end": 1849.061,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1844.896,
+      "t_end": 1864.898,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1856.187,
+      "t_end": 1858.683,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1858.445,
+      "t_end": 1859.418,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1859.845,
+      "t_end": 1860.47,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1862.475,
+      "t_end": 1862.974,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1862.653,
+      "t_end": 1867.181,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1865.072,
+      "t_end": 1866.369,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1866.081,
+      "t_end": 1868.349,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1868.128,
+      "t_end": 1868.592,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1868.64,
+      "t_end": 1870.836,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1870.209,
+      "t_end": 1871.156,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1870.427,
+      "t_end": 1872.148,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1872.352,
+      "t_end": 1880.592,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1873.024,
+      "t_end": 1875.032,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1880.912,
+      "t_end": 1882.548,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1880.96,
+      "t_end": 1883.289,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1881.936,
+      "t_end": 1882.366,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1883.557,
+      "t_end": 1888.352,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1884.256,
+      "t_end": 1884.768,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1886.821,
+      "t_end": 1887.195,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1888.224,
+      "t_end": 1889.09,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1888.732,
+      "t_end": 1892.28,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1889.017,
+      "t_end": 1889.503,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1891.552,
+      "t_end": 1893.935,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1893.248,
+      "t_end": 1893.712,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1895.216,
+      "t_end": 1896.644,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1895.888,
+      "t_end": 1900.208,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1896.01,
+      "t_end": 1896.422,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1899.072,
+      "t_end": 1905.548,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1903.392,
+      "t_end": 1907.06,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1903.672,
+      "t_end": 1904.846,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1904.625,
+      "t_end": 1913.955,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1907.202,
+      "t_end": 1908.859,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1910.477,
+      "t_end": 1911.151,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1912.504,
+      "t_end": 1918.206,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1913.809,
+      "t_end": 1915.176,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1915.776,
+      "t_end": 1930.864,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1916.242,
+      "t_end": 1917.207,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1918.588,
+      "t_end": 1919.881,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1920.016,
+      "t_end": 1927.899,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1922.425,
+      "t_end": 1928.207,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1929.694,
+      "t_end": 1937.623,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1929.821,
+      "t_end": 1930.32,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1932.192,
+      "t_end": 1933.352,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1938.032,
+      "t_end": 1940.32,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1938.672,
+      "t_end": 1939.349,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1940.304,
+      "t_end": 1948.061,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1942.858,
+      "t_end": 1943.717,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1945.088,
+      "t_end": 1945.508,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1947.744,
+      "t_end": 1948.273,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1947.887,
+      "t_end": 1949.764,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1949.728,
+      "t_end": 1959.121,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1952.656,
+      "t_end": 1953.209,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1953.916,
+      "t_end": 1956.78,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1954.594,
+      "t_end": 1955.302,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1956.473,
+      "t_end": 1958.589,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1957.376,
+      "t_end": 1960.958,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1957.718,
+      "t_end": 1965.952,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1960.801,
+      "t_end": 1965.355,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1962.829,
+      "t_end": 1963.288,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1964.194,
+      "t_end": 1964.77,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1965.728,
+      "t_end": 1967.768,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1968.028,
+      "t_end": 1968.456,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1968.048,
+      "t_end": 1974.257,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1970.608,
+      "t_end": 1973.646,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1970.912,
+      "t_end": 1971.416,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1971.218,
+      "t_end": 1972.324,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1973.136,
+      "t_end": 1973.993,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1973.245,
+      "t_end": 1979.131,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1978.768,
+      "t_end": 1980.768,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1981.268,
+      "t_end": 1982.486,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1981.323,
+      "t_end": 1984.871,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 1986.186,
+      "t_end": 1994.8,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1988.631,
+      "t_end": 1988.96,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1988.976,
+      "t_end": 1989.43,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1990.88,
+      "t_end": 1993.634,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1992.482,
+      "t_end": 1993.157,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1994.72,
+      "t_end": 2003.184,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 1995.118,
+      "t_end": 1996.747,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 1997.516,
+      "t_end": 1998.241,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 1998.384,
+      "t_end": 2001.794,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2002.261,
+      "t_end": 2002.944,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 2003.808,
+      "t_end": 2004.176,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2004.059,
+      "t_end": 2006.032,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 2005.52,
+      "t_end": 2015.454,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2006.847,
+      "t_end": 2008.516,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2009.659,
+      "t_end": 2010.367,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2012.749,
+      "t_end": 2018.776,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 2012.952,
+      "t_end": 2013.246,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2018.944,
+      "t_end": 2022.005,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2020.002,
+      "t_end": 2020.982,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2020.8,
+      "t_end": 2026.764,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 2023.191,
+      "t_end": 2026.64,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2023.456,
+      "t_end": 2030.08,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2026.538,
+      "t_end": 2027.284,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 2028.075,
+      "t_end": 2028.511,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2029.591,
+      "t_end": 2044.524,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2034.224,
+      "t_end": 2036.016,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 2040.56,
+      "t_end": 2040.912,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2042.224,
+      "t_end": 2048.99,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2047.184,
+      "t_end": 2049.501,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 2048.048,
+      "t_end": 2048.319,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2050.251,
+      "t_end": 2051.232,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 2050.405,
+      "t_end": 2060.536,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2053.68,
+      "t_end": 2053.968,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 2060.746,
+      "t_end": 2062.24,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 2060.768,
+      "t_end": 2062.696,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2062.192,
+      "t_end": 2067.392,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2069.568,
+      "t_end": 2074.928,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2076.016,
+      "t_end": 2081.232,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2078.086,
+      "t_end": 2082.103,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2084.336,
+      "t_end": 2087.434,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2086.463,
+      "t_end": 2086.904,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2088.75,
+      "t_end": 2090.629,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2089.584,
+      "t_end": 2092.448,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2094.368,
+      "t_end": 2096.959,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2094.656,
+      "t_end": 2097.268,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2096.353,
+      "t_end": 2099.004,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 2098.72,
+      "t_end": 2104.944,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2098.82,
+      "t_end": 2099.227,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2105.504,
+      "t_end": 2105.904,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2106.032,
+      "t_end": 2108.64,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2107.728,
+      "t_end": 2117.945,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2109.824,
+      "t_end": 2110.41,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2112.112,
+      "t_end": 2117.768,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2113.821,
+      "t_end": 2117.147,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 2116.773,
+      "t_end": 2119.074,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 2118.912,
+      "t_end": 2124.128,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2119.979,
+      "t_end": 2125.211,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 2121.133,
+      "t_end": 2123.273,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 2125.808,
+      "t_end": 2127.847,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2125.958,
+      "t_end": 2127.754,
+      "speaker": "EN2002a.D"
+    },
+    {
+      "t_start": 2126.24,
+      "t_end": 2130.201,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2129.817,
+      "t_end": 2130.499,
+      "speaker": "EN2002a.A"
+    },
+    {
+      "t_start": 2131.456,
+      "t_end": 2132.78,
+      "speaker": "EN2002a.C"
+    },
+    {
+      "t_start": 2133.44,
+      "t_end": 2137.479,
+      "speaker": "EN2002a.B"
+    },
+    {
+      "t_start": 2139.264,
+      "t_end": 2142.704,
+      "speaker": "EN2002a.B"
+    }
+  ]
+}
