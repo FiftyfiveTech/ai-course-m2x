@@ -19,6 +19,11 @@ eval/labels/heldout/*
 !eval/labels/heldout/README.md
 # the pre-M2X-030 path, kept ignored so an older checkout cannot leak a case through it
 eval/heldout/
+# labels in progress, before the dev/held-out split has been drawn. Every case is
+# plaintext here and ten of them are about to become the sealed set -- committing this
+# directory would put the held-out cases in git history, and no later encryption can
+# take them back out. Ignored so the seal cannot be lost before it is applied.
+eval/labels/staging/
 __pycache__/
 .venv/
 .pytest_cache/

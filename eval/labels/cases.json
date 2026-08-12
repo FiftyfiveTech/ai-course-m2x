@@ -1,0 +1,256 @@
+{
+  "note": "M2X-033 case bounds, chosen by scripts/select_label_cases.py. Segments are re-derived from eval/tiron/ rather than copied, so a label and the extractor always see identical text.",
+  "target_case_s": 180.0,
+  "cases": [
+    {
+      "case_id": "tiron-Bmr013-c01",
+      "meeting_id": "tiron-Bmr013",
+      "first_turn": 256,
+      "last_turn": 358,
+      "turns": 103,
+      "duration_s": 180.5,
+      "speakers": 5,
+      "chars": 3397
+    },
+    {
+      "case_id": "tiron-Bmr013-c02",
+      "meeting_id": "tiron-Bmr013",
+      "first_turn": 769,
+      "last_turn": 852,
+      "turns": 84,
+      "duration_s": 180.3,
+      "speakers": 6,
+      "chars": 2963
+    },
+    {
+      "case_id": "tiron-Bmr013-c03",
+      "meeting_id": "tiron-Bmr013",
+      "first_turn": 1281,
+      "last_turn": 1397,
+      "turns": 117,
+      "duration_s": 181.2,
+      "speakers": 7,
+      "chars": 3248
+    },
+    {
+      "case_id": "tiron-Bmr018-c01",
+      "meeting_id": "tiron-Bmr018",
+      "first_turn": 250,
+      "last_turn": 330,
+      "turns": 81,
+      "duration_s": 183.1,
+      "speakers": 5,
+      "chars": 4160
+    },
+    {
+      "case_id": "tiron-Bmr018-c02",
+      "meeting_id": "tiron-Bmr018",
+      "first_turn": 751,
+      "last_turn": 802,
+      "turns": 52,
+      "duration_s": 180.2,
+      "speakers": 5,
+      "chars": 3151
+    },
+    {
+      "case_id": "tiron-Bmr018-c03",
+      "meeting_id": "tiron-Bmr018",
+      "first_turn": 1252,
+      "last_turn": 1311,
+      "turns": 60,
+      "duration_s": 182.5,
+      "speakers": 5,
+      "chars": 3960
+    },
+    {
+      "case_id": "tiron-Bro021-c01",
+      "meeting_id": "tiron-Bro021",
+      "first_turn": 189,
+      "last_turn": 255,
+      "turns": 67,
+      "duration_s": 182.9,
+      "speakers": 3,
+      "chars": 2654
+    },
+    {
+      "case_id": "tiron-Bro021-c02",
+      "meeting_id": "tiron-Bro021",
+      "first_turn": 567,
+      "last_turn": 628,
+      "turns": 62,
+      "duration_s": 180.6,
+      "speakers": 5,
+      "chars": 2488
+    },
+    {
+      "case_id": "tiron-Bro021-c03",
+      "meeting_id": "tiron-Bro021",
+      "first_turn": 945,
+      "last_turn": 987,
+      "turns": 43,
+      "duration_s": 204.1,
+      "speakers": 4,
+      "chars": 1630
+    },
+    {
+      "case_id": "tiron-EN2002a-c01",
+      "meeting_id": "tiron-EN2002a",
+      "first_turn": 186,
+      "last_turn": 254,
+      "turns": 69,
+      "duration_s": 188.3,
+      "speakers": 4,
+      "chars": 3698
+    },
+    {
+      "case_id": "tiron-EN2002a-c02",
+      "meeting_id": "tiron-EN2002a",
+      "first_turn": 559,
+      "last_turn": 609,
+      "turns": 51,
+      "duration_s": 182.1,
+      "speakers": 4,
+      "chars": 3042
+    },
+    {
+      "case_id": "tiron-ES2004a-c01",
+      "meeting_id": "tiron-ES2004a",
+      "first_turn": 65,
+      "last_turn": 109,
+      "turns": 45,
+      "duration_s": 181.6,
+      "speakers": 4,
+      "chars": 1686
+    },
+    {
+      "case_id": "tiron-ES2004a-c02",
+      "meeting_id": "tiron-ES2004a",
+      "first_turn": 195,
+      "last_turn": 246,
+      "turns": 52,
+      "duration_s": 186.0,
+      "speakers": 4,
+      "chars": 3120
+    },
+    {
+      "case_id": "tiron-IS1009a-c01",
+      "meeting_id": "tiron-IS1009a",
+      "first_turn": 97,
+      "last_turn": 154,
+      "turns": 58,
+      "duration_s": 184.0,
+      "speakers": 4,
+      "chars": 3537
+    },
+    {
+      "case_id": "tiron-MTG_32040-c01",
+      "meeting_id": "tiron-MTG_32040",
+      "first_turn": 0,
+      "last_turn": 226,
+      "turns": 227,
+      "duration_s": 348.5,
+      "speakers": 5,
+      "chars": 7452
+    },
+    {
+      "case_id": "tiron-MTG_32063-c01",
+      "meeting_id": "tiron-MTG_32063",
+      "first_turn": 0,
+      "last_turn": 193,
+      "turns": 194,
+      "duration_s": 347.3,
+      "speakers": 3,
+      "chars": 7249
+    },
+    {
+      "case_id": "tiron-MTG_32072-c01",
+      "meeting_id": "tiron-MTG_32072",
+      "first_turn": 0,
+      "last_turn": 179,
+      "turns": 180,
+      "duration_s": 357.7,
+      "speakers": 3,
+      "chars": 6923
+    },
+    {
+      "case_id": "tiron-MTG_32074-c01",
+      "meeting_id": "tiron-MTG_32074",
+      "first_turn": 0,
+      "last_turn": 229,
+      "turns": 230,
+      "duration_s": 350.9,
+      "speakers": 3,
+      "chars": 9207
+    },
+    {
+      "case_id": "tiron-MTG_32092-c01",
+      "meeting_id": "tiron-MTG_32092",
+      "first_turn": 0,
+      "last_turn": 165,
+      "turns": 166,
+      "duration_s": 346.6,
+      "speakers": 5,
+      "chars": 6500
+    },
+    {
+      "case_id": "tiron-MTG_32179-c01",
+      "meeting_id": "tiron-MTG_32179",
+      "first_turn": 0,
+      "last_turn": 242,
+      "turns": 243,
+      "duration_s": 349.6,
+      "speakers": 6,
+      "chars": 8182
+    },
+    {
+      "case_id": "tiron-MTG_32185-c01",
+      "meeting_id": "tiron-MTG_32185",
+      "first_turn": 0,
+      "last_turn": 101,
+      "turns": 102,
+      "duration_s": 349.6,
+      "speakers": 6,
+      "chars": 6588
+    },
+    {
+      "case_id": "tiron-MTG_32256-c01",
+      "meeting_id": "tiron-MTG_32256",
+      "first_turn": 0,
+      "last_turn": 106,
+      "turns": 107,
+      "duration_s": 356.6,
+      "speakers": 4,
+      "chars": 5494
+    },
+    {
+      "case_id": "tiron-MTG_32257-c01",
+      "meeting_id": "tiron-MTG_32257",
+      "first_turn": 0,
+      "last_turn": 341,
+      "turns": 342,
+      "duration_s": 353.5,
+      "speakers": 4,
+      "chars": 11094
+    },
+    {
+      "case_id": "tiron-MTG_32322-c01",
+      "meeting_id": "tiron-MTG_32322",
+      "first_turn": 0,
+      "last_turn": 157,
+      "turns": 158,
+      "duration_s": 351.4,
+      "speakers": 4,
+      "chars": 7005
+    },
+    {
+      "case_id": "tiron-TS3003a-c01",
+      "meeting_id": "tiron-TS3003a",
+      "first_turn": 121,
+      "last_turn": 148,
+      "turns": 28,
+      "duration_s": 210.0,
+      "speakers": 4,
+      "chars": 1656
+    }
+  ]
+}
