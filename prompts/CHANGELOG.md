@@ -22,3 +22,12 @@ Used by `m2x extract` (`src/m2x/extraction.py`).
 | version | date | digest | what changed | why | dev-F1 |
 |---|---|---|---|---|---|
 | v1 | 2026-08-11 | `c25354a2dc6e` | First version. Lifted byte-for-byte out of the `EXTRACTION_SYSTEM_PROMPT` constant: injection boundary, the four categories, and the citation / owner / deadline / empty-list rules. | A prompt that lives in code cannot be cited by an eval number. Moved unchanged so the numbers either side of the move stay comparable. | not yet run — first F1 lands with M2X-036 |
+
+## rag
+
+Used by `m2x ask` (`src/m2x/ask.py`).
+
+| version | date | digest | what changed | why | abstention rate |
+|---|---|---|---|---|---|
+| v1 | 2026-08-12 | `cb3a6c0b0e4e` | First version. Injection boundary for retrieved passages, cite-by-reference (`C1`) carrying a verbatim quote, no model-written timestamps, and the abstention rule. | Retrieval reopens the data/instruction boundary from a new direction, and abstention rate is prompt-sensitive enough that a rate which cannot name its prompt is not a measurement. | 4/4 abstained on Llama-3.1-8B — superseded, see v2 |
+| v2 | 2026-08-12 | `8a5f2f86c274` | Says the reference field takes the label only ("C1"), never the passage text, and shows a worked citation. Paired with renaming the schema field `passage` → `passage_ref` with a description, since Instructor renders field names into the prompt. | Under v1, Llama-3.1-8B put the whole passage text in the reference field. The validator rejected it and the system abstained on a question the corpus answers (distance 0.2963) — a false abstention, and the reason a prompt-sensitive metric needs a version. | 1/4 abstained on Llama-3.1-8B (the unanswerable one) — see `docs/design/day4-ask.md` |

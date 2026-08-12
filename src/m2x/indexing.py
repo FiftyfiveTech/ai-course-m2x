@@ -147,13 +147,13 @@ class Chunk(BaseModel):
     def citation(self) -> str:
         """One-line human citation, e.g. ``mtg-001 12:30–14:05`` or ``brief § Scope``."""
         if self.source_type is SourceType.MEETING and self.t_start is not None:
-            return f"{self.source_id} {_timestamp(self.t_start)}–{_timestamp(self.t_end or self.t_start)}"
+            return f"{self.source_id} {format_timestamp(self.t_start)}–{format_timestamp(self.t_end or self.t_start)}"
         if self.heading:
             return f"{self.source_id} § {self.heading}"
         return f"{self.source_id} #{self.ordinal}"
 
 
-def _timestamp(seconds: float) -> str:
+def format_timestamp(seconds: float) -> str:
     """Render seconds as ``mm:ss`` (or ``h:mm:ss`` past an hour)."""
     total = int(seconds)
     hours, remainder = divmod(total, 3600)

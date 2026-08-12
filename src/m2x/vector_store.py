@@ -394,6 +394,7 @@ def query_index(
     provider: Provider | None = None,
     source_type: SourceType | None = None,
     command: str = "m2x index query",
+    context: RunContext | None = None,
 ) -> list[Hit]:
     """Embed a question and return the nearest chunks.
 
@@ -408,6 +409,9 @@ def query_index(
         provider: Force an embedding backend.
         source_type: Restrict to meetings or documents.
         command: Run-log command label.
+        context: Provenance override. ``m2x ask`` passes one carrying its prompt version,
+            so the retrieval leg of a question is attributable to the same prompt as the
+            answering leg rather than showing up as an unversioned call.
 
     Returns:
         Hits ordered nearest first.
@@ -423,6 +427,6 @@ def query_index(
         [question],
         store.embed_model_repo_id,
         provider=provider,
-        context=RunContext(phase=PHASE, command=command),
+        context=context or RunContext(phase=PHASE, command=command),
     )
     return store.query(result.vectors[0], k=k, source_type=source_type)
