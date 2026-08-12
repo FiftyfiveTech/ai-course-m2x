@@ -3,6 +3,58 @@
 Newest first. One entry per ticket (or paired tickets), appended at close — same
 content as the Odoo completion comment, kept in-repo so it survives the course.
 
+## M2X-044 — citation-based Q&A with abstention (2026-08-12, PR #21)
+
+**Executed**
+
+- `src/m2x/ask.py` + `m2x ask "question"`: retrieve top-k → answer via the adapter with
+  the passages in a delimited data block (retrieved content is untrusted data, same rule
+  as a transcript) → Pydantic `AnswerDraft` of `answer` / `citations[]` / `abstained`.
+- Fabricated citations impossible by construction: passages are labelled `C1..Ck` and the
+  model cites labels, so it never types a timestamp — `[meeting · speaker · mm:ss–mm:ss]`
+  is rendered from chunk metadata. Each citation also carries a quote that must appear
+  verbatim in the cited passage, which catches a real passage cited for an unsupported
+  claim. Both validated inside the Instructor retry loop via validation context.
+- Four abstention reasons (`no_match`, `below_threshold`, `model_abstained`,
+  `ungrounded`), exit 0. `--max-distance` default 0.48, measured and provisional.
+- `prompts/rag/v1` + `v2`, changelog rows with digests; version stamped on the outcome and
+  on every run-log line, including the embedding leg (optional `RunContext` on
+  `query_index`).
+- 434 tests green (+24). Live acceptance on Ollama: 3 answerable → correct with 6
+  resolving citations, 1 unanswerable → abstained. `docs/design/day4-ask.md`.
+- Also fixed, on its own PR (#20): `m2x index build` took filenames from
+  `--transcripts-dir` but content from the global `data/diarization/`.
+
+**Deviations (documented in the design doc)**
+
+1. `extract` raises when its retry budget is gone; `ask` abstains. A meeting with no valid
+   record is a gate failure to look at, but a question the system cannot ground has a true
+   thing left to say.
+2. One retry rather than the extractor's two. An unresolvable citation means the model is
+   reaching for something not in front of it; a second retry buys a more confident reach.
+
+**Lessons**
+
+- **A validator strict in the safe direction still costs you the feature.** Everything was
+  unit-green before the first live call. Then `rag/v1` put the passage *text* in the
+  reference field, and once fixed, the model quoted `Citation accuracy` where the handbook
+  writes `**Citation accuracy**`. Two false abstentions on answerable questions — nothing
+  fabricated, nothing unsupported printed, the guard working exactly as designed and the
+  feature not working. "Refused" and "answered wrongly" are both Friday failures; only the
+  second is dangerous, but only the first is invisible in a mocked test.
+- **The schema field name is part of the prompt.** Instructor renders field names and
+  descriptions into the request, and `passage` reads as an invitation to paste a passage.
+  Renaming it `passage_ref` did more than the prompt sentence that said the same thing.
+- **Fold formatting, never wording.** Quote comparison drops whitespace, case and markdown
+  emphasis, because the corpus is markdown and the model quotes what it reads as prose.
+  Folding any further would turn a substring test into a similarity test.
+- **Measure the threshold, then say how weak the measurement is.** Answerable questions
+  land 0.2963–0.4414 and unanswerable ones 0.5241–0.5589, which looks like a clean gap
+  until you notice it is eight questions and that the 0.4414 hit is an answerable question
+  retrieved at the wrong section.
+- Cite by reference, not by string. Parsing a model-written citation can only ever be a
+  filter after the fact; a timestamp the model cannot type is one it cannot invent.
+
 ## M2X-043 — chunking + Chroma index (2026-08-11)
 
 **Executed**
