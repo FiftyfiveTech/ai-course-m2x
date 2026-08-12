@@ -38,6 +38,49 @@ content as the Odoo completion comment, kept in-repo so it survives the course.
 4. **Library modes are behaviour, not labels.** `Mode.JSON` and `Mode.MD_JSON` read as a
    formatting nicety and are in fact the entire parsing contract.
 
+## M2X-034 — field-level F1 harness (2026-08-12)
+
+**Executed**
+
+- `eval/README.md` written **before** the code and before any score existed to tune
+  against. That ordering is as much the deliverable as the harness.
+- `src/m2x/eval_extraction.py`: normalisation, token-set F1, greedy 1:1 matching with
+  deterministic tie-breaks, per-kind and owner counts, micro-F1, schema-validity.
+- `uv run m2x eval extraction --set dev|heldout`, appending to `eval/results/` with
+  prompt version, git SHA, model and set. `--set heldout` warns that it burns the set.
+- 26 new tests, 498 green.
+
+**Verified twice, deliberately**
+
+1. **Three synthetic pairs with the arithmetic written out in the docstrings** land on
+   exactly 1.0, 0.0 and 0.5 — the ticket's acceptance criterion.
+2. **The real dev labels scored against themselves**: 1.0000 on every field, 15/15
+   schema-valid, 22/22 owner. The same identity-check proof `wer.py` and
+   `diarization_score.py` were given in M2X-021 — synthetic pairs prove the code, real
+   data proves the plumbing.
+
+**Deviation**
+
+**`deadline` is reported, not scored**, against the ticket's "field-level F1" wording.
+The ground truth contains zero deadlines, so the field has no positive examples: any
+emitted deadline is a false positive and no true positive can be earned. Folding that
+into micro-F1 averages in a field that cannot be earned and drags the headline toward
+whatever the null rate happens to be. It gets its own abstention line instead. If a dated
+corpus ever arrives, the field rejoins micro-F1 and every number under this rule is
+re-run.
+
+**Lessons**
+
+- **The order of writing is a control, not a formality.** Pinning the matching rules
+  before the scorer existed meant the 0.60 threshold was chosen with no results to
+  flatter — the one moment it could be chosen honestly.
+- **Identity checks are cheap and catch what synthetic tests cannot.** Scoring the labels
+  against themselves needed no model and would have caught any drift between the label
+  format, the segment derivation and the matcher in one command.
+- **A broad `except` is right when the count is the measurement.** One case that never
+  validates is a schema-validity failure the gate needs counted, not a crash that costs
+  the other fourteen.
+
 ## M2X-033 — hand-labelled ground truth, 25 cases (2026-08-12, PR #29)
 
 **Executed**

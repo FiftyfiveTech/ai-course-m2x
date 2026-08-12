@@ -57,7 +57,14 @@ from m2x.pipeline import (
     load_transcript,
     process_meeting,
 )
+from m2x.eval_extraction import (
+    DEFAULT_RESULTS_PATH,
+    append_result,
+    format_report,
+    run_extraction_eval,
+)
 from m2x.indexing import SourceType
+from m2x.labels import DEFAULT_LABELS_DIR
 from m2x.prompts import DEFAULT_PROMPTS_DIR
 from m2x.run_log import RunLogger
 from m2x.run_summary import DEFAULT_RUN_LOG, format_summary, summarise
@@ -507,6 +514,57 @@ def build_parser() -> argparse.ArgumentParser:
     )
     _add_index_arguments(ask_cmd)
 
+    evaluate = subcommands.add_parser("eval", help="score the extractor against the labels")
+    eval_actions = evaluate.add_subparsers(dest="action", required=True)
+    eval_extraction = eval_actions.add_parser(
+        "extraction",
+        help="field-level precision/recall/F1 over a labelled set",
+    )
+    eval_extraction.add_argument(
+        "--set",
+        dest="set_name",
+        choices=("dev", "heldout"),
+        default="dev",
+        help=(
+            "which labelled set to score. 'heldout' is the M2X-040 gate set: it is "
+            "opened once and burnt afterwards (default: dev)"
+        ),
+    )
+    eval_extraction.add_argument(
+        "--labels-dir",
+        type=Path,
+        default=DEFAULT_LABELS_DIR,
+        help=f"root holding dev/ and heldout/ (default: {DEFAULT_LABELS_DIR})",
+    )
+    eval_extraction.add_argument(
+        "--model",
+        default=DEFAULT_EXTRACT_MODEL,
+        help=f"Hugging Face repo id of the extraction model (default: {DEFAULT_EXTRACT_MODEL})",
+    )
+    eval_extraction.add_argument(
+        "--provider",
+        type=Provider,
+        choices=list(Provider),
+        default=None,
+        help="force a backend; default routes by the model's registry entry",
+    )
+    eval_extraction.add_argument(
+        "--prompt-version",
+        default=None,
+        help="prompt version to score, e.g. v2; default is the latest on disk",
+    )
+    eval_extraction.add_argument(
+        "--results",
+        type=Path,
+        default=DEFAULT_RESULTS_PATH,
+        help=f"append-only results log (default: {DEFAULT_RESULTS_PATH})",
+    )
+    eval_extraction.add_argument(
+        "--no-record",
+        action="store_true",
+        help="print the table without appending to the results log",
+    )
+
     runs = subcommands.add_parser("runs", help="report on the run log")
     run_actions = runs.add_subparsers(dest="action", required=True)
     runs_summary = run_actions.add_parser(
@@ -541,6 +599,9 @@ def main(
 
     if args.command == "runs":
         return _run_summary(args)
+
+    if args.command == "eval":
+        return _run_eval(args, adapter_factory=adapter_factory)
 
     if args.command == "index":
         return _run_index(args, adapter_factory=adapter_factory)
@@ -1213,6 +1274,61 @@ def _run_summary(args: argparse.Namespace) -> int:
         return EXIT_FAILURE
 
     print(format_summary(summarise(records)))
+    return EXIT_OK
+
+
+def _run_eval(
+    args: argparse.Namespace,
+    *,
+    adapter_factory: Callable[[], ModelAdapter],
+) -> int:
+    """Score the extractor against a labelled set.
+
+    Args:
+        args: Parsed ``eval extraction`` arguments.
+        adapter_factory: Builds the adapter.
+
+    Returns:
+        Process exit code. A set that cannot be found is bad input; a run where some
+        case produced no valid record still prints its table and exits 0, because the
+        failure count is part of the measurement rather than a crash.
+    """
+    if args.set_name == "heldout":
+        print(
+            "opening the SEALED held-out set. It certifies exactly one run (M2X-040) "
+            "and is burnt afterwards — it can never certify a later prompt change.",
+            file=sys.stderr,
+        )
+
+    try:
+        with adapter_factory() as adapter:
+            report, prompt_version = run_extraction_eval(
+                args.set_name,
+                adapter=adapter,
+                labels_dir=args.labels_dir,
+                model_repo_id=args.model,
+                provider=args.provider,
+                prompt_version=args.prompt_version,
+            )
+    except FileNotFoundError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_USAGE
+    except M2XError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_FAILURE
+
+    print(format_report(report))
+    print(f"\nprompt: {prompt_version}   model: {args.model}")
+
+    if not args.no_record:
+        written = append_result(
+            report,
+            prompt_version=prompt_version,
+            model_repo_id=args.model,
+            path=args.results,
+        )
+        print(f"recorded -> {written}")
+
     return EXIT_OK
 
 
