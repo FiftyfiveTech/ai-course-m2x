@@ -14,3 +14,8 @@ __pycache__/
 .pytest_cache/
 # local-only hotwords: client/project and personal names the public file must not carry
 eval/vocab.local.txt
+
+# local-only references: a verbatim reference transcript cannot be redacted without
+# destroying the WER it exists to measure, so a meeting whose content is client work
+# keeps its reference here instead of in the tracked snippet. Same rule as vocab.local.
+eval/snippets/*.local.txt

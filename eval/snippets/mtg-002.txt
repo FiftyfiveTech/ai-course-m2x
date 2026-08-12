@@ -1,21 +1,50 @@
-# Hand transcript — mtg-002 (80s – 200s of the course scope alignment call)
+# Reference transcript — mtg-002 (80s – 200s of the course scope alignment call)
 #
-# THIS FILE IS WRITTEN BY EAR. Do not paste model output into it, and do not "fix it
-# up" against a transcript you have already seen. It is the reference every Day 2
-# number is measured against (M2X-021 informal WER, M2X-024 entity capture), so a
-# reference contaminated by the system under test measures nothing.
+# PROVENANCE — read before quoting any number measured against this file.
+#
+# This is NOT written by ear. It is a Deepgram `nova-3` transcript
+# (language=multi, diarize=true, utterances=true, smart_format=true) of the two-minute
+# clip below, reviewed and accepted as-is by Saurabh on 2026-08-12. No by-ear pass was
+# performed and no turn was corrected.
+#
+# What that costs, stated once so it is not rediscovered as a surprise: a WER measured
+# against this file is Whisper-vs-Deepgram AGREEMENT, not Whisper-vs-truth. Where the
+# two vendors share a failure mode — and on code-switched Hinglish they plausibly do —
+# the error is invisible to the metric. Read the V-1 off/on DELTA, which cancels a
+# shared bias; do not read the absolute number as accuracy. Correcting this file by ear
+# later would make the absolute number meaningful and would change every cell scored
+# against it, so the matrix records which reference produced which number.
+#
+# Deepgram is not the system under test (that is `openai/whisper-large-v3` via Groq and
+# Ollama), so this does not measure the pipeline against itself. That is the one
+# circularity it does avoid.
 #
 # Reproduce the clip:
 #   ffmpeg -ss 80 -t 120 -i data/raw/mtg-002-course-scope.wav -c:a pcm_s16le \
 #       data/clips/snippet-mtg-002-2min.wav
 #
-# Conventions:
+# Conventions (as produced, not as hand-enforced):
 #   - one line per speaker turn, prefixed "S1:", "S2:", ... in order of first speaking
-#   - transcribe what was said, not what was meant — keep false starts and fillers
-#   - code-switched speech stays in the script it was spoken in; write Hindi words in
-#     Devanagari and English words in Latin, on the same line
-#   - [inaudible] for anything you cannot make out; [crosstalk] for overlaps
-#   - do not translate, do not summarise, do not tidy grammar
+#   - code-switched speech stays in the script it was spoken in — Hindi in Devanagari,
+#     English in Latin, on the same line. nova-3 multi does this natively.
 #
-# Status: NOT YET TRANSCRIBED
+# Status: DEEPGRAM nova-3 REFERENCE, reviewed and accepted 2026-08-12 (no by-ear pass)
 
+S1: And I find this.
+S1: This is
+S2: देखो इसमें one year जैसे prompting
+S2: है जो उसके अंदर पहला जैसे और जो ChatGPT उस और GPT के अंदर ही रहेगा तो model choose करना भी है इसके अंदर कि कैसे model choose करते हैं like GPT का model use करता है या query use करना है या कौन सा use करना है? तो वह भी है इस corona. इसके अंदर मतलब और जो rag है next phase two के अंदर जो लिखा है तो वह rag भी उसके अंदर है like second last point था वह byte byte में. तो इस तरह इसी के अंदर सब है.
+S1: तो
+S1: यश then सिर्फ project पर ही अपने को focus करना तो यह वाला दोनों part उसके पास है मैंने डाल के रखे हैं. तो मैं बोलता हूं भाई
+S1: simple चार अक्षरों में projects का नाम दे दें and then उसका prompting जो
+S1: मतलब यह detail prompt for project PRD जो भी रहेगा वह create करवाने के लिए लगा दूं.
+S1: PRD भी तो है इसमें नहीं है क्या?
+S1: इसमें
+S1: अच्छा. Remember ठीक है ना यह यह क्या यह
+S1: सारा चीज़ें यार यह ना यह यह
+S1: भाई ने बहुत बड़ा project दे दिया यह.
+S2: अरे यार, यह बात तो पता है, एक हफ्ते में हो सकता है यह, अगर करने matter ना. तुमने
+S2: भाई कितने हफ्ते का, दो तीन महीने का बना दिया है यार यह तो. अरे यह यह इसको ignore करो ना. यह जैसा अब जैसे वह है ना, जैसे pan prompt यह क्या है? यह phase b diagnosis, safety
+S2: prompts. एक भी थोड़ी लगता है इसमें, एक दो घंटे लगते हैं इसमें. यह इसने इस हिसाब से बताया कि एकदम कुछ ऐसा होगा. पढ़कर कर रहे हैं तो. हां. उसमें ऐसे लगा है, ok. हां.
+S1: यह relax है इसको छोड़ दो जाइए. मैं हटवा दूंगा चाहूं उसको बोलकर. ठीक है, ठीक है, ठीक है. ठीक है, एक सेहनत दो मैं तू तू तू जो तुनो चीज़ों को मैंने कौन सी
+S1: engineering
