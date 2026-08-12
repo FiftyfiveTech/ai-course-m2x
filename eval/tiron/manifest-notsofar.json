@@ -1,0 +1,534 @@
+{
+  "dataset": "Trelis/tiron-eval-meetings",
+  "split": "notsofar",
+  "meetings": [
+    {
+      "meeting_id": "tiron-MTG_32040",
+      "corpus": "notsofar",
+      "source_meeting_id": "MTG_32040",
+      "file": "data/raw/tiron-MTG_32040.wav",
+      "reference": "eval/tiron/tiron-MTG_32040.speakers.json",
+      "reference_text": "eval/tiron/tiron-MTG_32040.txt",
+      "duration_s": 359.2,
+      "speakers": 5,
+      "segments": 227,
+      "sampling_rate": 16000,
+      "unknown_spans": [
+        [
+          20.09,
+          20.74
+        ],
+        [
+          21.19,
+          21.87
+        ],
+        [
+          40.27,
+          41.02
+        ],
+        [
+          41.12,
+          41.77
+        ],
+        [
+          88.69,
+          89.57
+        ],
+        [
+          96.32,
+          96.99
+        ],
+        [
+          209.81,
+          210.46
+        ],
+        [
+          212.181,
+          213.139
+        ],
+        [
+          266.03,
+          266.69
+        ],
+        [
+          294.39,
+          295.08
+        ],
+        [
+          304.3,
+          305.0
+        ],
+        [
+          307.23,
+          307.91
+        ]
+      ]
+    },
+    {
+      "meeting_id": "tiron-MTG_32063",
+      "corpus": "notsofar",
+      "source_meeting_id": "MTG_32063",
+      "file": "data/raw/tiron-MTG_32063.wav",
+      "reference": "eval/tiron/tiron-MTG_32063.speakers.json",
+      "reference_text": "eval/tiron/tiron-MTG_32063.txt",
+      "duration_s": 366.0,
+      "speakers": 3,
+      "segments": 194,
+      "sampling_rate": 16000,
+      "unknown_spans": [
+        [
+          59.03,
+          59.54
+        ],
+        [
+          114.07,
+          114.78
+        ],
+        [
+          229.186,
+          229.894
+        ],
+        [
+          255.69,
+          256.44
+        ],
+        [
+          307.44,
+          308.3
+        ],
+        [
+          309.05,
+          309.7
+        ],
+        [
+          317.14,
+          317.79
+        ],
+        [
+          319.44,
+          320.13
+        ]
+      ]
+    },
+    {
+      "meeting_id": "tiron-MTG_32072",
+      "corpus": "notsofar",
+      "source_meeting_id": "MTG_32072",
+      "file": "data/raw/tiron-MTG_32072.wav",
+      "reference": "eval/tiron/tiron-MTG_32072.speakers.json",
+      "reference_text": "eval/tiron/tiron-MTG_32072.txt",
+      "duration_s": 365.4,
+      "speakers": 3,
+      "segments": 180,
+      "sampling_rate": 16000,
+      "unknown_spans": [
+        [
+          43.89,
+          44.87
+        ],
+        [
+          82.6,
+          83.34
+        ],
+        [
+          113.47,
+          113.98
+        ],
+        [
+          142.42,
+          143.21
+        ],
+        [
+          173.82,
+          174.47
+        ],
+        [
+          206.8,
+          207.5
+        ],
+        [
+          255.25,
+          256.27
+        ],
+        [
+          354.26,
+          354.91
+        ],
+        [
+          363.9,
+          364.757
+        ]
+      ]
+    },
+    {
+      "meeting_id": "tiron-MTG_32074",
+      "corpus": "notsofar",
+      "source_meeting_id": "MTG_32074",
+      "file": "data/raw/tiron-MTG_32074.wav",
+      "reference": "eval/tiron/tiron-MTG_32074.speakers.json",
+      "reference_text": "eval/tiron/tiron-MTG_32074.txt",
+      "duration_s": 362.0,
+      "speakers": 3,
+      "segments": 230,
+      "sampling_rate": 16000,
+      "unknown_spans": [
+        [
+          31.22,
+          31.87
+        ],
+        [
+          37.51,
+          38.16
+        ],
+        [
+          48.52,
+          49.18
+        ],
+        [
+          62.22,
+          62.87
+        ],
+        [
+          68.73,
+          69.38
+        ],
+        [
+          98.66,
+          99.48
+        ],
+        [
+          137.7,
+          138.79
+        ],
+        [
+          144.49,
+          145.14
+        ],
+        [
+          169.34,
+          169.85
+        ],
+        [
+          191.45,
+          191.96
+        ],
+        [
+          196.86,
+          197.51
+        ],
+        [
+          203.09,
+          203.74
+        ],
+        [
+          247.82,
+          248.53
+        ],
+        [
+          305.23,
+          305.9
+        ],
+        [
+          336.61,
+          337.26
+        ],
+        [
+          340.14,
+          340.66
+        ],
+        [
+          345.69,
+          346.42
+        ],
+        [
+          352.47,
+          353.29
+        ]
+      ]
+    },
+    {
+      "meeting_id": "tiron-MTG_32092",
+      "corpus": "notsofar",
+      "source_meeting_id": "MTG_32092",
+      "file": "data/raw/tiron-MTG_32092.wav",
+      "reference": "eval/tiron/tiron-MTG_32092.speakers.json",
+      "reference_text": "eval/tiron/tiron-MTG_32092.txt",
+      "duration_s": 358.5,
+      "speakers": 5,
+      "segments": 166,
+      "sampling_rate": 16000,
+      "unknown_spans": [
+        [
+          47.35,
+          48.09
+        ],
+        [
+          58.31,
+          58.96
+        ],
+        [
+          74.68,
+          75.33
+        ],
+        [
+          89.91,
+          90.56
+        ],
+        [
+          111.98,
+          112.65
+        ],
+        [
+          113.44,
+          114.21
+        ],
+        [
+          219.0,
+          219.88
+        ],
+        [
+          251.44,
+          252.34
+        ],
+        [
+          324.3,
+          324.81
+        ],
+        [
+          326.13,
+          326.8
+        ],
+        [
+          343.18,
+          343.83
+        ]
+      ]
+    },
+    {
+      "meeting_id": "tiron-MTG_32179",
+      "corpus": "notsofar",
+      "source_meeting_id": "MTG_32179",
+      "file": "data/raw/tiron-MTG_32179.wav",
+      "reference": "eval/tiron/tiron-MTG_32179.speakers.json",
+      "reference_text": "eval/tiron/tiron-MTG_32179.txt",
+      "duration_s": 359.6,
+      "speakers": 6,
+      "segments": 243,
+      "sampling_rate": 16000,
+      "unknown_spans": [
+        [
+          44.48,
+          45.13
+        ],
+        [
+          45.84,
+          46.49
+        ],
+        [
+          80.45,
+          81.1
+        ],
+        [
+          89.46,
+          89.99
+        ],
+        [
+          154.28,
+          154.95
+        ],
+        [
+          231.34,
+          231.99
+        ],
+        [
+          237.47,
+          238.12
+        ],
+        [
+          283.55,
+          284.2
+        ]
+      ]
+    },
+    {
+      "meeting_id": "tiron-MTG_32185",
+      "corpus": "notsofar",
+      "source_meeting_id": "MTG_32185",
+      "file": "data/raw/tiron-MTG_32185.wav",
+      "reference": "eval/tiron/tiron-MTG_32185.speakers.json",
+      "reference_text": "eval/tiron/tiron-MTG_32185.txt",
+      "duration_s": 359.7,
+      "speakers": 6,
+      "segments": 102,
+      "sampling_rate": 16000,
+      "unknown_spans": [
+        [
+          11.33,
+          11.98
+        ],
+        [
+          190.71,
+          191.25
+        ],
+        [
+          195.28,
+          195.93
+        ]
+      ]
+    },
+    {
+      "meeting_id": "tiron-MTG_32256",
+      "corpus": "notsofar",
+      "source_meeting_id": "MTG_32256",
+      "file": "data/raw/tiron-MTG_32256.wav",
+      "reference": "eval/tiron/tiron-MTG_32256.speakers.json",
+      "reference_text": "eval/tiron/tiron-MTG_32256.txt",
+      "duration_s": 363.9,
+      "speakers": 4,
+      "segments": 107,
+      "sampling_rate": 16000,
+      "unknown_spans": [
+        [
+          52.59,
+          53.24
+        ]
+      ]
+    },
+    {
+      "meeting_id": "tiron-MTG_32257",
+      "corpus": "notsofar",
+      "source_meeting_id": "MTG_32257",
+      "file": "data/raw/tiron-MTG_32257.wav",
+      "reference": "eval/tiron/tiron-MTG_32257.speakers.json",
+      "reference_text": "eval/tiron/tiron-MTG_32257.txt",
+      "duration_s": 358.7,
+      "speakers": 4,
+      "segments": 342,
+      "sampling_rate": 16000,
+      "unknown_spans": [
+        [
+          9.38,
+          10.12
+        ],
+        [
+          24.64,
+          25.29
+        ],
+        [
+          78.02,
+          79.12
+        ],
+        [
+          87.33,
+          88.03
+        ],
+        [
+          119.16,
+          119.81
+        ],
+        [
+          138.36,
+          139.01
+        ],
+        [
+          142.26,
+          142.91
+        ],
+        [
+          150.79,
+          151.47
+        ],
+        [
+          157.2,
+          157.87
+        ],
+        [
+          158.12,
+          158.95
+        ],
+        [
+          159.24,
+          160.04
+        ],
+        [
+          183.58,
+          184.23
+        ],
+        [
+          190.59,
+          191.44
+        ],
+        [
+          206.24,
+          206.89
+        ],
+        [
+          207.31,
+          207.96
+        ],
+        [
+          219.78,
+          220.43
+        ],
+        [
+          245.41,
+          245.92
+        ],
+        [
+          266.51,
+          267.28
+        ],
+        [
+          286.38,
+          287.03
+        ],
+        [
+          299.45,
+          300.1
+        ],
+        [
+          311.0,
+          311.69
+        ],
+        [
+          329.2,
+          329.87
+        ],
+        [
+          340.67,
+          341.44
+        ]
+      ]
+    },
+    {
+      "meeting_id": "tiron-MTG_32322",
+      "corpus": "notsofar",
+      "source_meeting_id": "MTG_32322",
+      "file": "data/raw/tiron-MTG_32322.wav",
+      "reference": "eval/tiron/tiron-MTG_32322.speakers.json",
+      "reference_text": "eval/tiron/tiron-MTG_32322.txt",
+      "duration_s": 359.2,
+      "speakers": 4,
+      "segments": 158,
+      "sampling_rate": 16000,
+      "unknown_spans": [
+        [
+          39.93,
+          40.58
+        ],
+        [
+          151.33,
+          151.98
+        ],
+        [
+          229.21,
+          229.86
+        ],
+        [
+          351.02,
+          351.67
+        ]
+      ]
+    }
+  ]
+}

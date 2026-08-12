@@ -131,10 +131,22 @@ bonus.
   meetings. The source ids behind `ami-002` / `ami-003` were never identified, so an
   overlap there is **not ruled out**: check before pooling those two with the tiron AMI
   split in one score.
-- Verified end to end 2026-08-12 on `tiron-ES2004a`: 1049s, 4 speakers, 260 reference
-  utterances, 2614 reference words. Fed back through both evaluators as their own
-  reference — `wer.py` returns 0.0 and `diarization_score.py` returns 1.0 accuracy on a
-  4/4 speaker mapping, the correct identity behaviour, which proves the plumbing.
+- **All 17 meetings' references are committed** (1.1 MB of JSON and text under
+  `eval/tiron/`), so the ground truth is readable on a fresh clone without downloading
+  612 MB. The audio is not — `data/` stays ignored, and the fetch is what produces it.
+
+| split | meetings | speech | speakers | reference utterances |
+|---|---|---|---|---|
+| `ami` | 4 | 92 min | 4 each | 1443 |
+| `icsi` | 3 | 166 min | 7 each | 4176 |
+| `notsofar` | 10 | 60 min | 3–6 | 1949 |
+
+- Verified end to end 2026-08-12 on one meeting per corpus: `tiron-ES2004a` (1049s, 4
+  speakers, 260 utterances, 2614 words), `tiron-Bmr013` (7 speakers, 9891 words) and
+  `tiron-MTG_32040` (5 speakers, 1414 words). Each fed back through both evaluators as
+  its own reference — `wer.py` returns 0.0 and `diarization_score.py` returns 1.0
+  accuracy on a full speaker mapping, the correct identity behaviour, which proves the
+  plumbing on all three corpora.
 
 **Scope note.** The internal meetings are Hinglish; the PRD scope is English. Tiron is now
 the **graded** English corpus. The Hinglish meetings stay in as a robustness slice — real
