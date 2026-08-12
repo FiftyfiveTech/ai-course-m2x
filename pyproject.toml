@@ -60,6 +60,8 @@ packages = ["src/m2x"]
 testpaths = ["tests"]
 # tests/ on sys.path so shared fixtures import as `from conftest import ...`; eval/ too,
 # so the scoring scripts stay runnable standalone (`python eval/wer.py`) and still get
-# unit tests — a metric nobody tests is a number nobody should trust.
-pythonpath = ["tests", "eval"]
+# unit tests — a metric nobody tests is a number nobody should trust. scripts/ for the
+# same reason: the dev/held-out split is a claim about fairness, and a claim nobody tests
+# is a claim nobody should accept.
+pythonpath = ["tests", "eval", "scripts"]
 addopts = "--strict-markers"

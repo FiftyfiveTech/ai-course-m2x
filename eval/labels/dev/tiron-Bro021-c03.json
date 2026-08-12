@@ -1,0 +1,13 @@
+{
+  "case_id": "tiron-Bro021-c03",
+  "meeting_id": "tiron-Bro021",
+  "first_turn": 945,
+  "last_turn": 987,
+  "label": {
+    "decisions": [],
+    "actions": [],
+    "risks": [],
+    "open_questions": []
+  },
+  "notes": "Deliberately empty, and valuable for it. The whole case is one participant walking through a noise-estimation derivation at a whiteboard -- conditional expectations, Gaussian mixtures, dictionary weights. Nothing is settled, nobody accepts work, no threat is stated, and the two questions asked (seg-0023, seg-0025) are answered immediately. 'I need to calculate this' at seg-0040 describes a step in the derivation being explained, not a commitment to future work. A case where the correct answer is four empty lists is the only thing that measures whether the extractor invents items from dense technical talk."
+}

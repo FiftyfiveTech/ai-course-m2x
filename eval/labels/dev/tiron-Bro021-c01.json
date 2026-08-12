@@ -1,0 +1,30 @@
+{
+  "case_id": "tiron-Bro021-c01",
+  "meeting_id": "tiron-Bro021",
+  "first_turn": 189,
+  "last_turn": 255,
+  "label": {
+    "decisions": [],
+    "actions": [],
+    "risks": [],
+    "open_questions": [
+      {
+        "description": "What noise threshold to use below the peak -- fifteen dB was picked arbitrarily and twelve or twenty may be better -- and whether it should adapt rather than be fixed across the utterance",
+        "evidence": {
+          "segment_id": "seg-0034",
+          "t_start": 713.8,
+          "t_end": 718.9
+        }
+      },
+      {
+        "description": "Whether combining the two feature streams would gain anything, given how different they are",
+        "evidence": {
+          "segment_id": "seg-0031",
+          "t_start": 701.7,
+          "t_end": 705.9
+        }
+      }
+    ]
+  },
+  "notes": "No decisions, actions or risks. The apparent risk -- me013's 'you're still getting more recognition errors' at seg-0021 -- is withdrawn four turns later when me018 asks 'So performance went down?' and mn007 answers 'No. It didn't.' Recording it would mean reporting a threat the case explicitly retracts. mn007 returns to the threshold at seg-0065 ('still a factor we have to look at'), which is the same open question restated, so it is one item cited at the earliest turn where it is recognisable."
+}

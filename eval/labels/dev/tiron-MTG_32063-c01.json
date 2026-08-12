@@ -1,0 +1,99 @@
+{
+  "case_id": "tiron-MTG_32063-c01",
+  "meeting_id": "tiron-MTG_32063",
+  "first_turn": 0,
+  "last_turn": 193,
+  "label": {
+    "decisions": [
+      {
+        "description": "Approach individual teachers who want help directly, rather than going through the schools, which were uncooperative",
+        "evidence": {
+          "segment_id": "seg-0035",
+          "t_start": 68.8,
+          "t_end": 71.8
+        }
+      },
+      {
+        "description": "Train someone to answer the phones, on a separate number, rather than use an external answering service",
+        "evidence": {
+          "segment_id": "seg-0143",
+          "t_start": 265.5,
+          "t_end": 269.3
+        }
+      }
+    ],
+    "actions": [
+      {
+        "description": "Send over the details of the school running an English as a second language programme, whose teachers are good candidates",
+        "evidence": {
+          "segment_id": "seg-0057",
+          "t_start": 104.9,
+          "t_end": 109.7
+        },
+        "owner": "Beth",
+        "deadline": null
+      },
+      {
+        "description": "Find a standard release form for the parents to sign before the testimonial videos",
+        "evidence": {
+          "segment_id": "seg-0080",
+          "t_start": 153.4,
+          "t_end": 157.9
+        },
+        "owner": "Linda",
+        "deadline": null
+      },
+      {
+        "description": "Put Beth in contact with the parents who agreed to record testimonials",
+        "evidence": {
+          "segment_id": "seg-0090",
+          "t_start": 170.1,
+          "t_end": 175.9
+        },
+        "owner": "Rachel",
+        "deadline": null
+      },
+      {
+        "description": "Find somebody to shoot the testimonial videos and edit them properly",
+        "evidence": {
+          "segment_id": "seg-0122",
+          "t_start": 222.9,
+          "t_end": 224.3
+        },
+        "owner": "Linda",
+        "deadline": null
+      },
+      {
+        "description": "Start looking for candidates to answer the phones",
+        "evidence": {
+          "segment_id": "seg-0188",
+          "t_start": 343.2,
+          "t_end": 346.6
+        },
+        "owner": "Beth",
+        "deadline": null
+      }
+    ],
+    "risks": [
+      {
+        "description": "Training a dedicated phone answerer will cost more than using a service, because it means an employee",
+        "evidence": {
+          "segment_id": "seg-0149",
+          "t_start": 276.4,
+          "t_end": 279.0
+        }
+      }
+    ],
+    "open_questions": [
+      {
+        "description": "Whether a script is enough for the phone answerer or real training is needed, given callers will ask surprise questions",
+        "evidence": {
+          "segment_id": "seg-0170",
+          "t_start": 315.3,
+          "t_end": 317.1
+        }
+      }
+    ]
+  },
+  "notes": "Linda's video commitments are recorded as ONE action, not two. She offers to recommend her video guy at seg-0098 and then accepts the whole find-and-edit task at seg-0122; that is the same commitment widening, so the frozen contract's revision rule applies -- one item, final state, cited where it settled. Rachel's 'two weeks from now or months after' (seg-0090) is far too vague to be a deadline even if the corpus had a meeting date. The child-on-video concern is raised and answered within the case (blur the face), so it is not recorded as a risk."
+}

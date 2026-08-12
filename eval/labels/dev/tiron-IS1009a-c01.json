@@ -1,0 +1,56 @@
+{
+  "case_id": "tiron-IS1009a-c01",
+  "meeting_id": "tiron-IS1009a",
+  "first_turn": 97,
+  "last_turn": 154,
+  "label": {
+    "decisions": [
+      {
+        "description": "The remote's design should differ from existing remotes -- trendy, with different colours, materials or shapes",
+        "evidence": {
+          "segment_id": "seg-0011",
+          "t_start": 524.1,
+          "t_end": 538.8
+        }
+      },
+      {
+        "description": "A light sensor detecting that the remote is hidden will trigger a find-me signal",
+        "evidence": {
+          "segment_id": "seg-0046",
+          "t_start": 639.1,
+          "t_end": 641.3
+        }
+      },
+      {
+        "description": "Clap and voice activation are rejected as not specific enough to trigger the signal",
+        "evidence": {
+          "segment_id": "seg-0047",
+          "t_start": 641.3,
+          "t_end": 658.5
+        }
+      }
+    ],
+    "actions": [],
+    "risks": [
+      {
+        "description": "The remote could be somewhere obvious and well lit and still not be found, which the light sensor would not help with",
+        "evidence": {
+          "segment_id": "seg-0051",
+          "t_start": 658.1,
+          "t_end": 661.9
+        }
+      }
+    ],
+    "open_questions": [
+      {
+        "description": "Whether the find-me signal should be a beep or a light -- explicitly deferred to a later discussion",
+        "evidence": {
+          "segment_id": "seg-0038",
+          "t_start": 605.7,
+          "t_end": 637.2
+        }
+      }
+    ]
+  },
+  "notes": "The light-sensor decision is cited at seg-0046 where it is restated as settled and confirmed, rather than at the seg-0038 proposal: the frozen contract cites the earliest segment where a commitment is recognisable as one, and at seg-0038 it is still one participant thinking aloud. The beep-versus-light choice is a textbook open question because the meeting says out loud that it is deferred. No actions: the case is entirely feature discussion, nobody accepts work."
+}

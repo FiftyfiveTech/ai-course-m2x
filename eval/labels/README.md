@@ -76,11 +76,29 @@ one changed the rule.
 8. **Cite the segment that carries the item**, and where a commitment is restated, the
    earliest segment where it is recognisable as one (frozen contract §3).
 
-## The seal
+## The split
 
-`heldout/` holds 10 cases, encrypted. Plaintext there is git-ignored and ciphertext is
-committed, so a reviewer can confirm at the gate that ten cases existed and were not
-edited after the freeze — an ignored directory proves neither.
+Drawn by [`scripts/split_labels.py`](../../scripts/split_labels.py) with the seed
+recorded in that file, so a reviewer re-runs it and gets the same fifteen and the same
+ten. Seeding is not fussiness: an unseeded split can be re-rolled until the held-out set
+looks favourable and nothing in the repository would show it, which matters more than
+usual when the labeller and the prompt author are the same.
+
+## The seal — by convention, not encryption
+
+The ticket offers two forms: encrypt the set, **or** cover it with an agreed do-not-open
+rule. This project took the second, by the user's decision on 2026-08-12. `heldout/` holds
+10 plaintext cases which are **git-ignored and therefore never committed**.
+
+Two consequences, both real:
+
+1. **The held-out set exists only on the machine that produced it.** A fresh clone has
+   `dev/` and no `heldout/`, so it cannot reproduce the M2X-040 gate number — which
+   `CLAUDE.md` otherwise requires of any gate ("a gate number counts only when the
+   supervisor re-runs the command on a fresh clone"). The gate record must say so.
+2. **Nothing proves the set was unedited between the freeze and the gate.** Committed
+   ciphertext would have; an ignored directory cannot. The seal rests on the rule being
+   followed, not on it being enforced.
 
 **Protocol:** opened exactly once, at M2X-040, after the prompt version and SHA under
 test are frozen. The number goes into `docs/gates.md` whatever it is. After that the set

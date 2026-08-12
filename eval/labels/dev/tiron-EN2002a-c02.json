@@ -1,0 +1,62 @@
+{
+  "case_id": "tiron-EN2002a-c02",
+  "meeting_id": "tiron-EN2002a",
+  "first_turn": 559,
+  "last_turn": 609,
+  "label": {
+    "decisions": [
+      {
+        "description": "Get together to work through the possible types of search, then decide at the next meeting which options to include",
+        "evidence": {
+          "segment_id": "seg-0026",
+          "t_start": 1779.8,
+          "t_end": 1789.4
+        }
+      }
+    ],
+    "actions": [
+      {
+        "description": "Build the search interface -- tick-boxes and drop-down menus -- once the search fields have been decided",
+        "evidence": {
+          "segment_id": "seg-0008",
+          "t_start": 1710.8,
+          "t_end": 1724.0
+        },
+        "owner": "EN2002a.C",
+        "deadline": null
+      },
+      {
+        "description": "Research what the query language can do, as input to choosing the search options",
+        "evidence": {
+          "segment_id": "seg-0030",
+          "t_start": 1791.3,
+          "t_end": 1796.1
+        },
+        "owner": null,
+        "deadline": null
+      },
+      {
+        "description": "Give the others a tutorial on accessing the corpus and walk them through the existing code and set-up",
+        "evidence": {
+          "segment_id": "seg-0043",
+          "t_start": 1829.6,
+          "t_end": 1831.3
+        },
+        "owner": "EN2002a.C",
+        "deadline": null
+      }
+    ],
+    "risks": [],
+    "open_questions": [
+      {
+        "description": "What the system should be able to search for -- never agreed, and it blocks building the interface",
+        "evidence": {
+          "segment_id": "seg-0021",
+          "t_start": 1756.8,
+          "t_end": 1776.6
+        }
+      }
+    ]
+  },
+  "notes": "The search-interface mock-up turns out to be a screenshot of Google with the drop-downs pasted in (seg-0012), which is a nice trap: it reads like a delivered feature and is explicitly 'completely cut and pasted... that does not exist'. Recording it as a decision or a completed action would be wrong. 'Next week sometime' (seg-0048) for the tutorial is another relative deadline that stays null."
+}
