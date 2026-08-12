@@ -3,6 +3,67 @@
 Newest first. One entry per ticket (or paired tickets), appended at close — same
 content as the Odoo completion comment, kept in-repo so it survives the course.
 
+## M2X-030 — schema freeze and the Day 3 rituals (2026-08-12)
+
+**Executed**
+
+- **The schema is frozen.** Shapes unchanged from M2X-031 — four item kinds,
+  `owner`/`deadline` nullable, `YYYY-MM-DD` only, one resolved citation per item — so the
+  freeze cost no relabel and M2X-033 is unblocked. The open question standing in
+  `docs/reviews.md` since 2026-08-05 is answered.
+- **What the freeze added** is the rules *around* the shapes, which until now existed only
+  as implementation behaviour: dedup, conditional date resolution, and the per-field F1
+  matching rules including the 0.60 description threshold. `docs/design/day3-schema.md`
+  §The frozen contract.
+- **The seal moved** to the tickets' `eval/labels/heldout/`, with plaintext git-ignored and
+  `*.age` ciphertext committed. `.gitignore`, `CLAUDE.md` and the stray `eval/dev/.gitkeep`
+  reconciled. 446 tests green (docs-and-config ticket; no code changed).
+
+**Two rules could not be taken from the ticket as written**
+
+1. **"Relative dates resolved against meeting date" is not executable on the graded
+   corpus.** All three AMI meetings carry `date: null` and the tiron manifest has no `date`
+   field at all. The rule became conditional — resolve only where a meeting date exists,
+   null otherwise, *identically on both sides*. Under the literal wording, labels resolving
+   "next Friday" while the extractor nulls it makes every relative deadline a guaranteed
+   field miss, and the resulting F1 measures the mismatch rather than the model.
+2. **Token-set F1 at 0.60, not embedding similarity.** The harness must be deterministic
+   and offline. An embedding threshold changes meaning silently when the model is upgraded,
+   which makes two gate numbers taken months apart incomparable with nothing in the diff to
+   explain why.
+
+**Deviations**
+
+1. **M2X-030's scope check cannot pass and cannot be repaired.** It verifies by git history
+   that the schema doc precedes `src/m2x/schema.py`; the code landed in `104c8e7`, the doc
+   three commits later in `ff4ba14`, both 2026-08-07. The *property* it protects — contract
+   frozen before labelling — does hold, since `eval/labels/` is created empty here.
+2. **Labels will be written by the same author as the extractor**, by the user's explicit
+   and reaffirmed decision. Every Phase 1B F1 is therefore an upper bound, not an
+   independent measurement, and says so in the design doc and must say so in `gates.md`.
+3. **The evening cross-review is not held.** It requires each developer to explain the
+   *other's* work; with one operator there is no second party to explain anything back.
+   Left pending rather than written up from what it would have concluded.
+
+**Lessons**
+
+- **Writing the rule down is the cheapest way to find out it is unexecutable.** "Relative
+  dates resolved against meeting date" reads as obviously correct and survives any amount
+  of discussion. It died the moment someone opened `corpus.json` and looked at whether the
+  dates were actually there. Three of five local meetings and all seventeen tiron meetings
+  have none.
+- **A matching rule is a contract, and a threshold picked after seeing scores is not a
+  measurement.** 0.60 is a judgement call made before any data exists to tune against,
+  which is the only time it can be made honestly. Last run's 0.8063 was arguable partly
+  because the rules were settled late.
+- **Dedup pulls citation and content to different segments.** A restated commitment cites
+  the *earliest* segment; a revised one records the *final* state. Each rule is obvious
+  alone; together they are the easy thing to get quietly wrong.
+- **"Agreement" and "absence of objection" are different, and only one of them is worth
+  recording as agreement.** The freeze had no second opinion on the shapes — that is
+  written into `reviews.md` as agreement-by-default, because a review log that flatters
+  itself is worse than none.
+
 ## M2X-024 + M2X-025 — vocabulary experiment and the Phase 1 gate (2026-08-12, PR #23)
 
 **Executed**
