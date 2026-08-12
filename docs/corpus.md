@@ -94,15 +94,66 @@ installing a deep-learning runtime to read a WAV is not a dependency this projec
 carry. `datasets` + `soundfile` sit in an optional `corpus` dependency group, so a
 normal `uv sync` stays lean and the fetch stays a one-off.
 
+## English set, second pass — Tiron evaluation meetings
+
+AMI closed the language gap but not the **reference-words** gap. `diarizers-community/ami`
+ships reference speaker turns and no reference text, so every WER number still needed a
+snippet written by ear — the manual step M2X-024/025 are blocked on, and the reason
+Hinglish accuracy is unmeasurable at all.
+
+`Trelis/tiron-eval-meetings` ships speaker turns **and** the words, from the same human
+annotation, on one timeline. That is the reason to adopt it; the extra corpora are a
+bonus.
+
+| split | meetings | source |
+|---|---|---|
+| `ami` | ES2004a, IS1009a, TS3003a, EN2002a | AMI, single distant microphone (Array1-01) |
+| `icsi` | Bmr013, Bmr018, Bro021 | ICSI, mean of 4 distant PZM room microphones |
+| `notsofar` | 10 `MTG_*` sessions | NOTSOFAR-1 eval set, one distant device per meeting |
+
+- **Source:** `Trelis/tiron-eval-meetings` — 17 whole meetings, 612 MB, ungated,
+  **CC BY 4.0** (AMI, ICSI and NOTSOFAR-1 each CC BY 4.0 upstream).
+- **Fetch:** `uv run --group corpus python scripts/fetch_tiron.py --split ami --count 2`.
+  Writes 16 kHz mono WAV to `data/raw/tiron-<meeting>.wav`, reference turns to
+  `eval/tiron/tiron-<meeting>.speakers.json`, reference words to
+  `eval/tiron/tiron-<meeting>.txt`, and `eval/tiron/manifest-<split>.json`.
+- **Drops into the existing evaluators unchanged.** The turns file uses the same
+  `segments` / `t_start` / `t_end` / `speaker` shape `eval/diarization_score.py` already
+  reads; the words file is the plain text `eval/wer.py --reference` already reads. No
+  evaluator code changed to adopt this.
+- **Far-field, not per-headset.** The material difference from the AMI IHM set: IHM is
+  one headset per speaker, where 94% of utterances in the measured window overlap another
+  speaker and absolute WER is inflated. Tiron's AMI split is the distant microphone —
+  harder audio, but a single realistic channel, which is what the product actually ingests.
+- **Meetings keep their real corpus id** (`tiron-ES2004a`, not `tiron-001`) so an overlap
+  with an already-fetched meeting shows up in the filename. `ami-001` is EN2002**b**
+  (established in M2X-021) and the tiron `ami` split carries EN2002**a** — different
+  meetings. The source ids behind `ami-002` / `ami-003` were never identified, so an
+  overlap there is **not ruled out**: check before pooling those two with the tiron AMI
+  split in one score.
+- Verified end to end 2026-08-12 on `tiron-ES2004a`: 1049s, 4 speakers, 260 reference
+  utterances, 2614 reference words. Fed back through both evaluators as their own
+  reference — `wer.py` returns 0.0 and `diarization_score.py` returns 1.0 accuracy on a
+  4/4 speaker mapping, the correct identity behaviour, which proves the plumbing.
+
+**Scope note.** The internal meetings are Hinglish; the PRD scope is English. Tiron is now
+the **graded** English corpus. The Hinglish meetings stay in as a robustness slice — real
+register, real domain vocabulary, real screen-share — but a gate number is quoted against
+tiron, not against them.
+
 ## Corpus status
 
-**5 meetings, ~118 minutes** — 2 internal Hinglish (real register, screen-share, our own
-domain vocabulary) plus 3 English AMI (clean control, speaker ground truth).
+**5 meetings, ~118 minutes** held locally — 2 internal Hinglish (real register,
+screen-share, our own domain vocabulary) plus 3 English AMI (clean control, speaker
+ground truth) — plus the tiron set on demand: 17 more English meetings, fetched per
+split rather than kept locally, each carrying **both** references.
 
 - **M2X-033** — was the pressure point at 24 minutes; now has ~118 minutes to draw 25
   distinct labelled cases from without over-sampling the same passages.
 - **M2X-021 / M2X-022** — comparisons run across both registers, which is strictly more
   informative than three meetings of one.
+- **M2X-024 / M2X-025** — the by-ear snippet is no longer the only route to a WER
+  reference. Any tiron meeting scores without a manual transcription pass.
 - **Phase 5 / M2X-070** — unaffected; `mtg-001` carries the screen-share.
 - Still worth doing: one or two more **internal** FiftyFive meetings, so the real-world
   half grows too. AMI is a control, not a substitute for our own domain.

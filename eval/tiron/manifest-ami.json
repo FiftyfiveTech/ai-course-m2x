@@ -1,0 +1,19 @@
+{
+  "dataset": "Trelis/tiron-eval-meetings",
+  "split": "ami",
+  "meetings": [
+    {
+      "meeting_id": "tiron-ES2004a",
+      "corpus": "ami",
+      "source_meeting_id": "ES2004a",
+      "file": "data/raw/tiron-ES2004a.wav",
+      "reference": "eval/tiron/tiron-ES2004a.speakers.json",
+      "reference_text": "eval/tiron/tiron-ES2004a.txt",
+      "duration_s": 1049.4,
+      "speakers": 4,
+      "segments": 260,
+      "sampling_rate": 16000,
+      "unknown_spans": []
+    }
+  ]
+}
