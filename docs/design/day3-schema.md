@@ -1,6 +1,8 @@
 # Day 3 — the extraction schema and the Instructor loop (M2X-031)
 
-**Status:** implemented; schema **frozen pending Yash's sign-off** (see Deviation 1).
+**Status:** implemented; schema **FROZEN as of M2X-030** (2026-08-12) — see
+[The frozen contract](#the-frozen-contract-m2x-030) for the rules that close the open
+points, and Deviation 1 for how the freeze differs from the ticket's procedure.
 **Code:** `src/m2x/schema.py`, `src/m2x/extraction.py`. **Command:** `uv run m2x extract <meeting-id>`.
 
 ## What this decides
@@ -61,6 +63,162 @@ transcripts.** Re-transcribing a meeting with different settings renumbers every
 so labels and records are only comparable against the transcript they were made from.
 Same property the diarisation labels have (Day 2), same reason.
 
+## The frozen contract (M2X-030)
+
+Everything above describes what `src/m2x/schema.py` enforces. This section closes the
+three points the ticket asks the pairing to settle — nullability, date normalization,
+dedup — plus the matching rules, so that labels and extractor target the same
+definitions. **From this point a field rename costs a relabel, not an edit.**
+
+The shapes are unchanged from M2X-031: four item kinds, `owner`/`deadline` nullable,
+`YYYY-MM-DD` only, one `evidence` per item, `extra="forbid"`, empty lists valid. What
+follows are the rules *around* the shapes, which existed only as implementation
+behaviour until now.
+
+### 1. Nullability — null is an answer, not a gap
+
+`owner` is `null` when the meeting named nobody. It is **never** inferred from who was
+speaking: "we should do X" said by Yash is not an action owned by Yash. `deadline` is
+`null` when no calendar date is recoverable under rule 2.
+
+For both fields the labeller and the extractor are held to the same standard: **`null`
+is the correct answer**, and a label that guesses is as wrong as an extraction that
+guesses. Under the matching rules below `null` matches only `null`, so a guess on either
+side costs a field match.
+
+### 2. Date normalization — resolve only against a known meeting date
+
+The ticket asks for "relative dates resolved against meeting date". That is only possible
+where a meeting date exists, and **on the graded corpus it does not**:
+
+| meetings | `date` in `data/corpus.json` |
+|---|---|
+| `mtg-001`, `mtg-002` (internal, Hinglish) | present — `2026-07-27`, `2026-07-28` |
+| `ami-001`, `ami-002`, `ami-003` | **`null`** |
+| tiron (`eval/tiron/manifest-*.json`, 17 meetings) | **no `date` field at all** |
+
+Since [`corpus.md`](../corpus.md) makes tiron the graded English corpus and the gate
+number is quoted against it, the majority of scored cases carry no meeting date. The rule
+therefore has to be conditional, and it is the *same* rule on both sides:
+
+> **A `deadline` is `YYYY-MM-DD` when the meeting states an absolute date, or when the
+> meeting date is known from `data/corpus.json` **and** the relative expression resolves
+> unambiguously against it. Otherwise it is `null`.**
+>
+> Neither the labeller nor the extractor may invent a meeting date to resolve against.
+
+Consequences, both deliberate:
+
+- On the dateless English corpus every relative deadline ("next Friday", "end of the
+  sprint") is `null` on **both** sides. Null matches null, so these score as agreement
+  rather than as a mutual miss. The alternative — one side resolving and the other not —
+  makes every relative deadline a guaranteed field miss and tells you nothing about the
+  model.
+- The current implementation already converges here without a code change: a relative
+  deadline fails `_deadline_is_iso_date`, and the retry the model receives says *"use
+  YYYY-MM-DD, or null when the meeting named no resolvable date"*.
+- Where a date **is** known (`mtg-001`/`mtg-002`), resolution is permitted but the prompt
+  does not yet carry the meeting date. Feeding it in is a prompt change and belongs to
+  M2X-036, not here. Until then those two meetings behave like the dateless ones.
+
+### 3. Dedup — one commitment, one item
+
+A meeting restates itself. The unit is the **commitment, not the utterance**:
+
+1. **Restatement is one item.** "You'll draft the PRD" / "Yes, I'll draft the PRD" /
+   "So Yash has the PRD" is a single action, cited to the **earliest** segment where it
+   is recognisable as a commitment.
+2. **Revision is one item carrying the final state.** If the owner is reassigned or the
+   deadline moves later in the meeting, the item records what it *settled* as, cited to
+   the segment where it settled. A superseded intermediate state is not a second item.
+3. **Same wording, different commitment = two items.** "Send the deck" about two
+   different decks is two actions. Wording is evidence of identity, not identity itself.
+4. **Across kinds, never deduped.** A risk that later becomes an action is a `Risk` *and*
+   an `ActionItem`; both were true, and the harness matches within a kind anyway.
+5. **Negated or abandoned items are not items.** "We could do X — no, drop it" yields
+   nothing. An abandoned proposal is not a decision, and recording it inflates recall on
+   both sides.
+
+Rule 1 makes the citation deterministic (earliest), rule 2 makes the *content*
+deterministic (final) — they point at different segments on purpose, and that is the one
+place this is easy to get wrong.
+
+### 4. Matching rules for field-level F1
+
+Pinned here rather than in M2X-034 because the labeller has to know them *before*
+labelling. M2X-034 implements exactly this and restates it in `eval/README.md`; if the
+two ever disagree, this file is the contract.
+
+| what | rule |
+|---|---|
+| **kind** | Hard partition. A `Risk` never matches an `ActionItem`, however similar the text. |
+| **description** | Normalize (casefold, strip punctuation, collapse whitespace, drop a fixed stopword list), then **token-set F1 ≥ 0.60**. |
+| **owner** | Exact after canonicalization (casefold, strip titles, map to the canonical name via `eval/vocab.txt`). `null` matches `null` only. |
+| **deadline** | Exact string equality on `YYYY-MM-DD`. `null` matches `null` only. |
+| **evidence** | **Not scored in matching.** It is a validity property, reported separately as schema-validity %. |
+| **pairing** | Greedy 1:1 within a kind, by descending description similarity. Ties broken by (labelled index, extracted index) ascending, so the pairing is deterministic. |
+| **unmatched** | Extracted-but-unpaired = FP. Labelled-but-unpaired = FN. |
+
+**Token-set F1 rather than embedding similarity**, though the ticket offers both. The
+harness must be deterministic and runnable offline — the suite takes no network, and an
+embedding threshold silently changes meaning when the embedding model is upgraded, which
+would make two gate numbers taken months apart incomparable without anything in the diff
+to show why. The threshold **0.60** is a fixed, recorded constant; it is not tuned after
+seeing scores, because a matching rule tuned against results is how 0.8063 became
+arguable last run.
+
+`0.60` is a judgement call made before any data exists to tune it against. If it proves
+wrong, changing it is a **contract change** — a new row here, a rerun of every number
+that used the old value, never a quiet edit.
+
+### 5. Deviations recorded at the freeze
+
+Three, and the first two weaken what the Phase 1B gate number can claim. Written here
+rather than left implicit, per the project's deviation rule.
+
+1. **M2X-030's scope check can no longer pass, and cannot be repaired.** The ticket
+   verifies by git history that this doc precedes `src/m2x/schema.py`. It does not — the
+   code landed in `104c8e7` and the doc three commits later in `ff4ba14`, both on
+   2026-08-07, because M2X-031 was built before the pairing was held:
+
+   ```
+   104c8e7  feat(m2x-031): add the MeetingRecord schema with resolved evidence   ← code
+      ...3 commits...
+   ff4ba14  docs(m2x-031): record the schema design, the primer and the retro     ← doc
+   ```
+
+   No commit can reorder history that is already pushed. What the criterion protects —
+   that the contract is fixed *before labelling* — is still intact, because no label
+   exists yet: `eval/labels/` is created empty by this ticket. The freeze genuinely
+   precedes M2X-033. The ordering check does not pass; the property it was checking for
+   does.
+
+2. **The ground-truth labels will be written by Claude, not by a human labelling blind.**
+   Decided by the user on 2026-08-12, reaffirmed after being shown that M2X-033 exists
+   *because* "the agent wrote labels, extractor, and score — F1 1.0000 tuned vs 0.5195
+   real". Claude has already read `prompts/extraction/v1.md` and `src/m2x/schema.py`, so
+   labels and extractor share an author.
+
+   **Therefore every Phase 1B F1 — the dev ≥0.90 target and the M2X-040 held-out ≥0.85
+   gate — is an upper bound, not an independent measurement,** and must be reported that
+   way in `docs/gates.md` and in the Odoo record. The rules in this section are the
+   partial mitigation: a labeller who has to follow written dedup, nullability and date
+   rules has less room to drift toward what the extractor happens to do. Partial is the
+   honest word — the rules do not restore independence, they only narrow the gap.
+
+   The same caveat covers the *procedural* checks downstream: M2X-036 is verified by
+   "Yash re-runs the final dev eval" and M2X-040 by "Saurabh confirms he never saw
+   held-out contents". With one operator driving every ticket, neither is an independent
+   check either.
+
+3. **The sealed set lives at `eval/labels/heldout/`, not `eval/heldout/`.** The tickets
+   name `eval/labels/`; `.gitignore` and `CLAUDE.md` predate them and name `eval/heldout/`.
+   The ticket path wins, and the seal is now: plaintext under `eval/labels/heldout/` is
+   git-ignored, ciphertext (`*.age`/`*.gpg`) is committed. That keeps the sealed set
+   auditable in git — a reviewer can confirm ten encrypted cases exist and were not
+   quietly edited before the gate — which an ignored directory cannot offer. The stray
+   `eval/dev/.gitkeep` at the abandoned path is removed.
+
 ## The extraction loop
 
 ```
@@ -102,12 +260,13 @@ limit does bite, `ExtractionOutcome.truncated` records it in the artefact.
 
 ## Deviations from the ticket spec
 
-1. **There is no prior schema doc, because the M2X-030 pairing has not been held.** The
-   ticket says "exactly per the schema doc"; the schema doc is this file. The shapes are
-   taken from the handbook (ch. 3.1), which is the only written spec that exists, and
-   extended where the handbook shows only `ActionItem`. **This needs Yash's explicit
-   sign-off before he labels anything** — a field renamed after labelling begins costs a
-   relabel, not an edit. Recorded as the open item in `docs/reviews.md`.
+1. ~~**There is no prior schema doc, because the M2X-030 pairing has not been held.**~~
+   **Closed by M2X-030 on 2026-08-12.** The shapes were taken from the handbook (ch. 3.1)
+   and extended where the handbook shows only `ActionItem`; they are now frozen, with the
+   surrounding rules written in [The frozen contract](#the-frozen-contract-m2x-030) and
+   the open point in `docs/reviews.md` answered. No label had been written when the freeze
+   landed, so the "before labelling" property the sign-off protects is intact — see
+   Deviation 1 of that section for the part that is not.
 2. **`response_format` is dropped.** Instructor passes
    `response_format={"type": "json_object"}`; `ModelAdapter.complete()` does not expose
    it, and the shim ignores it rather than widening the adapter's signature (and its

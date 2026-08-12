@@ -7,7 +7,17 @@ data/*
 !data/corpus.json
 # real keys live in ~/.config, only .env.example is tracked
 .env
-# held-out set is Evaluator-only until the gate (blind-labelling rule)
+# held-out labels are Evaluator-only until the gate (blind-labelling rule). The sealed
+# set is committed as *ciphertext* so a reviewer can confirm the ten cases exist and were
+# not edited between the freeze and the gate — an ignored directory proves neither.
+# Plaintext beside it must never enter git. Same `dir/*` trick as data/ above: git will
+# not re-include a file whose parent directory is excluded.
+eval/labels/heldout/*
+!eval/labels/heldout/*.age
+!eval/labels/heldout/*.gpg
+!eval/labels/heldout/.gitkeep
+!eval/labels/heldout/README.md
+# the pre-M2X-030 path, kept ignored so an older checkout cannot leak a case through it
 eval/heldout/
 __pycache__/
 .venv/
