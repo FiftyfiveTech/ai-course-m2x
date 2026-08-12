@@ -23,9 +23,45 @@ Yash's answer before he labels anything:
 
 *Status: schema drafted and implemented, pairing not yet held.*
 
-**PM — cross-review.** *Pending.* Yash explains the extraction loop and where the
-evidence validator can still be fooled (M2X-031); Saurabh explains the ground-truth
-split and what makes a label consistent (M2X-033).
+### Resolved 2026-08-12 — schema FROZEN, but by decision rather than by pairing
+
+The open question above is answered: **the schema holds as frozen.** Four item kinds,
+`owner`/`deadline` nullable with null as the correct answer, `deadline` restricted to
+`YYYY-MM-DD`, one resolved citation per item — all unchanged from the draft. Nothing was
+renamed, so no relabel cost was incurred, and M2X-033 is unblocked.
+
+What the freeze *added* is the rules around the shapes, which had existed only as
+implementation behaviour: dedup (commitment not utterance, earliest citation, final
+state), conditional date resolution, and the per-field F1 matching rules including the
+0.60 description threshold. All in
+[`day3-schema.md` §The frozen contract](design/day3-schema.md).
+
+**This was not the pairing the ticket describes, and the difference is worth naming.**
+The ticket wants two people arguing the contract before either has code or labels
+invested in it. What happened is that Claude drafted the rules and the user decided the
+two points that were genuinely open — who writes the labels, and where the sealed set
+lives. On the schema shapes themselves there was no second opinion, only an absence of
+objection. Recorded as agreement-by-default, not as agreement.
+
+Two questions the pairing would have been the right place to catch, surfaced here by
+writing the rules down instead:
+
+1. **The ticket's "relative dates resolved against meeting date" is not executable on the
+   graded corpus.** All three AMI meetings carry `date: null` and the tiron manifest has
+   no date field at all. The rule had to become conditional — resolve only where a
+   meeting date exists, null everywhere else, *on both sides*. Had labelling started
+   under the ticket's literal wording, every relative deadline would have been a
+   guaranteed field miss.
+2. **Dedup pulls the citation and the content toward different segments.** A restated
+   commitment cites the *earliest* segment; a revised one records the *final* state. Both
+   rules are obvious alone and contradict each other if written carelessly.
+
+**PM — cross-review.** *Still not held, and cannot be held as specified.* The ritual asks
+Yash to explain the extraction loop and Saurabh to explain the dev/held-out split — each
+explaining the other's work, which is what makes it a review rather than a summary. With
+one operator driving Claude through every ticket, there is no second party to explain
+anything back. Left pending rather than written up from what the review would have
+concluded, per this file's own rule.
 
 ## Day 2 — 2026-08-04 (M2X-020)
 
