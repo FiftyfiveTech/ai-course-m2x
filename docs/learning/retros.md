@@ -3,6 +3,41 @@
 Newest first. One entry per ticket (or paired tickets), appended at close — same
 content as the Odoo completion comment, kept in-repo so it survives the course.
 
+## M2X-037 — `m2x extract` fenced-JSON parse failure (2026-08-12)
+
+**Executed**
+
+- **One word.** `src/m2x/extraction.py` selected `instructor.Mode.JSON`, which hands raw
+  assistant content to Pydantic's JSON validator. Providers return the record inside a
+  ` ```json ` fence, sometimes behind "Here is the corrected JSON response:". Switched to
+  `Mode.MD_JSON`, which routes through `extract_json_from_codeblock()` and takes the first
+  balanced JSON span, so a fence and a preamble both survive.
+- **A regression test that fails on the old code**, parametrised over three reply shapes —
+  bare, fenced, prefaced-fenced. On `Mode.JSON`: bare passes, the other two raise
+  `InstructorRetryException`. On `Mode.MD_JSON`: all three pass. 449 tests green.
+- **Split out of M2X-036**, which it blocked. No F1 can be scored on records the extractor
+  cannot produce.
+
+**Deviations**
+
+- None. The ticket was written after the diagnosis, so its spec and the fix agree.
+
+**Lessons**
+
+1. **A retry loop disguises a systematic error as a flaky one.** Three attempts failed
+   identically for days and it read as provider trouble. Variance produces three
+   *different* errors; three identical failures means stop retrying and read the parse path.
+2. **"Needs a live provider to reproduce" was false, and cost the most.** This sat in a
+   session handoff note as network-only, so nobody reproduced it. The failure is in
+   *parsing* a response — and a response is just a string. `tests/test_extraction.py`
+   already scripts the model over `httpx.MockTransport`; the repro was one parametrised
+   test away the whole time.
+3. **The defect had no ticket and no failing test**, so it was invisible to everyone
+   except the session that hit it, and resurfaced as a surprise each time. A defect that
+   exists only in prose is not tracked.
+4. **Library modes are behaviour, not labels.** `Mode.JSON` and `Mode.MD_JSON` read as a
+   formatting nicety and are in fact the entire parsing contract.
+
 ## M2X-030 — schema freeze and the Day 3 rituals (2026-08-12)
 
 **Executed**

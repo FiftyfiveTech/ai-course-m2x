@@ -357,3 +357,32 @@ def test_an_unknown_prompt_version_fails_before_any_call(make_adapter, scripted,
             )
 
     assert sent == []
+
+
+@pytest.mark.parametrize(
+    "wrap",
+    [
+        pytest.param(lambda body: body, id="bare"),
+        pytest.param(lambda body: f"```json\n{body}\n```", id="fenced"),
+        pytest.param(
+            lambda body: f"Here is the corrected JSON response:\n```json\n{body}\n```",
+            id="prefaced-fenced",
+        ),
+    ],
+)
+def test_a_fenced_reply_is_parsed_not_retried(make_adapter, scripted, wrap) -> None:
+    """M2X-037: providers fence the record, so the parse has to see through markdown.
+
+    Every attempt is served the *same* reply, because that is the live failure mode. A
+    fenced reply followed by a clean one would only prove the retry loop works.
+    """
+    replies, sent = scripted
+    for _ in range(MAX_ATTEMPTS):
+        replies.append(wrap(record_json()))
+
+    with make_adapter(handler_for(replies, sent)) as adapter:
+        outcome = extract_record(transcript(), adapter=adapter, meeting_id="mtg-001")
+
+    assert outcome.attempts == 1
+    assert outcome.record.item_count == 2
+    assert outcome.record.actions[0].owner == "Yash"
