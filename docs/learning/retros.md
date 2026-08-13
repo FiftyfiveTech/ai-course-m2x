@@ -3,6 +3,67 @@
 Newest first. One entry per ticket (or paired tickets), appended at close — same
 content as the Odoo completion comment, kept in-repo so it survives the course.
 
+## M2X-040 prep — pinned prompt default + reproducible gate denominator (2026-08-13)
+
+Builder-side prerequisites only; the gate run itself is Yash's.
+
+**Executed**
+
+- **Split the two failure classes.** `run_extraction_eval` counted a transport loss and an
+  exhausted reask budget into one `cases_failed`, so a provider failure silently moved the
+  micro-F1 denominator. `classify_failure` walks the exception chain for an `M2XError`
+  (Instructor wraps everything escaping its retry loop, so the outer type is useless).
+  `schema_validity` is now over answered cases only.
+- **Every run prints and records its scored-case set**, plus the ids of both failure
+  classes, on the report and on every `eval/results/extraction.jsonl` row. `cases_failed`
+  kept as their sum so the eleven older rows still line up.
+- **Pinned the extraction prompt default.** `DEFAULT_EXTRACTION_PROMPT_VERSION = "v3"`
+  replaces `latest_version()`. PR #33's renumbering had moved the default onto `v5` — the
+  weaker text on both gate legs — with nothing in the diff saying so.
+- **Wrote and measured v6; it lost, so v3 stays pinned.** NIM / Llama-3.1-8B, same commit:
+
+  | prompt | micro-F1 | scored | schema-valid | injections |
+  |---|---|---|---|---|
+  | v3 | 0.3086 | 15/15 | 1.0000 | **3/3** |
+  | v6 | 0.4174 | 13/15 | 0.8667 | **0/3** |
+
+  v6's higher F1 is over thirteen cases — `tiron-MTG_32063-c01` and `tiron-MTG_32257-c01`
+  failed schema validation and left the denominator. Legible only because of the harness
+  fix above. All four effect-level injection checks pass under v6; it is not steerable, it
+  is less reliable at producing a record.
+- 537 tests green (531 floor). Design record: `docs/design/day4-gate-preconditions.md`.
+
+**Deviations (recorded in the design doc and the ticket comment)**
+
+1. v5's line-*selection* rule was not imported into v6 alongside its timestamp mechanics —
+   v3's dedup rule already governs that choice, and taking both would have left the prompt
+   saying two things about one thing.
+2. v5's injection paragraph not imported at all, per the ticket.
+3. `m2x ask` still resolves the rag prompt through `latest_version`. Noted, not fixed: no
+   rag number is gate-bearing and widening the change would put an untested default in a
+   second place.
+4. Provider is not added to the results row. It is recoverable from `data/runs/runs.jsonl`
+   within a checkout; the ticket asked for the case set and the failure split.
+
+**Lessons**
+
+- **An implicit default is an unreviewed decision.** If a value is a claim — this prompt is
+  better — it belongs in a diff. `latest_version()` moved that claim into a filename, and
+  the merge that renumbered files silently changed what the repo would certify.
+- **A metric is defined by its denominator.** 0.3645 and 0.4279 were both correct. The
+  defect was that neither named its case set, which is what makes them incomparable.
+- **A win from a smaller denominator is not a win.** v6 looked better because it dropped the
+  two hardest cases.
+- **`temperature=0.0` is not reproducibility.** v3 gives 0.3086 here and 0.4279 on the
+  supervisor's clone — same everything, different sampled outputs replayed from different
+  git-ignored caches. Sampling variance, not the denominator, so the harness fix is
+  necessary but not sufficient for `docs/gates.md`'s fresh-clone requirement. Raised for
+  the supervisor rather than fixed: the options (send a seed, commit records as fixtures,
+  report an interval) are a contract decision.
+- **Adding prompt text is not free.** v6's system prompt is ~360 characters longer than v3's
+  and lost two cases to *schema* failures, not content errors. On an 8B model, length
+  competes with format adherence.
+
 ## M2X-036 — first dev F1 and prompt iteration, builder lineage (2026-08-13, PR #32)
 
 **Executed**
