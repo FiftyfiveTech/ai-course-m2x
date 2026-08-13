@@ -20,6 +20,7 @@ from m2x.errors import ConfigError
 from m2x.extraction import (
     EXTRACTION_PROMPT_NAME,
     MAX_ATTEMPTS,
+    MAX_OUTPUT_TOKENS,
     ExtractionOutcome,
     build_messages,
     extract_record,
@@ -184,6 +185,23 @@ def test_extract_sends_the_schema_and_the_transcript_to_the_provider(
     assert "json_schema" in system or "properties" in system
     assert "open_questions" in system
     assert "<transcript>" in sent[0]["messages"][1]["content"]
+
+
+def test_every_attempt_caps_its_output(make_adapter, scripted) -> None:
+    """An uncapped extraction is unbounded on a transcript the model won't stop on.
+
+    Without a cap the runaway case costs a 120s read timeout per attempt on a provider
+    that imposes none, and on one that caps at 2048 it yields truncated JSON, which
+    Instructor reasks with the parse error appended — inflating the very payload that hit
+    the token ceiling.
+    """
+    replies, sent = scripted
+    replies.append(record_json())
+
+    with make_adapter(handler_for(replies, sent)) as adapter:
+        extract_record(transcript(), adapter=adapter, meeting_id="mtg-001")
+
+    assert sent[0]["max_tokens"] == MAX_OUTPUT_TOKENS
 
 
 def test_extract_retries_with_the_validation_error_when_a_citation_is_invented(

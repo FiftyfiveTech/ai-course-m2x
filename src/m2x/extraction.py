@@ -56,6 +56,21 @@ against a model whose behaviour on this corpus is already measured.
 DEFAULT_RECORDS_DIR = Path("data/records")
 """Where extracted records land. Under git-ignored ``data/``, created on demand."""
 
+MAX_OUTPUT_TOKENS = 2048
+"""Output cap per extraction attempt.
+
+Left unset until M2X-036, which made the cost of that visible: on
+``tiron-Bmr018-c01`` the model never emits a stop token, so an uncapped call runs to
+whatever the provider imposes. Groq stops at 2048 and hands back truncated JSON, which
+Instructor reasks with the parse error appended — a 3734-token prompt becomes 5849 and
+trips the 6000 TPM ceiling. NIM caps nothing and generates until the 120s read timeout,
+so one case cost six minutes across three attempts.
+
+2048 is the measured runaway ceiling rather than a guess, and comfortably above any real
+``MeetingRecord``: the largest record in the dev set renders well under half of it. Every
+other model call site in ``src/m2x/`` already sets a cap; this was the outlier.
+"""
+
 MAX_ATTEMPTS = 3
 """Total model attempts per extraction: the first call plus two retries.
 
@@ -297,6 +312,7 @@ def extract_record(
             turns,
             model_repo_id,
             provider=provider,
+            max_tokens=MAX_OUTPUT_TOKENS,
             context=context,
         )
         attempts.append(

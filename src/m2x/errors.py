@@ -109,7 +109,12 @@ class ProviderRequestError(M2XError):
         self.status_code = status_code
         self.body = body
         status = f" (HTTP {status_code})" if status_code is not None else ""
-        super().__init__(f"{provider}{status}: {message}")
+        # The body carries the provider's own diagnosis and is the difference between
+        # "request failed" and "TPM: Limit 6000, Requested 10710". It was captured and
+        # attached here all along, and then dropped on the way to every log line and
+        # traceback that anyone actually reads.
+        detail = f" — {body}" if body else ""
+        super().__init__(f"{provider}{status}: {message}{detail}")
 
 
 class RateLimitError(ProviderRequestError):
