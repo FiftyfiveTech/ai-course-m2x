@@ -188,11 +188,23 @@ class Counts(BaseModel):
         return self.true_positive + self.false_positive + self.false_negative
 
 
+Similarity = Callable[[str, str], float]
+"""How two descriptions are compared. ``0.0``-``1.0``, symmetric.
+
+Pluggable because the lexical default is known to be inadequate: it measures phrasing,
+and two correct summaries of one fact routinely share few content words (M2X-036,
+``docs/design/day3-iteration.md``). Swapping in an embedding-backed similarity is the
+documented replacement; keeping the seam explicit means the choice is visible in the
+call rather than buried in a helper.
+"""
+
+
 def match_items(
     labelled: Sequence[object],
     extracted: Sequence[object],
     *,
     threshold: float = DESCRIPTION_MATCH_THRESHOLD,
+    similarity: Similarity = token_set_f1,
 ) -> tuple[list[tuple[int, int]], list[int], list[int]]:
     """Pair extracted items to labelled ones, greedily and one-to-one.
 
@@ -204,7 +216,8 @@ def match_items(
     Args:
         labelled: Ground-truth items of one kind. Each needs a ``description``.
         extracted: Extracted items of the same kind.
-        threshold: Minimum token-set F1 for a pair to be eligible.
+        threshold: Minimum similarity for a pair to be eligible.
+        similarity: How two descriptions are compared.
 
     Returns:
         ``(pairs, unmatched_labelled, unmatched_extracted)`` where pairs are
@@ -213,7 +226,7 @@ def match_items(
     candidates: list[tuple[float, int, int]] = []
     for label_index, label_item in enumerate(labelled):
         for extract_index, extract_item in enumerate(extracted):
-            score = token_set_f1(
+            score = similarity(
                 label_item.description,  # type: ignore[attr-defined]
                 extract_item.description,  # type: ignore[attr-defined]
             )
@@ -237,6 +250,132 @@ def match_items(
     unmatched_labelled = [index for index in range(len(labelled)) if index not in used_labels]
     unmatched_extracted = [index for index in range(len(extracted)) if index not in used_extracts]
     return sorted(pairs), unmatched_labelled, unmatched_extracted
+
+
+EMBEDDING_MATCH_THRESHOLD = 0.675
+"""Cosine at or above which two descriptions are the same item.
+
+**Calibrated against same/different judgements, never against the resulting F1.** Fifteen
+pairs were written down as SAME or DIFFERENT by reading them — the SAME set being the
+near-miss band found in M2X-036 error analysis, the DIFFERENT set the pathological cases
+that disqualified containment plus genuinely unrelated items and same-topic-different-claim
+pairs. Only then were the cosines computed:
+
+* lowest SAME ``0.6928`` ("Whether this corpus is the right one to attempt this on at all"
+  vs "Is the corpus the right one to try to find a correspondence…")
+* highest DIFFERENT ``0.6586`` ("Children are not coming on the retreat" vs "Horseback
+  riding is included in the retreat programme")
+
+This value is the midpoint of that gap. The one-word fragment ``"adopt"``, which scores
+``1.00`` under containment and is the reason containment was rejected, sits at ``0.5013``.
+
+**The gap is 0.034 wide on fifteen pairs, which is separation rather than comfort.**
+Same-topic-different-claim pairs are the ones that crowd it from below, and a larger
+calibration set would very likely narrow it further. Treat this as a working threshold
+that a future ticket should re-derive on more pairs, not as a settled constant.
+"""
+
+DEFAULT_EMBED_MODEL = "nomic-ai/nomic-embed-text-v1.5"
+"""Embedding model backing :class:`EmbeddingSimilarity`.
+
+Pinned, and recorded on every results row. The original objection to embeddings
+(``eval/README.md``) was that an upgrade would silently change what a score means; that
+holds only if the model is *unrecorded*, so it is written into the result alongside the
+prompt version and SHA and a change shows up in the diff.
+"""
+
+
+class EmbeddingSimilarity:
+    """Cosine similarity between description embeddings.
+
+    The lexical default measures phrasing. Two correct summaries of one fact — "Find
+    somebody to shoot the testimonial videos and edit them properly" and "Linda will find
+    someone to take the video and edit it properly" — score 0.43 on token overlap, and no
+    deterministic lexical metric closes that gap (M2X-036).
+
+    Determinism is preserved by the cache rather than by the metric: every batch goes
+    through :meth:`~m2x.adapter.ModelAdapter.embed`, so a re-run over unchanged text is a
+    cache hit and returns identical vectors. Two runs on one machine agree; two runs on
+    different embedding-model versions do not, which is why the model id travels with the
+    number.
+
+    Descriptions are embedded in one batch per call site rather than pair by pair: the
+    matcher compares every label against every extraction, so pairwise embedding would
+    issue O(n*m) requests for O(n+m) distinct texts.
+    """
+
+    def __init__(
+        self,
+        adapter: ModelAdapter,
+        *,
+        model_repo_id: str = DEFAULT_EMBED_MODEL,
+        provider: Provider | None = None,
+        context: RunContext | None = None,
+    ) -> None:
+        """Build a similarity backed by an embedding model.
+
+        Args:
+            adapter: Adapter performing the embedding calls.
+            model_repo_id: Hugging Face repo id of the embedding model.
+            provider: Force a backend. ``None`` routes by the registry.
+            context: Provenance for the run log.
+        """
+        self._adapter = adapter
+        self._model_repo_id = model_repo_id
+        self._provider = provider
+        self._context = context
+        self._vectors: dict[str, tuple[float, ...]] = {}
+
+    @property
+    def model_repo_id(self) -> str:
+        """Which model produced the vectors, for the results record."""
+        return self._model_repo_id
+
+    def warm(self, texts: Sequence[str]) -> None:
+        """Embed a batch of texts up front.
+
+        Args:
+            texts: Descriptions that will be compared. Duplicates and already-known
+                texts are skipped.
+
+        Raises:
+            M2XError: The embedding call failed.
+        """
+        pending = sorted({text for text in texts if text not in self._vectors})
+        if not pending:
+            return
+        result = self._adapter.embed(
+            pending,
+            self._model_repo_id,
+            provider=self._provider,
+            context=self._context,
+        )
+        for text, vector in zip(pending, result.vectors, strict=True):
+            self._vectors[text] = tuple(vector)
+
+    def __call__(self, left: str, right: str) -> float:
+        """Cosine similarity of two descriptions, clamped to ``0.0``-``1.0``.
+
+        Args:
+            left: One description.
+            right: The other.
+
+        Returns:
+            Similarity. Negative cosines clamp to ``0.0``: an item that is the *opposite*
+            of another is not a match, and letting a negative through would make the
+            greedy sort prefer it over an unrelated pair.
+
+        Raises:
+            M2XError: The embedding call failed.
+        """
+        self.warm([left, right])
+        first, second = self._vectors[left], self._vectors[right]
+        dot = sum(a * b for a, b in zip(first, second, strict=True))
+        norm_first = sum(a * a for a in first) ** 0.5
+        norm_second = sum(b * b for b in second) ** 0.5
+        if not norm_first or not norm_second:
+            return 0.0
+        return max(0.0, min(1.0, dot / (norm_first * norm_second)))
 
 
 ITEM_KINDS = ("decisions", "actions", "risks", "open_questions")
@@ -266,13 +405,22 @@ class CaseScore(BaseModel):
     """Denominator for the owner and deadline figures."""
 
 
-def score_case(case_id: str, labelled: MeetingRecord, extracted: MeetingRecord) -> CaseScore:
+def score_case(
+    case_id: str,
+    labelled: MeetingRecord,
+    extracted: MeetingRecord,
+    *,
+    similarity: Similarity = token_set_f1,
+    threshold: float = DESCRIPTION_MATCH_THRESHOLD,
+) -> CaseScore:
     """Score one extracted record against its label.
 
     Args:
         case_id: Case being scored, carried into the result for per-case reporting.
         labelled: Ground truth.
         extracted: What the extractor produced.
+        similarity: How two descriptions are compared.
+        threshold: Minimum similarity for a pair to be eligible.
 
     Returns:
         The case's contribution to the totals.
@@ -286,7 +434,9 @@ def score_case(case_id: str, labelled: MeetingRecord, extracted: MeetingRecord) 
     for kind in ITEM_KINDS:
         label_items = getattr(labelled, kind)
         extract_items = getattr(extracted, kind)
-        pairs, unmatched_labels, unmatched_extracts = match_items(label_items, extract_items)
+        pairs, unmatched_labels, unmatched_extracts = match_items(
+            label_items, extract_items, threshold=threshold, similarity=similarity
+        )
         per_kind[kind] = Counts(
             true_positive=len(pairs),
             false_positive=len(unmatched_extracts),
@@ -492,6 +642,8 @@ def run_extraction_eval(
     model_repo_id: str = DEFAULT_EXTRACT_MODEL,
     provider: Provider | None = None,
     prompt_version: str | None = None,
+    similarity: Similarity | None = None,
+    threshold: float | None = None,
 ) -> tuple[EvalReport, str]:
     """Extract every case in a set and score it against the labels.
 
@@ -511,6 +663,8 @@ def run_extraction_eval(
         model_repo_id: Hugging Face repo id of the extraction model.
         provider: Force a backend. ``None`` routes by the registry.
         prompt_version: Pin a prompt version. ``None`` takes the latest on disk.
+        similarity: How descriptions are compared. ``None`` uses the lexical default.
+        threshold: Match threshold. ``None`` uses the one matching the similarity.
 
     Returns:
         ``(report, resolved_prompt_version)``.
@@ -560,7 +714,19 @@ def run_extraction_eval(
             failed += 1
             continue
         resolved_version = outcome.prompt_version
-        scores.append(score_case(case.case_id, case.label, outcome.record))
+        scores.append(
+            score_case(
+                case.case_id,
+                case.label,
+                outcome.record,
+                similarity=similarity or token_set_f1,
+                threshold=(
+                    threshold
+                    if threshold is not None
+                    else DESCRIPTION_MATCH_THRESHOLD
+                ),
+            )
+        )
 
     return aggregate(set_name, scores, failed=failed), resolved_version
 
@@ -572,6 +738,9 @@ def append_result(
     model_repo_id: str,
     path: Path = DEFAULT_RESULTS_PATH,
     git_sha: str | None = None,
+    similarity_kind: str = "token_set_f1",
+    threshold: float = DESCRIPTION_MATCH_THRESHOLD,
+    embed_model_repo_id: str | None = None,
     now: Callable[[], datetime] = lambda: datetime.now(UTC),
 ) -> Path:
     """Append one run's numbers to the results log.
@@ -597,6 +766,12 @@ def append_result(
         "git_sha": git_sha if git_sha is not None else current_git_sha(),
         "prompt_version": prompt_version,
         "model_repo_id": model_repo_id,
+        # How agreement was measured travels with the number. A micro-F1 computed under
+        # a different matcher is a different quantity, and M2X-036 changed the matcher —
+        # so a row without these three fields cannot be compared with one that has them.
+        "similarity": similarity_kind,
+        "match_threshold": threshold,
+        "embed_model_repo_id": embed_model_repo_id,
         "micro_f1": round(report.micro_f1, 4),
         "schema_validity": round(report.schema_validity, 4),
         "deadline_abstention": round(report.deadline_abstention, 4),

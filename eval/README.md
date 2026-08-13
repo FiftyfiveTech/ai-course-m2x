@@ -37,24 +37,45 @@ within their own list. A model that files a decision as a risk is wrong twice �
 positive and one false negative — and that is the intended accounting, because
 mis-categorised output is not usable downstream.
 
-### 2. Item identity: description similarity ≥ 0.60
+### 2. Item identity: embedding cosine ≥ 0.675
 
-Free text cannot be compared exactly. Descriptions are normalised, then scored by
-**token-set F1**, and two items are candidates for matching when that score is **≥ 0.60**.
+Free text cannot be compared exactly. Descriptions are embedded with a pinned model and
+two items are candidates for matching when their cosine is **≥ 0.675**.
 
-Normalisation, in order: casefold → strip punctuation → collapse whitespace → drop a
-fixed stopword list. Token *set*, not multiset: repetition carries no meaning here.
+> **Contract change, M2X-036.** This replaces token-set F1 ≥ 0.60, which was frozen in
+> M2X-030 and is superseded. Every number computed under the old rule has been re-run;
+> rows in `results/` carry `similarity`, `match_threshold` and `embed_model_repo_id`, so
+> a figure produced under one rule is never silently compared with one produced under the
+> other. `--similarity lexical` reproduces the old rule on demand.
 
-**Why not embedding similarity**, which the ticket also offers: the harness must be
-deterministic and runnable offline (the suite takes no network), and an embedding
-threshold silently changes meaning when the embedding model is upgraded — two gate
-numbers taken months apart would be incomparable with nothing in the diff to explain why.
-Token overlap is crude and stable, and stability is what a gate needs.
+**Why the old rule was replaced.** It measured phrasing. Of 72 labelled dev items, five
+found any candidate above 0.60, while the band beneath was full of pairs any reader calls
+identical — *"Find somebody to shoot the testimonial videos and edit them properly"*
+against *"Linda will find someone to take the video and edit it properly"* scored 0.43.
+Two correct summaries of one fact routinely share few content words.
 
-**0.60 is a judgement call made before any data existed to tune it against**, which is
-the only time it can be made honestly. Changing it is a **contract change**: a new row
-here, and every number computed under the old value is re-run or discarded. It is never
-a quiet edit.
+Containment and stemming were both evaluated as repairs and both rejected. **Containment
+is disqualified outright**: every subset scores 1.00, so the one-word fragment `"adopt"`
+matches any item containing that word — with the extractor already over-extracting, that
+converts its worst failure into free true positives. **Stemming is safe but
+insufficient**, leaving five of six known-identical pairs below threshold. No
+deterministic lexical metric closes a paraphrase gap.
+
+**Why embeddings are acceptable now.** The original objection — that an upgrade silently
+changes what a score means — holds only if the model is *unrecorded*. It is pinned
+(`nomic-ai/nomic-embed-text-v1.5`), it goes through `ModelAdapter.embed()` so a re-run
+over unchanged text is a cache hit returning identical vectors, and the model id is
+written onto every results row. A change now appears in the diff.
+
+**How 0.675 was chosen.** Calibrated against fifteen pairs written down as SAME or
+DIFFERENT **by reading them, before any cosine was computed** — never against the
+resulting F1. Lowest SAME landed at 0.6928, highest DIFFERENT at 0.6586; the threshold is
+the midpoint of that gap. The fragment `"adopt"` sits at 0.5013.
+
+**The gap is 0.034 wide on fifteen pairs — separation, not comfort.** Same-topic,
+different-claim pairs crowd it from below, and a larger calibration set would likely
+narrow it. Treat it as a working threshold a later ticket should re-derive, and note that
+changing it remains a contract change: a new row here, and every affected number re-run.
 
 ### 3. Pairing: greedy, one-to-one, deterministic
 
