@@ -1,5 +1,13 @@
 # Day 3 — the first dev numbers, and why they are not what they look like (M2X-036)
 
+> **Version numbers below are pre-merge.** This document was written on the evaluator
+> branch, where its prompts were `v2.md` and `v3.md`. Those numbers were already taken on
+> `main` by the parallel builder lineage, so on merge these became **`v4.md`** and
+> **`v5.md`** — prose header only, digests `cc09b2a2b129` and `a4a219d1c013` unchanged.
+> Read every `v2` here as `v4` and every `v3` as `v5`; `v1` is the same text in both
+> lineages. Rows in `eval/results/extraction.jsonl` carry the post-merge names. The
+> builder-side write-up is [`day3-extraction-iteration.md`](day3-extraction-iteration.md).
+
 **Status:** time-boxed out below target. Phase 1B is **failing** on both gate legs, and
 this document is the risk note the ticket asks for in that case.
 
