@@ -489,6 +489,22 @@ class TestResponseParsing:
 
         assert len(caught.value.body) < 1_000
 
+    def test_error_body_reaches_the_message(self, make_adapter: AdapterFactory) -> None:
+        """The body is the provider's own diagnosis, so it belongs in what gets logged.
+
+        A 413 from Groq says "TPM: Limit 6000, Requested 10710" — permanent, and fixed by
+        routing elsewhere. Without the body the same exception reads "request failed",
+        which is indistinguishable from a malformed request.
+        """
+        handler = _Recorder(
+            httpx.Response(413, text='{"error":{"message":"Request too large ... TPM: Limit 6000"}}')
+        )
+
+        with pytest.raises(ProviderRequestError, match="TPM: Limit 6000") as caught:
+            make_adapter(handler).complete(_PROMPT, CHAT_MODEL)
+
+        assert caught.value.body in str(caught.value)
+
 
 class TestTranscription:
     def test_requests_verbose_json_multipart(self, make_adapter: AdapterFactory) -> None:

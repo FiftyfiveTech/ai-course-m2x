@@ -24,6 +24,7 @@ from __future__ import annotations
 import json
 import re
 import subprocess
+import sys
 import unicodedata
 from collections.abc import Callable, Sequence
 from datetime import UTC, datetime
@@ -547,10 +548,15 @@ def run_extraction_eval(
                 prompt_version=prompt_version,
                 context=context,
             )
-        except Exception:
+        except Exception as exc:
             # Deliberately broad: any failure to produce a valid record is the same
             # fact for the gate, whether it was a provider error or an exhausted retry
             # budget. The count is what the criterion asks for.
+            #
+            # Naming the case is not optional though. "failed: 5" sent M2X-036 to a
+            # throwaway harness to recover which cases died and why, when the loop had
+            # both in hand.
+            print(f"case {case.case_id} failed: {exc}", file=sys.stderr)
             failed += 1
             continue
         resolved_version = outcome.prompt_version
