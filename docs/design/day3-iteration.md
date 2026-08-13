@@ -145,6 +145,44 @@ its citations: **have the model cite an id only, and derive the time range from 
 segment in code.** A timestamp the model cannot type is one it cannot get wrong. That is a
 schema change, so it is M2X-041's to make, not this ticket's.
 
+## Finding 4b — the local Ollama route does not currently run this eval
+
+Attempted after M2X-036's numbers were produced, to remove the hosted rate limits. The
+route is the tracked one — `hf.co/bartowski/Meta-Llama-3.1-8B-Instruct-GGUF` from
+`config/models.toml` — so nothing here required a config change.
+
+**It works, and it is not usable.** The run reached 7 of 15 cases in about fifty minutes
+and then hung: the eval process alive but burning no CPU, Ollama resident and idle, no
+further calls. It was killed rather than left.
+
+What was measured before it stopped:
+
+| | |
+|---|---|
+| warm generation | 12.58 tok/s (a 4.9 GB load makes the *first* call ~80 s) |
+| mean per attempt | 37.9 s over 11 attempts |
+| largest prompt seen | **3,972 tokens against a 4,096 context** |
+
+The context ceiling is the clearest risk: Ollama defaults this model to 4,096 tokens
+where the hosted routes carry far more, and our retries *grow* the prompt because each
+one appends the validation error. `tokens_in` was observed climbing 2,050 → 2,342 →
+2,866 across three attempts on one case. Several dev cases are larger than anything that
+completed here.
+
+**That ceiling is not, however, the demonstrated cause of the hang**, and the difference
+matters. Three cases logged no model call at all, and they are among the *smallest* in
+the set — 1,686, 2,963 and 4,160 characters. A context overflow would have taken the
+largest. The cause is unpinned, and is recorded that way rather than guessed.
+
+Two things follow for anyone picking this up:
+
+1. **Raising `num_ctx` is the first thing to try**, but `ModelAdapter` does not expose
+   Ollama-specific options, so it is an adapter change rather than a flag.
+2. **A local number would not be comparable to the hosted ones anyway.** That route
+   serves a *quantised* GGUF build while groq and nim serve full precision, under one
+   Hugging Face repo id. Results rows now record `provider` for exactly this reason — but
+   a quantised local figure and a hosted figure are two measurements, not one series.
+
 ## Finding 4 — Groq's free tier cannot run this eval
 
 `HTTP 413` on the larger cases and `429` on rate, costing 7 of 15 cases on the first run.
