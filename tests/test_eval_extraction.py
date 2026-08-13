@@ -303,14 +303,55 @@ def test_inventing_items_in_an_empty_case_costs_precision() -> None:
     assert report.micro_f1 == pytest.approx(0.0)
 
 
-def test_failed_cases_lower_schema_validity_without_touching_f1() -> None:
+def test_schema_failures_lower_schema_validity_without_touching_f1() -> None:
     """A case that produced no record is a gate failure, tracked on its own axis."""
     labelled = MeetingRecord(decisions=[Decision(description="ship it", evidence=_ev())])
 
-    report = aggregate("dev", [score_case("c01", labelled, labelled)], failed=1)
+    report = aggregate("dev", [score_case("c01", labelled, labelled)], schema_failed=["c02"])
 
     assert report.schema_validity == pytest.approx(0.5)
     assert report.micro_f1 == pytest.approx(1.0)
+    assert report.schema_failed_case_ids == ["c02"]
+
+
+def test_provider_failures_are_kept_out_of_schema_validity() -> None:
+    """A case the provider never answered is unmeasured, not invalid.
+
+    Counting it as a schema failure blames the model for a network, and it is the reason
+    one commit reported two different micro-F1 figures. It still has to be visible, so
+    the ids are carried and ``cases_failed`` still totals both classes.
+    """
+    labelled = MeetingRecord(decisions=[Decision(description="ship it", evidence=_ev())])
+
+    report = aggregate(
+        "dev",
+        [score_case("c01", labelled, labelled)],
+        provider_failed=["c02"],
+    )
+
+    assert report.schema_validity == pytest.approx(1.0)
+    assert report.cases_provider_failed == 1
+    assert report.cases_schema_failed == 0
+    assert report.cases_failed == 1
+    assert report.scored_case_ids == ["c01"]
+
+
+def test_the_report_prints_the_case_set_it_was_computed_over() -> None:
+    """A micro-F1 whose case set is unknown cannot be compared with another one."""
+    labelled = MeetingRecord(decisions=[Decision(description="ship it", evidence=_ev())])
+
+    report = aggregate(
+        "dev",
+        [score_case("c01", labelled, labelled)],
+        schema_failed=["c02"],
+        provider_failed=["c03"],
+    )
+    printed = format_report(report)
+
+    assert "scored cases (1): c01" in printed
+    assert "schema failures (1): c02" in printed
+    assert "provider failures (1): c03" in printed
+    assert "schema-failed: 1   provider-failed: 1" in printed
 
 
 def test_totals_sum_across_cases() -> None:

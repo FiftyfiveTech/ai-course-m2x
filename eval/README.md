@@ -136,11 +136,49 @@ same weight as a case with twenty, and the set deliberately contains both.
 
 Reported alongside, never folded in:
 
-- **schema-validity** — the fraction of cases that produced a valid `MeetingRecord` at
-  all. The Phase 1B gate wants 100%.
+- **schema-validity** — the fraction of *answered* cases that produced a valid
+  `MeetingRecord`. The Phase 1B gate wants 100%. See below for what "answered" excludes.
 - **deadline abstention rate** — see above.
 - **per-kind P/R/F1** — so iteration knows *where* to work, which is the whole point of
   the table in M2X-036.
+
+## 6. The number names the cases it covers, and the two failure classes are separate
+
+**Added in M2X-040 prep.** Micro-F1 is a sum over whichever cases produced a record, so
+the case set is part of the quantity. Until this change it was not reported, and the
+consequence was measured: the same commit, the same prompt, the same matcher and the same
+threshold gave **0.3645 over 14 cases and 0.4279 over 15**. Neither figure was wrong.
+There was no way to tell them apart.
+
+Two things follow, both now enforced by the harness rather than by care:
+
+**Every run prints and records its scored-case set.** The ids appear under the table and
+on the results row (`scored_case_ids`), alongside the ids of both failure classes. Two
+runs that both score 14 of 15 may be over different fourteen; a comparison that cannot
+be checked is not a comparison.
+
+**A provider failure is not a schema failure.** They are counted apart:
+
+| class | means | counts against |
+|---|---|---|
+| **schema** | the model's output never validated, after every reask the budget allowed | schema-validity — this is the Phase 1B leg |
+| **provider** | HTTP error, exhausted rate-limit budget, timeout, bad route | nothing; the case is **unmeasured** |
+
+`schema_validity` is therefore `scored / (scored + schema_failed)`. Provider failures are
+excluded from the denominator because blaming the model for a network inverts the
+measurement — but they remove a case from micro-F1 all the same, so a run with any of
+them **does not cover the set, whatever schema-validity prints**. The report says so
+explicitly when the count is non-zero. Classification walks the exception chain for an
+`M2XError`: Instructor wraps everything that escapes its retry loop, so the outer type
+cannot be trusted.
+
+**Consequence for the held-out run.** The sealed set certifies exactly one run. A provider
+failure during it leaves the gate uncertifiable on a set that is already burnt, so the
+count has to be read before the F1 — and a gate record must quote the scored-case set
+next to the number, not only the number.
+
+`cases_failed` stays on the results row as the sum of both classes, so rows written before
+this change still line up on one key. It is not the figure to reason with.
 
 ## What this number is not
 

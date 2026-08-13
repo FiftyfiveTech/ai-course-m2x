@@ -17,9 +17,8 @@ import pytest
 from m2x.adapter import ModelAdapter
 from m2x.cli import EXIT_FAILURE, EXIT_OK, EXIT_USAGE, build_parser, main
 from m2x.diarization import DEFAULT_DIARIZATION_DIR
-from m2x.extraction import load_record
+from m2x.extraction import DEFAULT_EXTRACTION_PROMPT_VERSION, load_record
 from m2x.pipeline import load_transcript
-from m2x.prompts import latest_version
 from m2x.run_log import RunLogger
 from m2x.types import Provider, Transcript, TranscriptSegment
 from conftest import (
@@ -401,7 +400,7 @@ def test_extract_agrees_with_the_run_log_on_the_prompt_version(
     """
     transcript_path = _write_transcript(tmp_path / "transcripts" / "mtg-001.json")
     records = tmp_path / "records"
-    shipped = latest_version("extraction", prompts_dir=REPO_ROOT / "prompts")
+    shipped = DEFAULT_EXTRACTION_PROMPT_VERSION
 
     code = main(
         [

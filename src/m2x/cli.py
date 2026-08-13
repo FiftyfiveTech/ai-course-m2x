@@ -43,6 +43,7 @@ from m2x.diarization import DEFAULT_DIARIZATION_DIR
 from m2x.errors import M2XError
 from m2x.extraction import (
     DEFAULT_EXTRACT_MODEL,
+    DEFAULT_EXTRACTION_PROMPT_VERSION,
     DEFAULT_RECORDS_DIR,
     ExtractionOutcome,
     extract_record,
@@ -290,8 +291,9 @@ def build_parser() -> argparse.ArgumentParser:
         "--prompt-version",
         default=None,
         help=(
-            "prompt library version to extract with, e.g. 'v1'; default is the latest "
-            "on disk. Pin it to reproduce a number that was reported with an older one"
+            "prompt library version to extract with, e.g. 'v1'; default is the pinned "
+            f"{DEFAULT_EXTRACTION_PROMPT_VERSION}, not the newest file on disk. Pass it "
+            "to reproduce a number that was reported with another version"
         ),
     )
     extract.add_argument(
@@ -560,7 +562,10 @@ def build_parser() -> argparse.ArgumentParser:
     eval_extraction.add_argument(
         "--prompt-version",
         default=None,
-        help="prompt version to score, e.g. v2; default is the latest on disk",
+        help=(
+            "prompt version to score, e.g. v2; default is the pinned "
+            f"{DEFAULT_EXTRACTION_PROMPT_VERSION}"
+        ),
     )
     eval_extraction.add_argument(
         "--results",
@@ -615,7 +620,10 @@ def build_parser() -> argparse.ArgumentParser:
     eval_injections.add_argument(
         "--prompt-version",
         default=None,
-        help="prompt version to test, e.g. v2; default is the latest on disk",
+        help=(
+            "prompt version to test, e.g. v2; default is the pinned "
+            f"{DEFAULT_EXTRACTION_PROMPT_VERSION}"
+        ),
     )
 
     runs = subcommands.add_parser("runs", help="report on the run log")
