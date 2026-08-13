@@ -1,0 +1,30 @@
+{"question_id": "q01", "kind": "single_meeting", "question": "What is holding up the aquarium according to the legal department?"}
+{"question_id": "q02", "kind": "single_meeting", "question": "What did the marketing department buy to draw shoppers up to the third floor?"}
+{"question_id": "q03", "kind": "single_meeting", "question": "Which role has the mall still not hired for the third floor?"}
+{"question_id": "q04", "kind": "single_meeting", "question": "What did Beth report about the numbers this week?"}
+{"question_id": "q05", "kind": "single_meeting", "question": "When did John say he would come back about the legal problem?"}
+{"question_id": "q06", "kind": "single_meeting", "question": "Which overseas market did Beth want to target, and through what channel?"}
+{"question_id": "q07", "kind": "single_meeting", "question": "Why did Sarah argue against focusing on Japan?"}
+{"question_id": "q08", "kind": "single_meeting", "question": "What did Sarah ask Donald to produce, and by when?"}
+{"question_id": "q09", "kind": "single_meeting", "question": "Which part of the US did Donald name as the best target, and why?"}
+{"question_id": "q10", "kind": "single_meeting", "question": "Which celebrity did Ron suggest as an influencer, and how did Sarah respond?"}
+{"question_id": "q11", "kind": "single_meeting", "question": "Where is the company retreat being held?"}
+{"question_id": "q12", "kind": "single_meeting", "question": "What did Sally ask to add to the retreat programme?"}
+{"question_id": "q13", "kind": "single_meeting", "question": "Can employees bring family to the retreat?"}
+{"question_id": "q14", "kind": "single_meeting", "question": "Where does the trip stop on the way to Mexico, and for how long?"}
+{"question_id": "q15", "kind": "single_meeting", "question": "What did Jenny say when Donald suggested visiting a theme park in Florida?"}
+{"question_id": "q16", "kind": "single_meeting", "question": "Who developed the robotic nurse and how tall is it?"}
+{"question_id": "q17", "kind": "single_meeting", "question": "What does the piece claim about the robotic nurse's availability compared with human nurses?"}
+{"question_id": "q18", "kind": "single_meeting", "question": "How does Nursing Bot Incorporated address the safety and privacy concerns?"}
+{"question_id": "q19", "kind": "single_meeting", "question": "What is the main objection raised in the contrarian Q&A about robots in healthcare?"}
+{"question_id": "q20", "kind": "single_meeting", "question": "What does the contrarian say about the cost savings argument for robots?"}
+{"question_id": "q21", "kind": "cross_meeting", "question": "What does Donald offer or ask for in the marketing meeting and in the retreat meeting?"}
+{"question_id": "q22", "kind": "cross_meeting", "question": "What food plans are discussed in the mall meeting and in the retreat meeting?"}
+{"question_id": "q23", "kind": "cross_meeting", "question": "What does Sarah ask the group to do in each of the two meetings she chairs?"}
+{"question_id": "q24", "kind": "cross_meeting", "question": "Which cost or budget concerns are raised across the mall meeting and the marketing meeting?"}
+{"question_id": "q25", "kind": "cross_meeting", "question": "What physical or outdoor activities come up in the marketing meeting and the retreat meeting?"}
+{"question_id": "q26", "kind": "unanswerable", "question": "How much did the third-floor aquarium project cost in total?"}
+{"question_id": "q27", "kind": "unanswerable", "question": "What is the name of the company whose sports equipment is being marketed?"}
+{"question_id": "q28", "kind": "unanswerable", "question": "What is Nursing Bot Incorporated's annual revenue?"}
+{"question_id": "q29", "kind": "unanswerable", "question": "Which hotel is the Mexico retreat booked with?"}
+{"question_id": "q30", "kind": "unanswerable", "question": "Who won the 2026 cricket world cup?"}
