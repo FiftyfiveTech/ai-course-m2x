@@ -251,6 +251,29 @@ def match_items(
     return sorted(pairs), unmatched_labelled, unmatched_extracted
 
 
+EMBEDDING_MATCH_THRESHOLD = 0.675
+"""Cosine at or above which two descriptions are the same item.
+
+**Calibrated against same/different judgements, never against the resulting F1.** Fifteen
+pairs were written down as SAME or DIFFERENT by reading them — the SAME set being the
+near-miss band found in M2X-036 error analysis, the DIFFERENT set the pathological cases
+that disqualified containment plus genuinely unrelated items and same-topic-different-claim
+pairs. Only then were the cosines computed:
+
+* lowest SAME ``0.6928`` ("Whether this corpus is the right one to attempt this on at all"
+  vs "Is the corpus the right one to try to find a correspondence…")
+* highest DIFFERENT ``0.6586`` ("Children are not coming on the retreat" vs "Horseback
+  riding is included in the retreat programme")
+
+This value is the midpoint of that gap. The one-word fragment ``"adopt"``, which scores
+``1.00`` under containment and is the reason containment was rejected, sits at ``0.5013``.
+
+**The gap is 0.034 wide on fifteen pairs, which is separation rather than comfort.**
+Same-topic-different-claim pairs are the ones that crowd it from below, and a larger
+calibration set would very likely narrow it further. Treat this as a working threshold
+that a future ticket should re-derive on more pairs, not as a settled constant.
+"""
+
 DEFAULT_EMBED_MODEL = "nomic-ai/nomic-embed-text-v1.5"
 """Embedding model backing :class:`EmbeddingSimilarity`.
 
@@ -618,6 +641,8 @@ def run_extraction_eval(
     model_repo_id: str = DEFAULT_EXTRACT_MODEL,
     provider: Provider | None = None,
     prompt_version: str | None = None,
+    similarity: Similarity | None = None,
+    threshold: float | None = None,
 ) -> tuple[EvalReport, str]:
     """Extract every case in a set and score it against the labels.
 
@@ -637,6 +662,8 @@ def run_extraction_eval(
         model_repo_id: Hugging Face repo id of the extraction model.
         provider: Force a backend. ``None`` routes by the registry.
         prompt_version: Pin a prompt version. ``None`` takes the latest on disk.
+        similarity: How descriptions are compared. ``None`` uses the lexical default.
+        threshold: Match threshold. ``None`` uses the one matching the similarity.
 
     Returns:
         ``(report, resolved_prompt_version)``.
@@ -681,7 +708,19 @@ def run_extraction_eval(
             failed += 1
             continue
         resolved_version = outcome.prompt_version
-        scores.append(score_case(case.case_id, case.label, outcome.record))
+        scores.append(
+            score_case(
+                case.case_id,
+                case.label,
+                outcome.record,
+                similarity=similarity or token_set_f1,
+                threshold=(
+                    threshold
+                    if threshold is not None
+                    else DESCRIPTION_MATCH_THRESHOLD
+                ),
+            )
+        )
 
     return aggregate(set_name, scores, failed=failed), resolved_version
 
@@ -693,6 +732,9 @@ def append_result(
     model_repo_id: str,
     path: Path = DEFAULT_RESULTS_PATH,
     git_sha: str | None = None,
+    similarity_kind: str = "token_set_f1",
+    threshold: float = DESCRIPTION_MATCH_THRESHOLD,
+    embed_model_repo_id: str | None = None,
     now: Callable[[], datetime] = lambda: datetime.now(UTC),
 ) -> Path:
     """Append one run's numbers to the results log.
@@ -718,6 +760,12 @@ def append_result(
         "git_sha": git_sha if git_sha is not None else current_git_sha(),
         "prompt_version": prompt_version,
         "model_repo_id": model_repo_id,
+        # How agreement was measured travels with the number. A micro-F1 computed under
+        # a different matcher is a different quantity, and M2X-036 changed the matcher —
+        # so a row without these three fields cannot be compared with one that has them.
+        "similarity": similarity_kind,
+        "match_threshold": threshold,
+        "embed_model_repo_id": embed_model_repo_id,
         "micro_f1": round(report.micro_f1, 4),
         "schema_validity": round(report.schema_validity, 4),
         "deadline_abstention": round(report.deadline_abstention, 4),

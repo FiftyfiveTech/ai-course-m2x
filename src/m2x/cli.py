@@ -58,7 +58,11 @@ from m2x.pipeline import (
     process_meeting,
 )
 from m2x.eval_extraction import (
+    DEFAULT_EMBED_MODEL,
     DEFAULT_RESULTS_PATH,
+    DESCRIPTION_MATCH_THRESHOLD,
+    EMBEDDING_MATCH_THRESHOLD,
+    EmbeddingSimilarity,
     append_result,
     format_report,
     run_extraction_eval,
@@ -71,7 +75,7 @@ from m2x.eval_injections import (
 from m2x.indexing import SourceType
 from m2x.labels import DEFAULT_LABELS_DIR
 from m2x.prompts import DEFAULT_PROMPTS_DIR
-from m2x.run_log import RunLogger
+from m2x.run_log import RunContext, RunLogger
 from m2x.run_summary import DEFAULT_RUN_LOG, format_summary, summarise
 from m2x.settings import Settings
 from m2x.summarisation import (
@@ -563,6 +567,16 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=DEFAULT_RESULTS_PATH,
         help=f"append-only results log (default: {DEFAULT_RESULTS_PATH})",
+    )
+    eval_extraction.add_argument(
+        "--similarity",
+        choices=("embedding", "lexical"),
+        default="embedding",
+        help=(
+            "how descriptions are matched. 'embedding' is the adopted rule (M2X-036); "
+            "'lexical' is the superseded token-set F1, kept so pre-M2X-036 numbers can "
+            "be reproduced (default: embedding)"
+        ),
     )
     eval_extraction.add_argument(
         "--no-record",
@@ -1342,8 +1356,20 @@ def _run_eval(
             file=sys.stderr,
         )
 
+    use_embedding = args.similarity == "embedding"
     try:
         with adapter_factory() as adapter:
+            similarity = (
+                EmbeddingSimilarity(
+                    adapter,
+                    context=RunContext(
+                        phase="phase-1b",
+                        command=f"m2x eval extraction --set {args.set_name}",
+                    ),
+                )
+                if use_embedding
+                else None
+            )
             report, prompt_version = run_extraction_eval(
                 args.set_name,
                 adapter=adapter,
@@ -1351,6 +1377,8 @@ def _run_eval(
                 model_repo_id=args.model,
                 provider=args.provider,
                 prompt_version=args.prompt_version,
+                similarity=similarity,
+                threshold=EMBEDDING_MATCH_THRESHOLD if use_embedding else None,
             )
     except FileNotFoundError as error:
         print(f"error: {error}", file=sys.stderr)
@@ -1359,8 +1387,10 @@ def _run_eval(
         print(f"error: {error}", file=sys.stderr)
         return EXIT_FAILURE
 
+    threshold = EMBEDDING_MATCH_THRESHOLD if use_embedding else DESCRIPTION_MATCH_THRESHOLD
     print(format_report(report))
     print(f"\nprompt: {prompt_version}   model: {args.model}")
+    print(f"matching: {args.similarity} at {threshold}")
 
     if not args.no_record:
         written = append_result(
@@ -1368,6 +1398,9 @@ def _run_eval(
             prompt_version=prompt_version,
             model_repo_id=args.model,
             path=args.results,
+            similarity_kind="embedding_cosine" if use_embedding else "token_set_f1",
+            threshold=threshold,
+            embed_model_repo_id=DEFAULT_EMBED_MODEL if use_embedding else None,
         )
         print(f"recorded -> {written}")
 

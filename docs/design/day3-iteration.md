@@ -3,20 +3,31 @@
 **Status:** time-boxed out below target. Phase 1B is **failing** on both gate legs, and
 this document is the risk note the ticket asks for in that case.
 
-**Best dev result:** micro-F1 **0.0674** (prompt `v2`, `meta-llama/Llama-3.1-8B-Instruct`
+**Best dev result:** micro-F1 **0.3645** (prompt `v3`, `meta-llama/Llama-3.1-8B-Instruct`
 on NIM), 14/15 schema-valid. Injections **1/3**. Target was dev ≥0.90 and injections 3/3.
 
 Every number here is in [`eval/results/extraction.jsonl`](../../eval/results/extraction.jsonl)
-with its prompt version, model and git SHA.
+with its prompt version, model, git SHA, and the matching rule that produced it.
 
 ## The runs
 
-| prompt | dev micro-F1 | schema-valid | injections | what changed |
-|---|---|---|---|---|
-| v1 (groq) | 0.0235 | 8/15 | — | baseline; free tier refused the larger cases |
-| v1 (nim) | 0.0312 | 13/15 | — | baseline, complete |
-| **v2** | **0.0674** | 14/15 | 1/3 | summarise not quote; kind tests; not-an-item list; dedup |
-| v3 | 0.0518 | 14/15 | 1/3 | injection hardening; citation-line rule |
+Each version was scored twice: under the token-set F1 rule frozen in M2X-030, and under
+the embedding rule that replaced it (see Finding 1). **The two are different quantities
+and are never compared across columns as if they were one.**
+
+| prompt | lexical F1 | **embedding F1** | schema-valid | injections | what changed |
+|---|---|---|---|---|---|
+| v1 (groq) | 0.0235 | — | 8/15 | — | baseline; free tier refused the larger cases |
+| v1 (nim) | 0.0312 | 0.2981 | 13/15 | — | baseline, complete |
+| v2 | 0.0674 | 0.3560 | 14/15 | 1/3 | summarise not quote; kind tests; not-an-item list; dedup |
+| **v3** | 0.0518 | **0.3645** | 14/15 | 1/3 | injection hardening; citation-line rule |
+
+**The metric change reversed the version ordering.** Under the lexical rule v2 appeared
+to beat v3 (0.0674 vs 0.0518), which argued for keeping the *less secure* prompt. Under
+the calibrated rule v3 is ahead (0.3645 vs 0.3560) and its owner accuracy is far better
+(0.714 vs 0.471), so v3 is now best on both quality and security and the conflict
+disappears. That the ranking was an artefact of the matcher is the strongest single piece
+of evidence that the old rule was measuring the wrong thing.
 
 ## Finding 1 — most of that number is the metric, not the extractor
 
@@ -70,17 +81,31 @@ marketing" / "Focusing within" pair at 0.13, where two correct descriptions of t
 decision share almost no vocabulary.
 
 **No deterministic lexical metric can close this gap.** The defect is not verbosity or
-morphology; it is paraphrase. The remaining option is embedding similarity, which
-[`eval/README.md`](../../eval/README.md) originally ruled out on determinism grounds —
-**an objection this ticket considers overstated**, since the repo already has a pinned
-`nomic-ai/nomic-embed-text-v1.5` behind `ModelAdapter.embed()` (M2X-043), it is cached,
-and results rows already carry model and SHA so an upgrade would show in the diff.
+morphology; it is paraphrase.
 
-It is **not implemented**, because that model routes only to Ollama in
-`config/models.toml` and Ollama is not installed on the machine that produced these
-numbers. Adopting it means either installing Ollama or adding a hosted embedding route —
-either way a contract change with every prior number re-run, which is more than this
-ticket should decide alone.
+### Resolution: embeddings, calibrated before the scores were seen
+
+Adopted as a documented contract change. `nomic-ai/nomic-embed-text-v1.5` behind
+`ModelAdapter.embed()` (M2X-043), cached, with the model id written onto every results
+row — which answers the original determinism objection, since that only held while the
+model was *unrecorded*.
+
+The threshold was calibrated against fifteen pairs written down as SAME or DIFFERENT **by
+reading them, before any cosine was computed**, never against the resulting F1:
+
+```
+lowest  SAME       0.6928   "Whether this corpus is the right one to attempt this on"
+highest DIFFERENT  0.6586   "Horseback riding is included in the retreat programme"
+threshold          0.6757 → 0.675  (midpoint of the gap)
+fragment "adopt"   0.5013  (scores 1.00 under containment; the reason it was rejected)
+```
+
+**The gap is 0.034 wide on fifteen pairs — separation, not comfort.** Same-topic,
+different-claim pairs crowd it from below and a larger calibration set would likely
+narrow it. A later ticket should re-derive it on more pairs.
+
+Every prior number was re-run under the new rule, and `--similarity lexical` still
+reproduces the old one so the two are never conflated.
 
 ## Finding 2 — the extractor is genuinely steerable
 
@@ -127,14 +152,17 @@ Every number above is from NIM. Same limit M2X-023 hit on single-pass summarisat
 
 ## Risk note for the gate
 
-1. **Phase 1B fails both legs as it stands** — dev F1 far below 0.90 on a metric that
-   does not measure what it claims, and injections 1/3 with two demonstrated compliance
-   failures.
+1. **Phase 1B fails both legs as it stands** — best dev F1 **0.3645** against a target of
+   0.90, and injections 1/3 with two demonstrated compliance failures. The metric is no
+   longer the excuse: under a matcher calibrated to agree with a human reader, the
+   extractor still finds well under half of what the labels contain and invents a great
+   deal besides (precision 0.17–0.41 per kind).
 2. **The held-out gate should not be opened.** It certifies one run and is then burnt.
    Opening it now spends the set on a configuration already known to fail, and leaves
    nothing to certify a fix. M2X-041 exists for exactly this.
-3. **The metric must be replaced before any number is quoted as extraction quality.**
-   Until then 0.0674 is a lower bound of unknown tightness, not a measurement.
+3. **The metric has been replaced, and the number is now interpretable** — but it is
+   quoted only alongside the matching rule that produced it. A micro-F1 under the lexical
+   rule and one under the embedding rule are different quantities.
 4. **The labels are not independent** — same author as the prompt and schema — so even a
    corrected number is an upper bound. Both caveats apply at once, in opposite
    directions, which is its own reason not to quote a single figure.
