@@ -311,6 +311,19 @@ class AskOutcome(BaseModel):
     retrieved: int = Field(default=0, ge=0)
     """Passages retrieved for this question."""
 
+    hits: list[Hit] = Field(default_factory=list)
+    """The retrieved passages themselves, in rank order.
+
+    Added by M2X-046. ``retrieved`` is a count and :class:`ResolvedCitation` carries a
+    ``chunk_id``, so before this the only way to learn *which turns* a citation pointed at
+    was to query the index again by id — a second lookup that could disagree with the
+    first and would silently move citation accuracy if it ever did.
+
+    Retrieval is half of what produced the answer, so the passages travel with the outcome
+    rather than being recoverable from it. RAGAS also needs the passage *text* for context
+    precision and faithfulness, which no id can supply.
+    """
+
     nearest_distance: float | None = None
     """Distance of the nearest passage. ``None`` when nothing was retrieved."""
 
@@ -514,6 +527,7 @@ def ask(
             abstained=True,
             abstention_reason=reason,
             retrieved=len(hits),
+            hits=list(hits),
             nearest_distance=hits[0].distance if hits else None,
             max_distance=max_distance,
             prompt_name=prompt.name,
@@ -611,6 +625,7 @@ def ask(
             for citation in draft.citations
         ],
         retrieved=len(hits),
+        hits=list(hits),
         nearest_distance=hits[0].distance,
         max_distance=max_distance,
         prompt_name=prompt.name,

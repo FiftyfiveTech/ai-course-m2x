@@ -25,6 +25,7 @@ pure, and worth testing without a database. Storage lives in :mod:`m2x.vector_st
 from __future__ import annotations
 
 import re
+from collections.abc import Sequence
 from enum import StrEnum
 from hashlib import sha256
 from pathlib import Path
@@ -190,10 +191,6 @@ def chunk_transcript(
 ) -> list[Chunk]:
     """Pack a transcript's segments into overlapping chunks.
 
-    Segments are never split. A segment longer than the budget becomes an oversized
-    chunk of its own, which is the right trade: an approximate timestamp is worse than
-    a large chunk, because only one of the two is visibly wrong.
-
     Args:
         transcript: Transcript to chunk. Segments are taken in order.
         meeting_id: Stable id for the meeting; namespaces the chunk ids.
@@ -206,12 +203,51 @@ def chunk_transcript(
     Raises:
         ValueError: ``char_budget`` is not positive, or ``overlap_segments`` is negative.
     """
+    return chunk_segments(
+        transcript.segments,
+        meeting_id,
+        char_budget=char_budget,
+        overlap_segments=overlap_segments,
+    )
+
+
+def chunk_segments(
+    segments: Sequence[TranscriptSegment],
+    meeting_id: str,
+    *,
+    char_budget: int = CHUNK_CHAR_BUDGET,
+    overlap_segments: int = CHUNK_OVERLAP_SEGMENTS,
+) -> list[Chunk]:
+    """Pack bare segments into overlapping chunks.
+
+    Segments are never split. A segment longer than the budget becomes an oversized
+    chunk of its own, which is the right trade: an approximate timestamp is worse than
+    a large chunk, because only one of the two is visibly wrong.
+
+    Split out of :func:`chunk_transcript` for M2X-046. A :class:`~m2x.types.Transcript` is
+    an ``AdapterResult`` and carries a provider, a latency and a cost — facts about a call
+    that produced it. The tiron reference transcripts were written by human annotators, so
+    there is no such call, and :mod:`m2x.reference_transcript` deliberately refuses to
+    invent one. Chunking only ever needed the segments, so the RAG eval indexes them
+    directly rather than fabricating provenance to satisfy a type.
+
+    Args:
+        segments: Segments in transcript order.
+        meeting_id: Stable id for the meeting; namespaces the chunk ids.
+        char_budget: Target chunk size in characters.
+        overlap_segments: Segments repeated between neighbours. ``0`` disables overlap.
+
+    Returns:
+        Chunks in transcript order. Empty when there are no segments.
+
+    Raises:
+        ValueError: ``char_budget`` is not positive, or ``overlap_segments`` is negative.
+    """
     if char_budget <= 0:
         raise ValueError(f"char_budget must be positive, got {char_budget}")
     if overlap_segments < 0:
         raise ValueError(f"overlap_segments must be >= 0, got {overlap_segments}")
 
-    segments = transcript.segments
     chunks: list[Chunk] = []
     start = 0
 
