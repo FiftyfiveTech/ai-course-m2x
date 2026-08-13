@@ -1398,6 +1398,7 @@ def _run_eval(
             prompt_version=prompt_version,
             model_repo_id=args.model,
             path=args.results,
+            provider=args.provider,
             similarity_kind="embedding_cosine" if use_embedding else "token_set_f1",
             threshold=threshold,
             embed_model_repo_id=DEFAULT_EMBED_MODEL if use_embedding else None,

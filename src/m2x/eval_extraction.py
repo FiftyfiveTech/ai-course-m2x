@@ -732,6 +732,7 @@ def append_result(
     model_repo_id: str,
     path: Path = DEFAULT_RESULTS_PATH,
     git_sha: str | None = None,
+    provider: Provider | None = None,
     similarity_kind: str = "token_set_f1",
     threshold: float = DESCRIPTION_MATCH_THRESHOLD,
     embed_model_repo_id: str | None = None,
@@ -760,6 +761,11 @@ def append_result(
         "git_sha": git_sha if git_sha is not None else current_git_sha(),
         "prompt_version": prompt_version,
         "model_repo_id": model_repo_id,
+        # Which backend served it, because the same repo id is not the same weights
+        # everywhere: the ollama route for this model is a quantised GGUF build while
+        # groq and nim serve full precision. Two rows naming one repo id can therefore
+        # be two different models, and without this field nothing in the record says so.
+        "provider": provider.value if provider is not None else None,
         # How agreement was measured travels with the number. A micro-F1 computed under
         # a different matcher is a different quantity, and M2X-036 changed the matcher —
         # so a row without these three fields cannot be compared with one that has them.
