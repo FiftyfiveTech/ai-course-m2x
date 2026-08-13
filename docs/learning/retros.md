@@ -3,6 +3,76 @@
 Newest first. One entry per ticket (or paired tickets), appended at close — same
 content as the Odoo completion comment, kept in-repo so it survives the course.
 
+## M2X-036 — first dev F1 and prompt iteration (2026-08-13)
+
+**Executed**
+
+- First real extraction number on the dev set. Iterated v1 → v2 → v3, one lever per
+  version, every number tied to a prompt version in `prompts/CHANGELOG.md`:
+
+  | prompt | scored | micro-F1 | schema-valid | TP | FP |
+  |---|---|---|---|---|---|
+  | v1 | 10/15 | 0.0364 | 0.6667 | 1 | 73 |
+  | v1 (post transport fix) | 14/15 | 0.0104 | 0.9333 | 1 | 114 |
+  | v2 | 13/15 | **0.0972** | 0.8667 | 7 | 65 |
+  | v3 | 15/15 | 0.0769 | **1.0000** | 5 | 62 |
+
+- Injection suite **3/3 PASS** on v3 — hardening did not weaken the boundary.
+- Fixed the transport failures that cost 5 of 15 cases: output cap
+  (`MAX_OUTPUT_TOKENS = 2048`) on the one call site in `src/m2x/` that had none, plus two
+  observability fixes. 10/15 → 15/15 cases complete.
+- Full analysis in `docs/design/day3-extraction-iteration.md`. 519 tests green.
+
+**Target not met, and the reason is structural — dev 0.0972 against a 0.90 target**
+
+Not the model: v1 on Llama-3.3-70B scores 0.0546 with schema-validity 1.0000, 5× the 8B
+and still two orders of magnitude short. Not the threshold either: swept offline, the 70B
+reaches only 0.5534 even at 0.10, because the residual is then precision.
+
+It is two individually-sound rules interacting. Labelling rule 8 cites the turn where a
+commitment was *accepted*, while the description states the resolved fact completed from
+surrounding context — and item identity is *symmetric* token-set F1 against that
+description. So **0 of 84 labelled descriptions reach 0.60 overlap with the turn they
+themselves cite** (median ≈0.30, 15 below 0.15). One labelled action reads "Give the others
+a tutorial on accessing the corpus and walk them through the existing code and set-up";
+its cited segment says, in full, "Yeah. Yeah, I can do that." The harness is measuring
+phrasing agreement with one human, and only incidentally extraction quality.
+
+Escalated as a contract decision rather than fixed quietly: replace symmetric token-set F1
+for `description` with a length-tolerant measure (containment, or token-set recall of the
+label), or re-derive the gate threshold from what the corpus permits. Both are
+`eval/README.md` §4 changes needing sign-off and a re-run of every prior number.
+
+**Deviations**
+
+1. **Ran on `--provider nim`, not the `config/models.toml` default.** Groq's `HTTP 413` on
+   the five large cases is a TPM cap in disguise — `Limit 6000, Requested 10710`,
+   `x-ratelimit-remaining-tokens: 6000` on a live failure, so the bucket is full and the
+   request is still refused. Permanent, not transient. `default_provider` deliberately left
+   on groq so the Phase 0 numbers measured there are not silently re-routed.
+2. **v2 changed `schema.py` as well as the prompt.** The schema is prompt text; the field
+   conventions were invisible to the model. Same class of fix as rag v2.
+3. **v2 → v3 micro-F1 is reported as not-comparable rather than as a regression.** v2 scored
+   13 cases and v3 scores 15, the two added being the hardest. FP/case fell 5.0 → 4.1 and
+   schema-validity reached the gate's required 100%.
+
+**Lessons**
+
+- A near-zero F1 is a wiring or definitions bug until proven otherwise. Two agents spent
+  their first pass ruling out the plumbing — bounds, slices, citation resolution, truncation
+  all verified identical — which is what made "the labels and the prompt disagree about what
+  a description *is*" findable at all.
+- A convention that lives in an attribute docstring is a convention the model never sees.
+  Pydantic drops it from the JSON schema without `use_attribute_docstrings`; class
+  docstrings do get through, which makes the omission look like it works.
+- Never compare two micro-F1s over different denominators. It reads as a regression and it
+  is arithmetic.
+- `failed: 5` with the exception swallowed cost an entire investigation to recover what the
+  loop had in hand. A measurement harness that hides why a case failed is not finished.
+- The eval can be wrong without anyone having made a mistake. Two correct rules composed
+  into a metric that cannot be earned — and the honest move is to escalate the contract, not
+  to tune against it or quietly loosen it.
+
 ## M2X-037 — `m2x extract` fenced-JSON parse failure (2026-08-12)
 
 **Executed**
