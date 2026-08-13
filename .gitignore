@@ -17,6 +17,10 @@ eval/labels/heldout/*
 !eval/labels/heldout/*.gpg
 !eval/labels/heldout/.gitkeep
 !eval/labels/heldout/README.md
+# the integrity half of the seal (M2X-041). Ciphertext proves the set is recoverable;
+# only this manifest proves it is unedited, because gpg salts every run and a *.gpg diff
+# therefore cannot tell a re-seal from a content change. Digests leak nothing.
+!eval/labels/heldout/seal-manifest.json
 # the pre-M2X-030 path, kept ignored so an older checkout cannot leak a case through it
 eval/heldout/
 # labels in progress, before the dev/held-out split has been drawn. Every case is
