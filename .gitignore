@@ -23,6 +23,15 @@ eval/labels/heldout/*
 !eval/labels/heldout/seal-manifest.json
 # the pre-M2X-030 path, kept ignored so an older checkout cannot leak a case through it
 eval/heldout/
+# the Phase 2 gate's answer key (M2X-045), sealed on the same terms as the held-out
+# labels. Questions are public -- the system has to be asked them -- but a builder who can
+# read the expected segments can tune retrieval until they come back, and a retrieval
+# metric tuned against its own answer key measures nothing.
+eval/rag/expected/*
+!eval/rag/expected/*.gpg
+!eval/rag/expected/seal-manifest.json
+!eval/rag/expected/.gitkeep
+!eval/rag/expected/README.md
 # labels in progress, before the dev/held-out split has been drawn. Every case is
 # plaintext here and ten of them are about to become the sealed set -- committing this
 # directory would put the held-out cases in git history, and no later encryption can

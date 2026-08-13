@@ -1,0 +1,158 @@
+{
+  "schema": 1,
+  "sealed_at": "2026-08-13",
+  "cipher": "AES256",
+  "case_count": 30,
+  "cases": [
+    {
+      "case_id": "q01",
+      "file": "q01.json",
+      "sha256": "003b54d21c4b0b6bbf530395d13e39555d0c4fc69270689945494610226e02a8"
+    },
+    {
+      "case_id": "q02",
+      "file": "q02.json",
+      "sha256": "ca5791a898534fd921a13d48ed6f7507a78e36ba62574446231e5d29c07924dc"
+    },
+    {
+      "case_id": "q03",
+      "file": "q03.json",
+      "sha256": "2924e9c8530759855128b6437ee1bcb35c40a8a5ea2ea4150dad6c3251d1ddca"
+    },
+    {
+      "case_id": "q04",
+      "file": "q04.json",
+      "sha256": "ae969b53081cede6e389256f3373e703545cab4980fb3062f4c57f38a1398c16"
+    },
+    {
+      "case_id": "q05",
+      "file": "q05.json",
+      "sha256": "4c4548a9fd2a3566f97be828ffeff90ab9120feddcc9eba800e7c9ca192bdfde"
+    },
+    {
+      "case_id": "q06",
+      "file": "q06.json",
+      "sha256": "30d3bce2c4334c2a569e05b7d369a6cad23738e8f29aef6c439599139b992e32"
+    },
+    {
+      "case_id": "q07",
+      "file": "q07.json",
+      "sha256": "269b445389eee860d4502e2e72a5c6613c1e85ea2e1500cf8799f4b908320521"
+    },
+    {
+      "case_id": "q08",
+      "file": "q08.json",
+      "sha256": "2f5910533e00dddc13e7d34c98bfab62406f6c2f2a7c2cf4247cc462c38311b0"
+    },
+    {
+      "case_id": "q09",
+      "file": "q09.json",
+      "sha256": "d09de7791c37dca654f8059abdb68f9494fea86eee78625bdaaafeb9a535e11b"
+    },
+    {
+      "case_id": "q10",
+      "file": "q10.json",
+      "sha256": "b0a88ee664f3d5f7a77f5598c0681f384a7add914bfec91ef5131d2fdfd00f9f"
+    },
+    {
+      "case_id": "q11",
+      "file": "q11.json",
+      "sha256": "95ddfccc1981419a9953bc4484adde81f5320f947b0ad9eda014afef15322ce3"
+    },
+    {
+      "case_id": "q12",
+      "file": "q12.json",
+      "sha256": "29773d15c0f6ca5a5c02ac43830547b20927f0bfe689163e5a4b2077f57bd8ed"
+    },
+    {
+      "case_id": "q13",
+      "file": "q13.json",
+      "sha256": "7e897183a0dcdba2b999b95eadf6e012cf594782c2339419e0122982ebabd3b5"
+    },
+    {
+      "case_id": "q14",
+      "file": "q14.json",
+      "sha256": "e359bb77c72e59c9430bcc066804c6acbf2464ee5645ebd9267763f8819c7336"
+    },
+    {
+      "case_id": "q15",
+      "file": "q15.json",
+      "sha256": "3ca1fb198e33c7ad109e9c03fd9d91eb078ffd788eed8eec1ccb5a878a9fc6db"
+    },
+    {
+      "case_id": "q16",
+      "file": "q16.json",
+      "sha256": "e8e682b5403373b8eb771f0b8bb3880fd35054df6f5014339d30cfebb0fe2641"
+    },
+    {
+      "case_id": "q17",
+      "file": "q17.json",
+      "sha256": "1d0e08e8659c2e4f8f95f128e27314a2f7be85b57fc847ef0f57fa1fedfd2c7c"
+    },
+    {
+      "case_id": "q18",
+      "file": "q18.json",
+      "sha256": "74a1c9c330854d1281bf7381262c6c9f5505469df86de342a687d4856e5f7e86"
+    },
+    {
+      "case_id": "q19",
+      "file": "q19.json",
+      "sha256": "713f521a15abf8dc89bc0fc1e296c8d95919508b13abf66166f28238556d49dc"
+    },
+    {
+      "case_id": "q20",
+      "file": "q20.json",
+      "sha256": "a29f59c2509a26ec503fe32901fb62e62529663de04b26a7773fc12d7aca85f1"
+    },
+    {
+      "case_id": "q21",
+      "file": "q21.json",
+      "sha256": "00dcacb09a03241e857dbe6f554c3ae6a94aff8e112c63b8f8d2cc85ac90da45"
+    },
+    {
+      "case_id": "q22",
+      "file": "q22.json",
+      "sha256": "00146cd6d216d1732ef4b6ec6e23b8fd09f755ae17300bc45ce14e82266c03f4"
+    },
+    {
+      "case_id": "q23",
+      "file": "q23.json",
+      "sha256": "0351f9425bfbe8e6e4fa20b8796788cfe8dbb34bfe486391cddcc358faf39828"
+    },
+    {
+      "case_id": "q24",
+      "file": "q24.json",
+      "sha256": "b4ecea86c4eebeb4f06b84c5db9605bdce21f19fb22eb76b4da0f1fda70907bb"
+    },
+    {
+      "case_id": "q25",
+      "file": "q25.json",
+      "sha256": "e9adc19ba1b4b5b58ed5791c9153bd799a202c178974d164dbb22fb53e759449"
+    },
+    {
+      "case_id": "q26",
+      "file": "q26.json",
+      "sha256": "a0610d73c5b9f610c111c4a7e77baf6c2f4a87901c859c754193f6cdb6b36950"
+    },
+    {
+      "case_id": "q27",
+      "file": "q27.json",
+      "sha256": "226d9de8209d77c6e6140e34b326c5cf450ecf8b28c9cf12df829765ac9fd186"
+    },
+    {
+      "case_id": "q28",
+      "file": "q28.json",
+      "sha256": "93d9f6ca1728f6952d45e74e9d3063c1490a5a7cfd3588e5c11907a5d79da100"
+    },
+    {
+      "case_id": "q29",
+      "file": "q29.json",
+      "sha256": "50f398b8819e440b237e2a78766165a6d43044eb439d94fe6c1173d5c0303713"
+    },
+    {
+      "case_id": "q30",
+      "file": "q30.json",
+      "sha256": "d1aa4ba18a17676ee872c2f2f1b773adfd33dd6936ebed99795186022cc1ee91"
+    }
+  ]
+}
