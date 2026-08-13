@@ -22,6 +22,22 @@ frozen in `eval/README.md`. Nothing under `eval/labels/` was touched;
 Injection suite on v3: **3/3 PASS** (`m2x eval injections`), so the hardening in v2/v3 did
 not weaken the data/instruction boundary.
 
+**A v3 × 70B run was attempted and is not obtainable today.** Every case failed with
+`nim: transport failure: The read operation timed out`. Not a code fault — NIM's 70B
+endpoint is queueing hard on the free tier. Measured directly, one call each, 8-token reply:
+
+| model | provider | latency |
+|---|---|---|
+| `meta-llama/Llama-3.1-8B-Instruct` | nim | **0.4s** |
+| `meta-llama/Llama-3.3-70B-Instruct` | nim | **159.0s** |
+
+At 159s for eight output tokens, `M2X_REQUEST_TIMEOUT_S=120` guarantees a timeout on every
+70B call, and raising it would put a 15-case run into the hours with three retries per case.
+Groq is not the escape either: its `llama-3.3-70b-versatile` sits behind the same 6,000 TPM
+ceiling that 413s the five large cases. So the "not the model" conclusion below rests on the
+**v1 × 70B** run, which did complete at 15/15 — that measurement stands and is sufficient for
+the claim. A v3 × 70B figure would refine it, not change its direction.
+
 **Read the v2 → v3 row carefully: those two numbers are not comparable.** v2 scored 13
 cases, v3 scored 15, and the two cases v3 added are the two hardest in the set. Per-case
 false positives fell 5.0 → 4.1 and schema-validity reached the 100% the Phase 1B gate
