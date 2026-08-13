@@ -7,6 +7,7 @@ listed number. Claimed ≠ verified.
 |------|-------|---------|---------|--------|-----------|
 | 2026-08-04 | Phase 0 | `make run` then `make run-local` | `85f80d4` | hosted 395 ms vs local 141,339 ms — **358×** | **PASS** |
 | 2026-08-12 | Phase 1 | `uv run python eval/validate_transcripts.py` | `e392922` | **3/3** speaker-attributed and schema-valid | **PASS** |
+| 2026-08-13 | Phase 1B | *not run — set not unsealed* | `066253b` | dev 0.3882 against a 0.85 bar; two preconditions were structurally unmet | **NOT RUN** |
 
 ## Phase 1 — 2026-08-12, SHA `e392922`
 
@@ -103,3 +104,90 @@ Copying the clip in is a real step and is recorded above rather than glossed. Th
 property of the data boundary, not a packaging defect: the alternative is committing
 meeting audio, which the PRD forbids. `data/corpus.json` (M2X-015) makes the expectation
 machine-readable so a clone can at least name what it is missing.
+
+## Phase 1B — 2026-08-13 — **NOT RUN**
+
+**Criterion (PRD 1B):** schema-valid 100%; ≥0.85 field-level F1 on the sealed held-out
+cases; adversarial transcripts treated as data. The held-out set certifies exactly one run
+and is burnt afterwards.
+
+**The set was not unsealed.** This is a gate record for a gate that was deliberately not
+run, which is the honest form of it — M2X-040's acceptance criteria say "gate record
+committed regardless of outcome", and "we chose not to spend the seal, here is why" is an
+outcome.
+
+### Why
+
+| precondition | required | state on 2026-08-13 |
+|---|---|---|
+| dev micro-F1 | ≥0.85 on held-out | **0.3882** on dev |
+| schema-valid | 10/10 | 14/15 on dev |
+| injections | 3/3 | **3/3** ✅ |
+| number reproduces on a fresh clone (`docs/gates.md`) | required | **was: no** → now yes |
+| held-out set exists in git (`CLAUDE.md`) | required | **was: no** → now yes |
+
+Only the injection leg passed. Unsealing would have spent the single available
+certification on a configuration already known to fail the other two, and M2X-041's own
+rule is that a burnt set never re-certifies — so the fix would have had nothing left to be
+certified against.
+
+The two structural rows were the more serious finding, because they mean the gate could not
+have *meant* anything regardless of the number it printed:
+
+1. **The number was not reproducible by anyone.** v3 scored 0.4279 on one checkout and
+   0.3086 on another — same prompt, matcher, threshold and 15/15 case set, differing only
+   in which sampled outputs each git-ignored `data/cache/` held.
+2. **The seal did not exist.** `git ls-files eval/labels/heldout/` returned `.gitkeep` and
+   nothing else, so a fresh clone had no set to run and nothing showed the ten cases were
+   unedited between the freeze and the gate.
+
+Both are closed by M2X-041 (`docs/design/day4-gate-recovery.md`): `--fixtures replay` makes
+the number a function of tracked files, and the set is now committed as ciphertext plus a
+digest manifest.
+
+### Decision
+
+**Fix first, gate later** — the supervisor's call on 2026-08-13. This deviates from
+M2X-041's literal trigger ("ONLY if M2X-040 fails"), which as written requires burning the
+set to unlock the ticket that repairs it. Recorded here, in the design record, on the Odoo
+tickets and in the retro rather than left implicit.
+
+The held-out set remains **sealed and unburnt**. It is still available to certify Phase 1B
+once dev F1 is credible.
+
+### What is reproducible today
+
+```
+uv run m2x eval extraction --set dev --prompt-version v3 --fixtures replay
+
+MICRO-F1             0.3882
+schema-valid:        0.9333 (14/15 answered)
+scored cases (14): tiron-Bmr013-c01, … (full list in the results row)
+schema failures (1): tiron-Bmr018-c01
+```
+
+No provider is contacted, so this reproduces on a fresh clone — with one caveat stated
+plainly: the *matcher* still embeds, so the clone needs `nomic-embed-text` served. An
+embedding is a single forward pass with no sampling and reproduces given the same model;
+generation samples, which is why only the generation half is frozen.
+
+```
+uv run m2x eval injections --provider nim   →   3/3 PASS
+```
+
+The seal was exercised as a real round trip rather than only against the stubbed gpg the
+unit tests use — seal, delete the plaintext, unseal, verify:
+
+```
+uv run python scripts/seal_heldout.py seal   --dir <scratch>   → 2 cases encrypted with AES256
+(plaintext deleted)
+uv run python scripts/seal_heldout.py unseal --dir <scratch>   → OK, every sealed case
+                                                                 present and unedited
+```
+
+Decrypted content was byte-identical to what went in.
+
+**Every Phase 1B number remains an upper bound.** The labels share an author with the
+prompt and the schema (`eval/labels/README.md` §"these labels are not independent"). A
+perfect seal on a non-independent set is still a perfect seal on a non-independent set, and
+0.3882 against a 0.85 bar is not a tuning gap.
