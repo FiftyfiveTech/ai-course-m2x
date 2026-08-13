@@ -18,6 +18,7 @@ from instructor.core import InstructorRetryException
 
 from m2x.errors import ConfigError
 from m2x.extraction import (
+    DEFAULT_EXTRACTION_PROMPT_VERSION,
     EXTRACTION_PROMPT_NAME,
     MAX_ATTEMPTS,
     MAX_OUTPUT_TOKENS,
@@ -29,7 +30,7 @@ from m2x.extraction import (
     segment_ids,
     write_record,
 )
-from m2x.prompts import Prompt, load_prompt
+from m2x.prompts import Prompt, available_versions, load_prompt
 from m2x.run_log import RunLogger
 from m2x.types import Provider, Transcript, TranscriptSegment
 
@@ -38,8 +39,12 @@ TRACKED_PROMPTS = Path(__file__).resolve().parents[1] / "prompts"
 
 
 def tracked_prompt(version: str | None = None) -> Prompt:
-    """Load a version of the shipped extraction prompt."""
-    return load_prompt(EXTRACTION_PROMPT_NAME, version, prompts_dir=TRACKED_PROMPTS)
+    """Load a version of the shipped extraction prompt; ``None`` is the pinned default."""
+    return load_prompt(
+        EXTRACTION_PROMPT_NAME,
+        version or DEFAULT_EXTRACTION_PROMPT_VERSION,
+        prompts_dir=TRACKED_PROMPTS,
+    )
 
 
 def two_version_library(root: Path) -> Path:
@@ -315,6 +320,7 @@ def test_the_record_and_every_log_line_name_the_same_prompt_version(
             transcript(),
             adapter=adapter,
             meeting_id="mtg-001",
+            prompt_version="v2",
             prompts_dir=two_version_library(tmp_path / "prompts"),
         )
 
@@ -325,21 +331,45 @@ def test_the_record_and_every_log_line_name_the_same_prompt_version(
     assert {record.meeting_id for record in records} == {"mtg-001"}
 
 
-def test_an_unpinned_extraction_takes_the_latest_version(make_adapter, scripted, tmp_path) -> None:
-    """Shipping v2.md is the switch — no argument, no code change."""
+def test_an_unpinned_extraction_takes_the_pinned_version_not_the_newest_file(
+    make_adapter, scripted, tmp_path
+) -> None:
+    """The M2X-040 regression: a new file on disk must not move the default.
+
+    Merging the M2X-036 lineage added higher-numbered version files and the extractor
+    followed them, off ``v3`` and onto text that scores worse on both Phase 1B gate legs.
+    Nothing in that diff said so, because the default was directory listing order. Here a
+    strictly higher version exists and the pinned one still wins.
+    """
     replies, sent = scripted
     replies.append(record_json())
+    library = tmp_path / "prompts" / EXTRACTION_PROMPT_NAME
+    library.mkdir(parents=True)
+    pinned = DEFAULT_EXTRACTION_PROMPT_VERSION
+    newer = f"v{int(pinned.removeprefix('v')) + 1}"
+    for version, system in ((pinned, "pinned wording"), (newer, "newer wording")):
+        (library / f"{version}.md").write_text(
+            f"## system\n\n{system}\n\n## user\n\n<transcript>\n{{{{transcript}}}}\n</transcript>\n",
+            encoding="utf-8",
+        )
 
     with make_adapter(handler_for(replies, sent)) as adapter:
         outcome = extract_record(
             transcript(),
             adapter=adapter,
             meeting_id="mtg-001",
-            prompts_dir=two_version_library(tmp_path / "prompts"),
+            prompts_dir=tmp_path / "prompts",
         )
 
-    assert outcome.prompt_version == "v2"
-    assert sent[0]["messages"][0]["content"].startswith("newer wording")
+    assert outcome.prompt_version == pinned
+    assert sent[0]["messages"][0]["content"].startswith("pinned wording")
+
+
+def test_the_pinned_default_names_a_version_the_repo_ships() -> None:
+    """A pin at a missing file fails every extraction, so it is checked here, not there."""
+    shipped = available_versions(EXTRACTION_PROMPT_NAME, prompts_dir=TRACKED_PROMPTS)
+
+    assert DEFAULT_EXTRACTION_PROMPT_VERSION in shipped
 
 
 def test_a_pinned_version_is_the_one_sent_and_stamped(make_adapter, scripted, tmp_path) -> None:

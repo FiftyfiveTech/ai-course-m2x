@@ -171,10 +171,17 @@ def available_versions(name: str, *, prompts_dir: Path = DEFAULT_PROMPTS_DIR) ->
 def latest_version(name: str, *, prompts_dir: Path = DEFAULT_PROMPTS_DIR) -> str:
     """Return the highest version present.
 
-    This is what makes a new version a zero-code-change switch: shipping ``v2.md`` moves
-    every unpinned caller onto it. It stays reproducible because prompts are tracked —
-    a fresh clone at a given commit sees exactly one highest version. It is the commit
-    that pins a run, never the word "latest".
+    This makes a new version a zero-code-change switch: shipping ``v2.md`` moves every
+    caller that resolves through here onto it. It stays reproducible because prompts are
+    tracked — a fresh clone at a given commit sees exactly one highest version. It is the
+    commit that pins a run, never the word "latest".
+
+    **That is also the hazard, and why extraction no longer resolves through here.** A
+    default nobody wrote moves when someone adds a file: merging the M2X-036 lineage
+    renumbered its versions onto ``v4``/``v5``, and the extraction default followed the
+    directory rather than the measurements, onto the weaker text on both Phase 1B gate
+    legs. Anything whose choice of version is a claim about quality should pin it as a
+    constant instead — see :data:`~m2x.extraction.DEFAULT_EXTRACTION_PROMPT_VERSION`.
 
     Args:
         name: Prompt library name.

@@ -24,7 +24,8 @@ Two consequences of that wiring, both deliberate:
 The prompt itself is not in this module. It is read from the versioned library
 (:mod:`m2x.prompts`), and the version it resolved to is stamped onto the outcome *and*
 onto every run-log line the extraction produced, so a reported F1 can name the exact
-text that earned it.
+text that earned it. Which version an unpinned call resolves to is
+:data:`DEFAULT_EXTRACTION_PROMPT_VERSION` — a constant, for the reason given there.
 """
 
 from __future__ import annotations
@@ -95,9 +96,25 @@ SEGMENT_ID_TEMPLATE = "seg-{index:04d}"
 EXTRACTION_PROMPT_NAME = "extraction"
 """Prompt library entry this module extracts with: ``prompts/extraction/v<N>.md``.
 
-The name is code, the text and the version are data. Which version runs is decided at
-the call site or, by default, by which files exist — shipping ``v2.md`` switches the
-extractor onto it without touching this module.
+The name is code, the text is data, and the version is
+:data:`DEFAULT_EXTRACTION_PROMPT_VERSION` unless a caller pins one.
+"""
+
+DEFAULT_EXTRACTION_PROMPT_VERSION = "v3"
+"""Version an unpinned extraction uses. **Pinned here, not resolved from the directory.**
+
+Every default used to be :func:`~m2x.prompts.latest_version` — the highest version file on
+disk. That made shipping a new file a zero-code-change switch, and it is what broke: two
+branches iterated prompts in parallel, the M2X-036 lineage was renumbered onto ``v4``/``v5``
+on merge, and the repo's default silently moved from ``v3`` to ``v5`` — the weaker text on
+*both* Phase 1B gate legs (``v5``: embedded dev micro-F1 0.3645, injections 1/3; ``v3``:
+0.4279, injections 3/3). Nothing in the merge diff said so, because the default was a
+property of directory listing order rather than a line anyone wrote.
+
+So the version is a constant. Moving it is one reviewable line in a diff, and adding
+``v7.md`` changes nothing until someone decides it should. The measurement that chose this
+value is in ``prompts/CHANGELOG.md``; ``tests/test_prompts.py`` fails if it names a version
+the tracked library does not ship.
 """
 
 TRANSCRIPT_PLACEHOLDER = "transcript"
@@ -274,8 +291,9 @@ def extract_record(
         provider: Force a backend. ``None`` uses the model's default route.
         max_attempts: Total model calls allowed, including retries.
         char_limit: Transcript rendering budget.
-        prompt_version: Prompt version to extract with. ``None`` takes the latest on
-            disk, which is what makes shipping ``v2.md`` a zero-code-change switch.
+        prompt_version: Prompt version to extract with. ``None`` takes
+            :data:`DEFAULT_EXTRACTION_PROMPT_VERSION` — deliberately not the latest on
+            disk, see that constant.
         prompts_dir: Root of the prompt library.
         context: Provenance for the run log. The resolved prompt version is written
             onto it here rather than left to callers — the record and the log lines
@@ -292,7 +310,11 @@ def extract_record(
             meeting with no valid record is a gate failure to be looked at, not an
             empty record to be scored.
     """
-    prompt = load_prompt(EXTRACTION_PROMPT_NAME, prompt_version, prompts_dir=prompts_dir)
+    prompt = load_prompt(
+        EXTRACTION_PROMPT_NAME,
+        prompt_version or DEFAULT_EXTRACTION_PROMPT_VERSION,
+        prompts_dir=prompts_dir,
+    )
     messages, truncated = build_messages(transcript, prompt, char_limit=char_limit)
     context = (context or RunContext(phase=PHASE, command="m2x extract", meeting_id=meeting_id)).model_copy(
         update={"prompt_version": prompt.version}
