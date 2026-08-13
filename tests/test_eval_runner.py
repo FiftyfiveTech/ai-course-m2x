@@ -112,6 +112,7 @@ def test_a_matching_extraction_scores_perfectly(
 
     assert report.cases_scored == 1
     assert report.cases_failed == 0
+    assert report.scored_case_ids == ["ref-001-c01"]
     assert report.micro_f1 == pytest.approx(1.0)
 
 
@@ -135,8 +136,42 @@ def test_a_case_that_never_validates_is_counted_not_raised(
     )
 
     assert report.cases_scored == 0
-    assert report.cases_failed == 1
+    assert report.cases_schema_failed == 1
+    assert report.cases_provider_failed == 0
+    assert report.schema_failed_case_ids == ["ref-001-c01"]
     assert report.schema_validity == pytest.approx(0.0)
+
+
+def test_a_transport_failure_is_not_counted_as_a_schema_failure(
+    tmp_path: Path, make_adapter: Callable[..., ModelAdapter]
+) -> None:
+    """The fix M2X-040 waited on: the two failure classes must not share one count.
+
+    A provider that answers HTTP 400 tells us nothing about whether the model can
+    produce a valid record, but it removes the case from the micro-F1 denominator all
+    the same. Collapsed into one ``cases_failed`` that removal was invisible, and the
+    same commit reported 0.3645 over fourteen cases and 0.4279 over fifteen.
+    """
+    _write_reference(tmp_path / "tiron")
+    _write_case(tmp_path / "labels", "dev", "ship release one")
+    adapter = make_adapter(
+        lambda _request: httpx.Response(400, json={"error": {"message": "bad request"}})
+    )
+
+    report, _ = run_extraction_eval(
+        "dev",
+        adapter=adapter,
+        labels_dir=tmp_path / "labels",
+        reference_dir=tmp_path / "tiron",
+    )
+
+    assert report.cases_provider_failed == 1
+    assert report.provider_failed_case_ids == ["ref-001-c01"]
+    assert report.cases_schema_failed == 0
+    # Nothing was measured, so schema-validity has no evidence either way and must not
+    # read as a model failure. The provider count beside it is what says the run is void.
+    assert report.schema_validity == pytest.approx(1.0)
+    assert report.scored_case_ids == []
 
 
 def test_a_missing_set_names_the_directory(
@@ -210,6 +245,47 @@ def test_result_records_the_prompt_version_and_sha(tmp_path: Path) -> None:
     assert record["set"] == "dev"
     assert record["micro_f1"] == 1.0
     assert "deadline excluded from micro_f1" in record["note"]
+
+
+def test_a_results_row_names_the_cases_the_number_covers(tmp_path: Path) -> None:
+    """``docs/gates.md`` wants a number a supervisor can reproduce.
+
+    A micro-F1 is computed over whichever cases survived, so a row carrying only counts
+    cannot be lined up against another row: both may say 14 and mean different fourteen.
+    """
+    labelled = MeetingRecord(
+        decisions=[
+            Decision(
+                description="ship it",
+                evidence=Evidence(segment_id="seg-0001", t_start=0.0, t_end=1.0),
+            )
+        ]
+    )
+    report = aggregate(
+        "dev",
+        [score_case("c01", labelled, labelled)],
+        schema_failed=["c02"],
+        provider_failed=["c03"],
+    )
+    path = tmp_path / "results" / "extraction.jsonl"
+
+    append_result(
+        report,
+        prompt_version="v6",
+        model_repo_id="meta-llama/Llama-3.1-8B-Instruct",
+        path=path,
+        git_sha="abc1234",
+        now=lambda: FIXED_TIME,
+    )
+
+    record = json.loads(path.read_text(encoding="utf-8").strip())
+    assert record["scored_case_ids"] == ["c01"]
+    assert record["cases_schema_failed"] == 1
+    assert record["schema_failed_case_ids"] == ["c02"]
+    assert record["cases_provider_failed"] == 1
+    assert record["provider_failed_case_ids"] == ["c03"]
+    # The pre-M2X-040 key still totals both, so old rows and new ones line up on it.
+    assert record["cases_failed"] == 2
 
 
 def test_results_are_append_only(tmp_path: Path) -> None:

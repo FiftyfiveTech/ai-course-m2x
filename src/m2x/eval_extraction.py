@@ -33,6 +33,7 @@ from pathlib import Path
 from pydantic import BaseModel, ConfigDict, Field
 
 from m2x.adapter import ModelAdapter
+from m2x.errors import M2XError
 from m2x.extraction import DEFAULT_EXTRACT_MODEL, extract_record
 from m2x.labels import DEFAULT_LABELS_DIR, LabelledCase, load_label_set
 from m2x.reference_transcript import DEFAULT_REFERENCE_DIR
@@ -49,6 +50,20 @@ record can be found again next to the prompt version and SHA that produced it.
 
 EVAL_PHASE = "phase-1b"
 """Run-log phase eval extractions are attributed to."""
+
+FAILURE_PROVIDER = "provider"
+"""A case lost to transport: HTTP error, exhausted rate-limit budget, timeout, bad route.
+
+Counted apart from :data:`FAILURE_SCHEMA` because it is not the model failing. It is a
+case the run did not measure, and folding it into schema-validity both understates the
+model and moves the micro-F1 denominator invisibly.
+"""
+
+FAILURE_SCHEMA = "schema"
+"""A case whose model output never validated, after every reask the budget allowed.
+
+This is the failure the Phase 1B "schema-valid 100%" leg is about.
+"""
 
 DESCRIPTION_MATCH_THRESHOLD = 0.60
 """Token-set F1 at or above which two descriptions are the same item.
@@ -487,8 +502,22 @@ class EvalReport(BaseModel):
 
     set_name: str
     cases_scored: int = Field(ge=0)
-    cases_failed: int = Field(default=0, ge=0)
-    """Cases that produced no valid record at all. The Phase 1B gate wants zero."""
+
+    schema_failed_case_ids: list[str] = Field(default_factory=list)
+    """Cases whose model output never validated. The Phase 1B gate wants none.
+
+    A real model failure: three attempts of unparseable JSON, an unresolvable citation,
+    a deadline that is not a date. This is the count ``schema-validity`` is about.
+    """
+
+    provider_failed_case_ids: list[str] = Field(default_factory=list)
+    """Cases lost to transport: an HTTP error, an exhausted rate-limit budget, a timeout.
+
+    Held apart from the schema failures because the two say opposite things about the
+    model. Collapsed into one count they silently move the micro-F1 denominator — the
+    same commit, prompt, matcher and threshold reported 0.3645 over 14 cases and 0.4279
+    over 15, and nothing in either row said which cases were in it.
+    """
 
     per_kind: dict[str, Counts]
     owner: Counts
@@ -496,6 +525,37 @@ class EvalReport(BaseModel):
     deadline_emitted: int = Field(default=0, ge=0)
     matched_actions: int = Field(default=0, ge=0)
     per_case: list[CaseScore] = Field(default_factory=list)
+
+    @property
+    def scored_case_ids(self) -> list[str]:
+        """The cases this run's numbers were computed over, in scoring order.
+
+        The set, not just its size: two runs can both score 14 of 15 cases and drop a
+        different one, and micro-F1 over different cases is a different quantity. Printed
+        and written onto the results row so a comparison can be checked rather than
+        assumed.
+        """
+        return [score.case_id for score in self.per_case]
+
+    @property
+    def cases_schema_failed(self) -> int:
+        """How many cases produced no valid record. See :attr:`schema_failed_case_ids`."""
+        return len(self.schema_failed_case_ids)
+
+    @property
+    def cases_provider_failed(self) -> int:
+        """How many cases the provider never answered. See :attr:`provider_failed_case_ids`."""
+        return len(self.provider_failed_case_ids)
+
+    @property
+    def cases_failed(self) -> int:
+        """Both failure classes together — the figure earlier rows in ``results/`` carry.
+
+        Kept so a pre-M2X-040 row and a later one can still be lined up on one key, but
+        it is not the number to reason with: the two halves have different causes and
+        only one of them is the model's.
+        """
+        return self.cases_schema_failed + self.cases_provider_failed
 
     @property
     def items(self) -> Counts:
@@ -517,9 +577,17 @@ class EvalReport(BaseModel):
 
     @property
     def schema_validity(self) -> float:
-        """Fraction of cases that produced a valid record. The gate wants ``1.0``."""
-        attempted = self.cases_scored + self.cases_failed
-        return self.cases_scored / attempted if attempted else 1.0
+        """Fraction of *answered* cases that produced a valid record. The gate wants ``1.0``.
+
+        Provider failures are excluded from the denominator, because a case the provider
+        never answered is unmeasured rather than invalid — counting it as a schema failure
+        blames the model for a network. That makes this a rate over
+        :attr:`cases_scored` + :attr:`cases_schema_failed`, so it must always be read next
+        to :attr:`cases_provider_failed`: ``1.0`` on twelve of fifteen cases is not the
+        gate's "schema-valid 100%", and :func:`format_report` prints both.
+        """
+        answered = self.cases_scored + self.cases_schema_failed
+        return self.cases_scored / answered if answered else 1.0
 
     @property
     def deadline_abstention(self) -> float:
@@ -533,13 +601,47 @@ class EvalReport(BaseModel):
         return self.deadline_correct_nulls / self.matched_actions
 
 
-def aggregate(set_name: str, scores: Sequence[CaseScore], *, failed: int = 0) -> EvalReport:
+def classify_failure(exc: BaseException) -> str:
+    """Say whether a failed case lost its record to the provider or to validation.
+
+    Instructor wraps *everything* that escapes its retry loop in an
+    ``InstructorRetryException`` chained off the real cause, so the outer type says
+    nothing about which of the two happened. The chain does: a transport or routing
+    failure arrives as an :class:`~m2x.errors.M2XError` somewhere under it, while an
+    exhausted reask budget bottoms out in a ``ValidationError``.
+
+    Args:
+        exc: Exception raised by the extraction of one case.
+
+    Returns:
+        :data:`FAILURE_PROVIDER` or :data:`FAILURE_SCHEMA`. Anything unrecognised is
+        called a schema failure, which is the conservative answer: it counts against
+        schema-validity rather than being quietly excused as someone else's network.
+    """
+    seen: set[int] = set()
+    cause: BaseException | None = exc
+    while cause is not None and id(cause) not in seen:
+        seen.add(id(cause))
+        if isinstance(cause, M2XError):
+            return FAILURE_PROVIDER
+        cause = cause.__cause__ or cause.__context__
+    return FAILURE_SCHEMA
+
+
+def aggregate(
+    set_name: str,
+    scores: Sequence[CaseScore],
+    *,
+    schema_failed: Sequence[str] = (),
+    provider_failed: Sequence[str] = (),
+) -> EvalReport:
     """Sum per-case scores into a report.
 
     Args:
         set_name: ``dev`` or ``heldout``, carried into the record.
         scores: Per-case scores.
-        failed: Cases that produced no valid record.
+        schema_failed: Ids of cases whose output never validated.
+        provider_failed: Ids of cases the provider never answered.
 
     Returns:
         The aggregated report.
@@ -559,7 +661,8 @@ def aggregate(set_name: str, scores: Sequence[CaseScore], *, failed: int = 0) ->
     return EvalReport(
         set_name=set_name,
         cases_scored=len(scores),
-        cases_failed=failed,
+        schema_failed_case_ids=list(schema_failed),
+        provider_failed_case_ids=list(provider_failed),
         per_kind=per_kind,
         owner=owner,
         deadline_correct_nulls=correct_nulls,
@@ -580,7 +683,8 @@ def format_report(report: EvalReport) -> str:
     """
     lines = [
         f"set: {report.set_name}   cases scored: {report.cases_scored}"
-        f"   failed: {report.cases_failed}",
+        f"   schema-failed: {report.cases_schema_failed}"
+        f"   provider-failed: {report.cases_provider_failed}",
         "",
         f"{'field':<16}{'P':>8}{'R':>8}{'F1':>8}{'TP':>6}{'FP':>6}{'FN':>6}",
         "-" * 58,
@@ -601,9 +705,30 @@ def format_report(report: EvalReport) -> str:
         f"{'MICRO-F1':<16}{report.micro_f1:>24.4f}",
         "",
         f"schema-valid:        {report.schema_validity:.4f} "
-        f"({report.cases_scored}/{report.cases_scored + report.cases_failed})",
+        f"({report.cases_scored}/{report.cases_scored + report.cases_schema_failed} answered)",
         f"deadline abstention: {report.deadline_abstention:.4f} "
         f"({report.deadline_correct_nulls}/{report.matched_actions} matched actions)",
+        "",
+        # Printed, not left to the results file: the number above was computed over
+        # exactly these cases, and two runs that both score 14 of 15 can be over
+        # different fourteen. Without the set, the figures cannot be compared at all.
+        f"scored cases ({report.cases_scored}): "
+        + (", ".join(report.scored_case_ids) or "none"),
+    ]
+    if report.schema_failed_case_ids:
+        lines.append(
+            f"schema failures ({report.cases_schema_failed}): "
+            + ", ".join(report.schema_failed_case_ids)
+        )
+    if report.provider_failed_case_ids:
+        lines += [
+            f"provider failures ({report.cases_provider_failed}): "
+            + ", ".join(report.provider_failed_case_ids),
+            "provider failures are excluded from schema-validity and from micro-F1: those",
+            "cases are unmeasured, not invalid. A run with any of them does not cover the",
+            "set, whatever schema-valid prints.",
+        ]
+    lines += [
         "",
         "deadline is reported, not scored: the labels contain none, so the field has no",
         "positive examples and cannot enter micro-F1. See eval/README.md section 5.",
@@ -651,9 +776,12 @@ def run_extraction_eval(
     prompt is served from the cache — which is what makes the number reproducible without
     being free the first time.
 
-    A case whose extraction raises is counted as a schema-validity failure rather than
-    aborting the run: one unparseable case should not cost the other fourteen, and the
-    Phase 1B gate needs the count of failures anyway.
+    A case whose extraction raises is counted rather than aborting the run: one
+    unparseable case should not cost the other fourteen. It is counted *as its own class*
+    — :data:`FAILURE_SCHEMA` when the model never produced a valid record,
+    :data:`FAILURE_PROVIDER` when the provider never answered — and its id is carried into
+    the report, because the Phase 1B gate needs to know which cases the number covers and
+    not only how many.
 
     Args:
         set_name: ``dev`` or ``heldout``.
@@ -683,7 +811,8 @@ def run_extraction_eval(
 
     cases: list[LabelledCase] = load_label_set(directory)
     scores: list[CaseScore] = []
-    failed = 0
+    schema_failed: list[str] = []
+    provider_failed: list[str] = []
     resolved_version = prompt_version or "unknown"
 
     for case in cases:
@@ -703,15 +832,21 @@ def run_extraction_eval(
                 context=context,
             )
         except Exception as exc:
-            # Deliberately broad: any failure to produce a valid record is the same
-            # fact for the gate, whether it was a provider error or an exhausted retry
-            # budget. The count is what the criterion asks for.
+            # Deliberately broad — but no longer undifferentiated. A provider error and
+            # an exhausted reask budget are not the same fact: one says the model cannot
+            # produce a valid record, the other says nobody asked it. Collapsing them let
+            # a transport loss move the micro-F1 denominator without appearing anywhere,
+            # which is how one commit reported both 0.3645 (14 cases) and 0.4279 (15).
             #
-            # Naming the case is not optional though. "failed: 5" sent M2X-036 to a
+            # Naming the case is not optional either. "failed: 5" sent M2X-036 to a
             # throwaway harness to recover which cases died and why, when the loop had
             # both in hand.
-            print(f"case {case.case_id} failed: {exc}", file=sys.stderr)
-            failed += 1
+            failure = classify_failure(exc)
+            print(f"case {case.case_id} failed ({failure}): {exc}", file=sys.stderr)
+            if failure == FAILURE_PROVIDER:
+                provider_failed.append(case.case_id)
+            else:
+                schema_failed.append(case.case_id)
             continue
         resolved_version = outcome.prompt_version
         scores.append(
@@ -728,7 +863,15 @@ def run_extraction_eval(
             )
         )
 
-    return aggregate(set_name, scores, failed=failed), resolved_version
+    return (
+        aggregate(
+            set_name,
+            scores,
+            schema_failed=schema_failed,
+            provider_failed=provider_failed,
+        ),
+        resolved_version,
+    )
 
 
 def append_result(
@@ -776,6 +919,17 @@ def append_result(
         "schema_validity": round(report.schema_validity, 4),
         "deadline_abstention": round(report.deadline_abstention, 4),
         "cases_scored": report.cases_scored,
+        # Which cases, not only how many. A micro-F1 is computed over whatever survived,
+        # so a row that names only a count cannot be compared with another row — the two
+        # may be over different case sets. The two failure classes are split for the same
+        # reason: a transport loss changes the denominator and says nothing about the model.
+        "scored_case_ids": report.scored_case_ids,
+        "cases_schema_failed": report.cases_schema_failed,
+        "schema_failed_case_ids": report.schema_failed_case_ids,
+        "cases_provider_failed": report.cases_provider_failed,
+        "provider_failed_case_ids": report.provider_failed_case_ids,
+        # Retained so rows written before M2X-040 line up on one key. Superseded by the
+        # split above.
         "cases_failed": report.cases_failed,
         "per_kind": {
             kind: {
