@@ -34,7 +34,23 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from m2x.adapter import ModelAdapter
 from m2x.errors import M2XError
-from m2x.extraction import DEFAULT_EXTRACT_MODEL, extract_record
+from m2x.extraction import (
+    DEFAULT_EXTRACTION_PROMPT_VERSION,
+    DEFAULT_EXTRACT_MODEL,
+    ExtractionOutcome,
+    extract_record,
+)
+from m2x.eval_fixtures import (
+    DEFAULT_FIXTURES_DIR,
+    STATUS_OK,
+    STATUS_SCHEMA_FAILED,
+    ExtractionFixture,
+    FixtureMode,
+    fixture_path,
+    load_fixture,
+    save_fixture,
+    transcript_digest,
+)
 from m2x.labels import DEFAULT_LABELS_DIR, LabelledCase, load_label_set
 from m2x.reference_transcript import DEFAULT_REFERENCE_DIR
 from m2x.run_log import RunContext
@@ -758,6 +774,37 @@ def current_git_sha() -> str:
     return completed.stdout.strip() or "unknown"
 
 
+def _score(
+    case: LabelledCase,
+    outcome: ExtractionOutcome,
+    *,
+    similarity: Similarity | None,
+    threshold: float | None,
+) -> CaseScore:
+    """Score one extraction against its label.
+
+    Extracted so the live and replay paths cannot drift: a fixture that scored by a
+    slightly different route would make the two modes incomparable, which is the one thing
+    replay must not do.
+
+    Args:
+        case: The labelled case.
+        outcome: What the model produced, live or replayed.
+        similarity: How descriptions are compared. ``None`` uses the lexical default.
+        threshold: Match threshold. ``None`` uses the one matching the similarity.
+
+    Returns:
+        The case's score.
+    """
+    return score_case(
+        case.case_id,
+        case.label,
+        outcome.record,
+        similarity=similarity or token_set_f1,
+        threshold=threshold if threshold is not None else DESCRIPTION_MATCH_THRESHOLD,
+    )
+
+
 def run_extraction_eval(
     set_name: str,
     *,
@@ -769,12 +816,16 @@ def run_extraction_eval(
     prompt_version: str | None = None,
     similarity: Similarity | None = None,
     threshold: float | None = None,
+    fixtures: FixtureMode = FixtureMode.LIVE,
+    fixtures_dir: Path = DEFAULT_FIXTURES_DIR,
 ) -> tuple[EvalReport, str]:
     """Extract every case in a set and score it against the labels.
 
     Extraction runs through the adapter like any other call, so a re-run over an unchanged
-    prompt is served from the cache — which is what makes the number reproducible without
-    being free the first time.
+    prompt is served from the cache — which makes the number cheap to repeat *on one
+    machine* and, as M2X-041 found, not reproducible across machines at all: the cache is
+    git-ignored, so a fresh clone re-samples and scores a different draw. ``fixtures``
+    closes that. See :mod:`m2x.eval_fixtures`.
 
     A case whose extraction raises is counted rather than aborting the run: one
     unparseable case should not cost the other fourteen. It is counted *as its own class*
@@ -793,6 +844,9 @@ def run_extraction_eval(
         prompt_version: Pin a prompt version. ``None`` takes the latest on disk.
         similarity: How descriptions are compared. ``None`` uses the lexical default.
         threshold: Match threshold. ``None`` uses the one matching the similarity.
+        fixtures: ``LIVE`` calls the provider, ``RECORD`` calls it and freezes each
+            outcome, ``REPLAY`` scores the frozen outcomes and contacts nothing.
+        fixtures_dir: Root of the fixture set.
 
     Returns:
         ``(report, resolved_prompt_version)``.
@@ -801,6 +855,10 @@ def run_extraction_eval(
         FileNotFoundError: The set directory does not exist. For ``heldout`` this is the
             expected state on a fresh clone, since the sealed plaintext is never
             committed.
+        ConfigError: Under ``REPLAY``, a case has no fixture or its fixture was recorded
+            from different transcript text. Both abort the run rather than dropping the
+            case, because a replayed gate that silently covers fourteen of fifteen cases
+            is the precise failure this mode exists to remove.
     """
     directory = labels_dir / set_name
     if not directory.is_dir():
@@ -813,9 +871,31 @@ def run_extraction_eval(
     scores: list[CaseScore] = []
     schema_failed: list[str] = []
     provider_failed: list[str] = []
-    resolved_version = prompt_version or "unknown"
+    # Replay has to find files before any extraction resolves a version for it, so the
+    # default is materialised here rather than left to `extract_record`.
+    pinned_version = prompt_version or DEFAULT_EXTRACTION_PROMPT_VERSION
+    resolved_version = pinned_version
 
     for case in cases:
+        segments = case.segments(reference_dir=reference_dir)
+        path = fixture_path(
+            case.case_id,
+            prompt_version=pinned_version,
+            model_repo_id=model_repo_id,
+            fixtures_dir=fixtures_dir,
+        )
+
+        if fixtures is FixtureMode.REPLAY:
+            fixture = load_fixture(path, expected_digest=transcript_digest(segments))
+            if not fixture.succeeded:
+                schema_failed.append(case.case_id)
+                continue
+            outcome = fixture.outcome
+            assert outcome is not None  # save_fixture refuses an ok fixture without one
+            resolved_version = outcome.prompt_version
+            scores.append(_score(case, outcome, similarity=similarity, threshold=threshold))
+            continue
+
         context = RunContext(
             phase=EVAL_PHASE,
             command=f"m2x eval extraction --set {set_name}",
@@ -823,7 +903,7 @@ def run_extraction_eval(
         )
         try:
             outcome = extract_record(
-                case.segments(reference_dir=reference_dir),
+                segments,
                 adapter=adapter,
                 meeting_id=case.case_id,
                 model_repo_id=model_repo_id,
@@ -845,23 +925,38 @@ def run_extraction_eval(
             print(f"case {case.case_id} failed ({failure}): {exc}", file=sys.stderr)
             if failure == FAILURE_PROVIDER:
                 provider_failed.append(case.case_id)
+                # Deliberately not recorded. A 429 is a fact about a network, and
+                # freezing one into the fixture set would let a bad afternoon become a
+                # permanent gate number. The case is left without a fixture, which replay
+                # refuses to run past.
             else:
                 schema_failed.append(case.case_id)
+                if fixtures is FixtureMode.RECORD:
+                    # Recorded, unlike the above: 100% schema validity is a gate leg, so a
+                    # fixture set holding only successes would report that leg green by
+                    # construction.
+                    save_fixture(
+                        ExtractionFixture(
+                            case_id=case.case_id,
+                            status=STATUS_SCHEMA_FAILED,
+                            transcript_sha256=transcript_digest(segments),
+                            failure=f"{type(exc).__name__}: {exc}"[:2000],
+                        ),
+                        path,
+                    )
             continue
         resolved_version = outcome.prompt_version
-        scores.append(
-            score_case(
-                case.case_id,
-                case.label,
-                outcome.record,
-                similarity=similarity or token_set_f1,
-                threshold=(
-                    threshold
-                    if threshold is not None
-                    else DESCRIPTION_MATCH_THRESHOLD
+        if fixtures is FixtureMode.RECORD:
+            save_fixture(
+                ExtractionFixture(
+                    case_id=case.case_id,
+                    status=STATUS_OK,
+                    transcript_sha256=transcript_digest(segments),
+                    outcome=outcome,
                 ),
+                path,
             )
-        )
+        scores.append(_score(case, outcome, similarity=similarity, threshold=threshold))
 
     return (
         aggregate(
@@ -884,6 +979,7 @@ def append_result(
     similarity_kind: str = "token_set_f1",
     threshold: float = DESCRIPTION_MATCH_THRESHOLD,
     embed_model_repo_id: str | None = None,
+    fixtures: FixtureMode = FixtureMode.LIVE,
     now: Callable[[], datetime] = lambda: datetime.now(UTC),
 ) -> Path:
     """Append one run's numbers to the results log.
@@ -894,6 +990,12 @@ def append_result(
         model_repo_id: Model that produced it.
         path: Results file, created with its parent if absent.
         git_sha: SHA under test. Resolved from the working tree when ``None``.
+        similarity_kind: How descriptions were compared.
+        threshold: Match threshold used.
+        embed_model_repo_id: Embedding model, when the matcher used one.
+        fixtures: Whether the run sampled the provider or replayed committed outcomes.
+            Recorded because it is the difference between a number a reviewer can
+            reproduce and one they cannot.
         now: Clock, injected so tests do not depend on one.
 
     Returns:
@@ -915,6 +1017,11 @@ def append_result(
         "similarity": similarity_kind,
         "match_threshold": threshold,
         "embed_model_repo_id": embed_model_repo_id,
+        # Whether the provider was sampled or a committed outcome was replayed. A `live`
+        # row is a number from this machine's cache and nobody else can land on it; a
+        # `replay` row is a function of tracked files. Rows written before M2X-041 have no
+        # such field and are all `live`.
+        "fixtures": fixtures.value,
         "micro_f1": round(report.micro_f1, 4),
         "schema_validity": round(report.schema_validity, 4),
         "deadline_abstention": round(report.deadline_abstention, 4),
