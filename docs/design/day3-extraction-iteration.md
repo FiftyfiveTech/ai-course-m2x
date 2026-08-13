@@ -105,7 +105,57 @@ the harness demands the extractor reproduce a human's abstractive phrasing to wi
 token overlap. A second independent human labeller would frequently miss that bar. The
 number being measured is phrasing agreement, and only incidentally extraction quality.
 
-## The decision that belongs to a human
+## RESOLVED 2026-08-13 — embedding matching, approved
+
+The contract question below was decided while this ticket was in review. **The symmetric
+token-set F1 @ 0.60 rule is replaced by embedding cosine on
+`nomic-ai/nomic-embed-text-v1.5` @ 0.675**, implemented on the parallel M2X-036 effort in
+PR #33 and approved by the supervisor. Neither of the two options this document proposed is
+what was adopted — the third route, embedding similarity, is what the evidence supported once
+someone calibrated a threshold for it properly.
+
+What makes it sound: the threshold was fixed against 15 pairs written down SAME/DIFFERENT by
+reading them, **before any cosine was computed and never against the resulting F1** — lowest
+SAME 0.6928, highest DIFFERENT 0.6586, midpoint 0.675. The `"adopt"` fragment that scores
+1.00 under containment sits at 0.5013, so the metric rejects the failure mode that
+disqualified the alternative. Determinism comes from the response cache rather than from the
+metric, and `similarity`, `match_threshold` and `embed_model_repo_id` now travel on every
+results row, so an embedding upgrade shows in the diff instead of silently changing what a
+score means.
+
+Re-run under the new rule on that lineage: v1 0.0312 → 0.2981, v2 0.0674 → 0.3560,
+v3 0.0518 → 0.3645. Reproduced independently here at **0.4279** for v3 (15/15 scored).
+
+**Every number in this document's table, and in `prompts/CHANGELOG.md`, is a lexical-rule
+figure and is superseded.** They stay reproducible under `--similarity lexical` and are kept
+for that reason, but they are not comparable with any embedded figure — and the ranking they
+imply is not trustworthy: on the PR #33 lineage the two rules ordered v2 and v3 **oppositely**,
+which had us preferring the less injection-resistant prompt on what turned out to be a matcher
+artefact. This document made the same mistake, explaining its own v2-over-v3 inversion as a
+denominator difference. A metric that silently inverts a ranking is worse than no metric,
+because it looks like evidence.
+
+Four conditions attached to the approval, none of them waived:
+
+1. Superseded figures are marked, not silently left beside embedded ones (done here and in the
+   changelog).
+2. The calibration set grows before the held-out run — a 0.034 gap on 15 pairs is separation
+   rather than comfort, and the held-out set gets exactly one run. Widening it is not tuning,
+   because the judgments are made on pairs rather than on scores.
+3. **M2X-040 is still blocked**, for two reasons independent of the metric: the held-out seal
+   does not exist in git, and the headline number does not reproduce — the same commit, prompt,
+   matcher and threshold gave 0.3645 and 0.4279, because micro-F1 is computed over whichever
+   cases survived and survival depends on provider conditions. Both fixes in "Follow-ups" below
+   are prerequisites now, not nice-to-haves.
+4. Injection resistance stays a release condition beside the F1. The approval is of the
+   *matcher*, not of a prompt: the PR #33 lineage scores 1/3 and echoes
+   `'system override accepted'`, this one holds 3/3, and whatever text lands on `main` gets the
+   suite re-run at 3/3.
+
+The original framing is kept below, unedited, because the reasoning that led to the wrong two
+options is worth more to the course than a tidy record of the right one.
+
+## The decision that belonged to a human (superseded by the above)
 
 Recommended for Thursday, in preference order. Both are `eval/README.md` §4 changes, so both
 need sign-off and a re-run of every number taken under the old rule — not a quiet edit.
