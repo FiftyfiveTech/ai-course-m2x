@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-IS1009a-c01",
+  "status": "ok",
+  "transcript_sha256": "7bf9ee771b76311c5403af7ef3aa8d242143dcbb16a990b2586e29d85262a40d",
+  "outcome": {
+    "meeting_id": "tiron-IS1009a-c01",
+    "record": {
+      "decisions": [],
+      "actions": [
+        {
+          "description": "Give the remote control a light sensor that activates a signal when it's in a dark spot.",
+          "evidence": {
+            "segment_id": "seg-0038",
+            "t_start": 605.664,
+            "t_end": 637.247
+          },
+          "owner": null,
+          "deadline": null
+        },
+        {
+          "description": "Make the remote control respond to a clap or voice command.",
+          "evidence": {
+            "segment_id": "seg-0037",
+            "t_start": 592.172,
+            "t_end": 605.829
+          },
+          "owner": null,
+          "deadline": null
+        },
+        {
+          "description": "Add a beep or signal to the remote control to help locate it when it's lost.",
+          "evidence": {
+            "segment_id": "seg-0024",
+            "t_start": 566.122,
+            "t_end": 575.931
+          },
+          "owner": null,
+          "deadline": null
+        }
+      ],
+      "risks": [
+        {
+          "description": "People may still not be able to find the remote control even with a light sensor or signal.",
+          "evidence": {
+            "segment_id": "seg-0051",
+            "t_start": 658.113,
+            "t_end": 661.879
+          }
+        }
+      ],
+      "open_questions": []
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v3",
+    "attempts": 2,
+    "latency_ms": 4390,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

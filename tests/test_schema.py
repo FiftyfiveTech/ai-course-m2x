@@ -38,26 +38,46 @@ def test_evidence_rejects_an_unknown_segment_id() -> None:
         Evidence.model_validate(evidence_data(segment_id="seg-9999"), context=CONTEXT)
 
 
-def test_evidence_rejects_a_range_outside_its_segment() -> None:
-    """A real segment id cited for a claim made elsewhere is still a bad citation."""
-    with pytest.raises(ValidationError, match="falls outside segment"):
-        Evidence.model_validate(
-            evidence_data(segment_id="seg-0001", t_start=12.0, t_end=15.0), context=CONTEXT
-        )
+def test_evidence_derives_the_time_range_from_the_segment() -> None:
+    """The citation-drift fix: the model names a segment, the code writes the times.
+
+    Replaces a rejection test, and that is the point — the failure mode it guarded is now
+    unreachable rather than caught. Nothing the model puts in these fields can be wrong,
+    because nothing it puts there is kept.
+    """
+    evidence = Evidence.model_validate(evidence_data(segment_id="seg-0002"), context=CONTEXT)
+
+    assert (evidence.t_start, evidence.t_end) == SEGMENTS["seg-0002"]
 
 
-def test_evidence_tolerates_rounding_at_the_segment_boundary() -> None:
-    """Timestamps are rendered to one decimal, so exact-boundary citations must survive."""
+def test_a_supplied_range_is_discarded_rather_than_validated() -> None:
+    """The measured drift: seg-0033 cited with the *previous* line's timestamps.
+
+    Under the old contract that failed validation and burned the case's whole retry
+    budget. Now the wrong numbers are simply replaced by the right ones.
+    """
     evidence = Evidence.model_validate(
-        evidence_data(segment_id="seg-0002", t_start=9.8, t_end=20.2), context=CONTEXT
+        evidence_data(segment_id="seg-0002", t_start=0.0, t_end=9.0), context=CONTEXT
     )
 
-    assert evidence.t_end == 20.2
+    assert (evidence.t_start, evidence.t_end) == SEGMENTS["seg-0002"]
 
 
-def test_evidence_rejects_an_inverted_range() -> None:
-    with pytest.raises(ValidationError, match="precedes t_start"):
-        Evidence.model_validate(evidence_data(t_start=5.0, t_end=1.0), context=CONTEXT)
+def test_evidence_omitting_the_range_entirely_is_valid() -> None:
+    """What the prompt now asks for: a segment id and nothing else."""
+    evidence = Evidence.model_validate({"segment_id": "seg-0001"}, context=CONTEXT)
+
+    assert (evidence.t_start, evidence.t_end) == SEGMENTS["seg-0001"]
+
+
+def test_an_unknown_segment_id_is_still_the_check_that_catches_invention() -> None:
+    """Deriving times removes one check; this is the one that mattered, and it stays.
+
+    A model that invents a decision invents a segment id to go with it, and no amount of
+    deriving timestamps would make that citation real.
+    """
+    with pytest.raises(ValidationError, match="does not exist in this transcript"):
+        Evidence.model_validate({"segment_id": "seg-9999"}, context=CONTEXT)
 
 
 def test_evidence_without_context_skips_resolution_but_keeps_structure() -> None:

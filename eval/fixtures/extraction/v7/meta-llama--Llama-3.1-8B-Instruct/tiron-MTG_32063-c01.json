@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-MTG_32063-c01",
+  "status": "ok",
+  "transcript_sha256": "47e231fd99380c3f536d81b6557c2c3eb0303a19c3752e3d8799d42f475793de",
+  "outcome": {
+    "meeting_id": "tiron-MTG_32063-c01",
+    "record": {
+      "decisions": [
+        {
+          "description": "Approach the schools directly as teachers who want to help, rather than as a school.",
+          "evidence": {
+            "segment_id": "seg-0039",
+            "t_start": 75.99,
+            "t_end": 78.28
+          }
+        },
+        {
+          "description": "Hire a student to answer the phones, rather than a service.",
+          "evidence": {
+            "segment_id": "seg-0153",
+            "t_start": 283.09,
+            "t_end": 285.45
+          }
+        }
+      ],
+      "actions": [
+        {
+          "description": "Linda will find someone to edit the videos.",
+          "evidence": {
+            "segment_id": "seg-0112",
+            "t_start": 208.74,
+            "t_end": 214.49
+          },
+          "owner": "Linda",
+          "deadline": null
+        },
+        {
+          "description": "Linda will find someone to take the videos and edit them properly.",
+          "evidence": {
+            "segment_id": "seg-0121",
+            "t_start": 222.17,
+            "t_end": 227.12
+          },
+          "owner": "Linda",
+          "deadline": null
+        },
+        {
+          "description": "Beth will start looking for candidates to answer the phones.",
+          "evidence": {
+            "segment_id": "seg-0188",
+            "t_start": 343.23,
+            "t_end": 346.65
+          },
+          "owner": "Beth",
+          "deadline": null
+        }
+      ],
+      "risks": [
+        {
+          "description": "The schools may not be cooperative.",
+          "evidence": {
+            "segment_id": "seg-0018",
+            "t_start": 37.46,
+            "t_end": 44.01
+          }
+        },
+        {
+          "description": "The people calling in may come up with surprise questions.",
+          "evidence": {
+            "segment_id": "seg-0173",
+            "t_start": 317.67,
+            "t_end": 321.21
+          }
+        }
+      ],
+      "open_questions": [
+        {
+          "description": "How to incentivize the parents to do the testimonial videos.",
+          "evidence": {
+            "segment_id": "seg-0076",
+            "t_start": 143.9,
+            "t_end": 148.6
+          }
+        },
+        {
+          "description": "How to train the person answering the phones.",
+          "evidence": {
+            "segment_id": "seg-0143",
+            "t_start": 265.49,
+            "t_end": 269.34
+          }
+        }
+      ]
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v7",
+    "attempts": 1,
+    "latency_ms": 3186,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

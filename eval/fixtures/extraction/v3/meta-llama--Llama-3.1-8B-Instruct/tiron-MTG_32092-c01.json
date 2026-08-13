@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-MTG_32092-c01",
+  "status": "ok",
+  "transcript_sha256": "90f9e2e279f3dfe90c98537da8029ba50ae8d70a246da6d957f4fbd485033b65",
+  "outcome": {
+    "meeting_id": "tiron-MTG_32092-c01",
+    "record": {
+      "decisions": [
+        {
+          "description": "Focus on the US market first, where they know the culture and there is a big hiking market.",
+          "evidence": {
+            "segment_id": "seg-0106",
+            "t_start": 236.33,
+            "t_end": 242.79
+          }
+        },
+        {
+          "description": "Use online channels such as social media and Google ads to target the US market.",
+          "evidence": {
+            "segment_id": "seg-0130",
+            "t_start": 291.21,
+            "t_end": 294.1
+          }
+        }
+      ],
+      "actions": [
+        {
+          "description": "Make a list of influencers to work with by Monday.",
+          "evidence": {
+            "segment_id": "seg-0157",
+            "t_start": 338.66,
+            "t_end": 342.49
+          },
+          "owner": "Donald",
+          "deadline": "2023-03-06"
+        },
+        {
+          "description": "Create a list of influencers for the Dodger organization and the San Francisco Forty Niner football organization.",
+          "evidence": {
+            "segment_id": "seg-0154",
+            "t_start": 332.17,
+            "t_end": 336.3
+          },
+          "owner": "Donald",
+          "deadline": null
+        }
+      ],
+      "risks": [
+        {
+          "description": "The cost of shipping products to Japan may be too expensive.",
+          "evidence": {
+            "segment_id": "seg-0110",
+            "t_start": 246.08,
+            "t_end": 251.65
+          }
+        }
+      ],
+      "open_questions": []
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v3",
+    "attempts": 1,
+    "latency_ms": 2077,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-Bro021-c03",
+  "status": "ok",
+  "transcript_sha256": "5c8a5a7115023f2b1d2ad7e790ab21a94ebd4ba3797cda566b8f50f13e27180c",
+  "outcome": {
+    "meeting_id": "tiron-Bro021-c03",
+    "record": {
+      "decisions": [],
+      "actions": [
+        {
+          "description": "Give the dictionary for the clean speech and the probability of our weight for each Gaussian.",
+          "evidence": {
+            "segment_id": "seg-0032",
+            "t_start": 3030.797,
+            "t_end": 3036.753
+          },
+          "owner": null,
+          "deadline": null
+        },
+        {
+          "description": "Develop an expression that is for calculate this.",
+          "evidence": {
+            "segment_id": "seg-0042",
+            "t_start": 3057.586,
+            "t_end": 3061.542
+          },
+          "owner": null,
+          "deadline": null
+        }
+      ],
+      "risks": [],
+      "open_questions": [
+        {
+          "description": "What is the first variable in that probability?",
+          "evidence": {
+            "segment_id": "seg-0023",
+            "t_start": 3013.054,
+            "t_end": 3015.843
+          }
+        },
+        {
+          "description": "What's that variable?",
+          "evidence": {
+            "segment_id": "seg-0026",
+            "t_start": 3018.858,
+            "t_end": 3019.294
+          }
+        },
+        {
+          "description": "It's one mixture of the model. Right?",
+          "evidence": {
+            "segment_id": "seg-0030",
+            "t_start": 3024.232,
+            "t_end": 3026.5
+          }
+        }
+      ]
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v3",
+    "attempts": 1,
+    "latency_ms": 2281,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-MTG_32092-c01",
+  "status": "ok",
+  "transcript_sha256": "90f9e2e279f3dfe90c98537da8029ba50ae8d70a246da6d957f4fbd485033b65",
+  "outcome": {
+    "meeting_id": "tiron-MTG_32092-c01",
+    "record": {
+      "decisions": [
+        {
+          "description": "Focus on the US market first, where they know the culture and there is a big hiking market.",
+          "evidence": {
+            "segment_id": "seg-0106",
+            "t_start": 236.33,
+            "t_end": 242.79
+          }
+        },
+        {
+          "description": "Use online channels, such as social media and Google ads, to reach the target audience.",
+          "evidence": {
+            "segment_id": "seg-0129",
+            "t_start": 287.46,
+            "t_end": 291.05
+          }
+        },
+        {
+          "description": "Use influencers, such as Kim Kardashian, to promote the product.",
+          "evidence": {
+            "segment_id": "seg-0142",
+            "t_start": 310.33,
+            "t_end": 313.06
+          }
+        }
+      ],
+      "actions": [
+        {
+          "description": "Make a list of influencers by Monday.",
+          "evidence": {
+            "segment_id": "seg-0157",
+            "t_start": 338.66,
+            "t_end": 342.49
+          },
+          "owner": "Sarah",
+          "deadline": "2023-03-06"
+        },
+        {
+          "description": "Make a list of influencers, including the Dodger organization and the San Francisco Forty Niner football organization.",
+          "evidence": {
+            "segment_id": "seg-0154",
+            "t_start": 332.17,
+            "t_end": 336.3
+          },
+          "owner": "Donald",
+          "deadline": null
+        }
+      ],
+      "risks": [],
+      "open_questions": []
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v7",
+    "attempts": 1,
+    "latency_ms": 2140,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-MTG_32063-c01",
+  "status": "ok",
+  "transcript_sha256": "47e231fd99380c3f536d81b6557c2c3eb0303a19c3752e3d8799d42f475793de",
+  "outcome": {
+    "meeting_id": "tiron-MTG_32063-c01",
+    "record": {
+      "decisions": [
+        {
+          "description": "Approach the schools directly as teachers who want to help, rather than as a school.",
+          "evidence": {
+            "segment_id": "seg-0039",
+            "t_start": 75.99,
+            "t_end": 78.28
+          }
+        },
+        {
+          "description": "Use a student or a recent art school graduate to edit the videos.",
+          "evidence": {
+            "segment_id": "seg-0112",
+            "t_start": 208.74,
+            "t_end": 214.49
+          }
+        },
+        {
+          "description": "Train someone within the company to answer the phones and have a separate phone number.",
+          "evidence": {
+            "segment_id": "seg-0163",
+            "t_start": 303.54,
+            "t_end": 308.48
+          }
+        }
+      ],
+      "actions": [
+        {
+          "description": "Contact a few parents and ask them to do a testimonial video.",
+          "evidence": {
+            "segment_id": "seg-0063",
+            "t_start": 109.62,
+            "t_end": 113.39
+          },
+          "owner": "Rachel",
+          "deadline": null
+        },
+        {
+          "description": "Find someone within the company to make the videos.",
+          "evidence": {
+            "segment_id": "seg-0111",
+            "t_start": 202.11,
+            "t_end": 209.99
+          },
+          "owner": "Rachel",
+          "deadline": null
+        },
+        {
+          "description": "Train someone within the company to answer the phones.",
+          "evidence": {
+            "segment_id": "seg-0163",
+            "t_start": 303.54,
+            "t_end": 308.48
+          },
+          "owner": "Rachel",
+          "deadline": null
+        }
+      ],
+      "risks": [
+        {
+          "description": "The schools may not be cooperative.",
+          "evidence": {
+            "segment_id": "seg-0018",
+            "t_start": 37.46,
+            "t_end": 44.01
+          }
+        },
+        {
+          "description": "The video production may be expensive.",
+          "evidence": {
+            "segment_id": "seg-0102",
+            "t_start": 188.86,
+            "t_end": 195.85
+          }
+        }
+      ],
+      "open_questions": [
+        {
+          "description": "How to incentivize the parents to do the testimonial videos.",
+          "evidence": {
+            "segment_id": "seg-0076",
+            "t_start": 143.9,
+            "t_end": 148.6
+          }
+        },
+        {
+          "description": "How to handle the surprise questions from the people calling in.",
+          "evidence": {
+            "segment_id": "seg-0173",
+            "t_start": 317.67,
+            "t_end": 321.21
+          }
+        }
+      ]
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v3",
+    "attempts": 1,
+    "latency_ms": 5813,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

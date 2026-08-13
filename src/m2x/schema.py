@@ -12,11 +12,12 @@ Two design decisions carry more weight than they look:
   plausible guess, because under field-level F1 a guessed owner costs precision while
   ``None`` simply is not matched. A model that admits ignorance has to be able to score
   better than one that confabulates.
-* **Evidence is machine-checked.** Every item cites a ``segment_id`` and the time range
-  it was read from, and :class:`Evidence` resolves that reference against the transcript
+* **Evidence is machine-checked, and half of it is machine-*written*.** Every item cites
+  a ``segment_id``, and :class:`Evidence` resolves that reference against the transcript
   actually passed in. A citation to nowhere is a validation error, not a shrug — an
   unverified citation is decoration, and a model that invents a decision will invent a
-  segment id to go with it.
+  segment id to go with it. The time range is then derived from the named segment rather
+  than asked for; see :class:`Evidence` for the drift that made that necessary.
 """
 
 from __future__ import annotations
@@ -33,59 +34,85 @@ retry loop: a fabricated segment id becomes an error the model is asked to fix, 
 like a malformed date, rather than a post-hoc filter that drops the item silently.
 """
 
-TIME_TOLERANCE_S = 0.5
-"""Slack allowed when checking a cited range against its segment's bounds.
+DERIVED_TIME_NOTE = (
+    "Do not emit this field. It is derived from segment_id, and any value supplied is "
+    "discarded."
+)
+"""What the model is told about the two timestamp fields.
 
-Segment timestamps come back from the provider rounded, and a model asked to echo them
-rounds again. Without a tolerance the validator would reject citations that are correct
-to within a rounding step, and the retry loop would burn attempts fixing arithmetic
-noise instead of real fabrication.
+Duplicated into ``Field(description=...)`` because that is the only channel Instructor
+renders into the request; an attribute docstring reaches readers of this file and nobody
+else.
 """
 
 
 class Evidence(BaseModel):
     """Where in the transcript an extracted item was read from.
 
-    Validation is deliberately two-sided: the segment must exist, *and* the cited range
-    must fall inside that segment. Checking only existence would let a model cite a real
-    segment for a claim made nowhere near it.
+    **The model names a segment; the timestamps are computed here.** Until M2X-041 the
+    model was asked to echo the ``t_start``/``t_end`` it saw on the rendered line, and the
+    validator checked the echo fell inside the segment's real bounds. It systematically
+    did not: the extractor paired a segment id with the *previous* line's timestamps —
+    ``seg-0033`` cited as ``580.3-581.4`` when it runs ``581.44-586.445`` — which failed
+    validation, consumed the whole retry budget on that case, and made citation drift the
+    single largest contributor to schema-validity failures. An explicit prompt rewrite
+    (v3) did not move it, which pointed at the model rather than at the wording.
+
+    So the field the model kept getting wrong is no longer a field the model fills.
+    ``segment_id`` resolves against the transcript exactly as before — that is the check
+    which catches invention — and the time range is then read off the segment. The
+    principle is M2X-044's, already load-bearing for RAG citations: *a timestamp the model
+    cannot type is one it cannot invent.*
+
+    What this gives up, deliberately: an item can no longer cite a sub-span of a segment.
+    Segments are single speaker turns, so the sub-span was never used and the labels never
+    wrote one — all 84 cited items in the dev set name a whole turn.
     """
 
     model_config = ConfigDict(extra="forbid")
 
-    segment_id: str = Field(min_length=1)
+    segment_id: str = Field(
+        min_length=1,
+        description=(
+            "Id of the segment this item was read from, exactly as shown in the "
+            "transcript block (e.g. seg-0007). Must be one of the ids in that block."
+        ),
+    )
     """Id of the citing segment, as rendered into the prompt (e.g. ``seg-0007``)."""
 
-    t_start: float = Field(ge=0.0)
-    """Start of the cited span, in seconds from the beginning of the audio."""
+    t_start: float | None = Field(default=None, ge=0.0, description=DERIVED_TIME_NOTE)
+    """Start of the cited segment, in seconds. Derived, not supplied.
 
-    t_end: float = Field(ge=0.0)
-    """End of the cited span, in seconds from the beginning of the audio."""
+    ``None`` only on a record read back from disk that was written before the value could
+    be resolved — with a transcript in hand this is always populated.
+    """
+
+    t_end: float | None = Field(default=None, ge=0.0, description=DERIVED_TIME_NOTE)
+    """End of the cited segment, in seconds. Derived, not supplied."""
 
     @model_validator(mode="after")
     def _resolve_against_transcript(self, info: ValidationInfo) -> Evidence:
-        """Check the citation points at a real place in the transcript.
+        """Resolve the segment id, then read its time range off the transcript.
 
         Args:
             info: Validation context. ``info.context[SEGMENT_CONTEXT_KEY]`` maps segment
                 id to its ``(t_start, t_end)`` bounds.
 
         Returns:
-            The validated evidence.
+            The validated evidence, with timestamps filled in from the named segment.
 
         Raises:
-            ValueError: The range is inverted, the segment id is unknown, or the cited
-                range lies outside the segment's bounds.
+            ValueError: The segment id is unknown, or — with no transcript in hand — a
+                stored range is inverted.
         """
-        if self.t_end < self.t_start:
-            raise ValueError(f"t_end {self.t_end} precedes t_start {self.t_start}")
-
         segments = (info.context or {}).get(SEGMENT_CONTEXT_KEY)
         if segments is None:
             # No context supplied — a record read back from disk for inspection, rather
-            # than one being extracted. Structural checks still apply; resolution cannot,
-            # because the transcript is not in hand. Callers that need the guarantee pass
-            # the context; see extraction.extract_record.
+            # than one being extracted. Nothing can be resolved or derived because the
+            # transcript is not in hand, so only the structural check survives. Callers
+            # that need the guarantee pass the context; see extraction.extract_record.
+            if self.t_start is not None and self.t_end is not None and self.t_end < self.t_start:
+                raise ValueError(f"t_end {self.t_end} precedes t_start {self.t_start}")
             return self
 
         bounds = segments.get(self.segment_id)
@@ -95,12 +122,10 @@ class Evidence(BaseModel):
                 "cite one of the segment ids shown in the transcript block"
             )
 
-        start, end = bounds
-        if self.t_start < start - TIME_TOLERANCE_S or self.t_end > end + TIME_TOLERANCE_S:
-            raise ValueError(
-                f"cited range {self.t_start}-{self.t_end} falls outside segment "
-                f"{self.segment_id} ({start}-{end})"
-            )
+        # Overwritten rather than checked. A supplied range is not evidence of anything —
+        # it is a copy the model made of a number already on the line it cited, and the
+        # copy is what kept going wrong.
+        self.t_start, self.t_end = bounds
         return self
 
 

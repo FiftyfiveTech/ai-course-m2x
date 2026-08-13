@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-Bro021-c02",
+  "status": "ok",
+  "transcript_sha256": "5caacf4696c8f2bf1a918b0ad16269c8288620d4a5ef02b231516c4fb09f2bc7",
+  "outcome": {
+    "meeting_id": "tiron-Bro021-c02",
+    "record": {
+      "decisions": [],
+      "actions": [
+        {
+          "description": "Give the others a tutorial on accessing the corpus and walk them through the existing code and set-up.",
+          "evidence": {
+            "segment_id": "seg-0008",
+            "t_start": 1815.302,
+            "t_end": 1820.722
+          },
+          "owner": null,
+          "deadline": null
+        },
+        {
+          "description": "Build up the stuff for the subspace approach.",
+          "evidence": {
+            "segment_id": "seg-0015",
+            "t_start": 1841.899,
+            "t_end": 1845.679
+          },
+          "owner": null,
+          "deadline": null
+        }
+      ],
+      "risks": [
+        {
+          "description": "Maybe you have to standardize this thing also, noise estimation, because all the thing that you are testing use a different -",
+          "evidence": {
+            "segment_id": "seg-0061",
+            "t_start": 1967.917,
+            "t_end": 1971.294
+          }
+        }
+      ],
+      "open_questions": [
+        {
+          "description": "What is the effect of the VTS when using the VAD also?",
+          "evidence": {
+            "segment_id": "seg-0043",
+            "t_start": 1924.911,
+            "t_end": 1930.291
+          }
+        }
+      ]
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v3",
+    "attempts": 1,
+    "latency_ms": 2093,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

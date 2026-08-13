@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-IS1009a-c01",
+  "status": "ok",
+  "transcript_sha256": "7bf9ee771b76311c5403af7ef3aa8d242143dcbb16a990b2586e29d85262a40d",
+  "outcome": {
+    "meeting_id": "tiron-IS1009a-c01",
+    "record": {
+      "decisions": [],
+      "actions": [
+        {
+          "description": "Give the remote control a light sensor that activates a signal when it's in a dark spot.",
+          "evidence": {
+            "segment_id": "seg-0036",
+            "t_start": 590.832,
+            "t_end": 593.236
+          },
+          "owner": null,
+          "deadline": null
+        },
+        {
+          "description": "Make the remote control respond to a clap or voice command.",
+          "evidence": {
+            "segment_id": "seg-0037",
+            "t_start": 592.172,
+            "t_end": 605.829
+          },
+          "owner": null,
+          "deadline": null
+        }
+      ],
+      "risks": [
+        {
+          "description": "Some people might still not be able to find the remote control even if it has a light sensor or responds to voice commands.",
+          "evidence": {
+            "segment_id": "seg-0051",
+            "t_start": 658.113,
+            "t_end": 661.879
+          }
+        }
+      ],
+      "open_questions": [
+        {
+          "description": "What type of sensor should be used to detect when the remote control is in a dark spot?",
+          "evidence": {
+            "segment_id": "seg-0038",
+            "t_start": 605.664,
+            "t_end": 637.247
+          }
+        }
+      ]
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v7",
+    "attempts": 2,
+    "latency_ms": 3654,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

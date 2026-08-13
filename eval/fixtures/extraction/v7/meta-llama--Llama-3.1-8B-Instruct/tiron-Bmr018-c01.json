@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-Bmr018-c01",
+  "status": "ok",
+  "transcript_sha256": "c2d5e31c88daeee8e34172adbb9fb43c945547f779cf8cdae07bae1f09ad9140",
+  "outcome": {
+    "meeting_id": "tiron-Bmr018-c01",
+    "record": {
+      "decisions": [],
+      "actions": [
+        {
+          "description": "Bring the transcribers to the meeting room to adjust boundaries one channel at a time with the marks.",
+          "evidence": {
+            "segment_id": "seg-0040",
+            "t_start": 558.26,
+            "t_end": 562.699
+          },
+          "owner": "me018",
+          "deadline": null
+        },
+        {
+          "description": "Have the transcribers listen to each channel all the way through.",
+          "evidence": {
+            "segment_id": "seg-0047",
+            "t_start": 567.54,
+            "t_end": 570.35
+          },
+          "owner": "me011",
+          "deadline": null
+        },
+        {
+          "description": "Have the transcribers visually scan the waveform to judge when it was speech and when it wasn't.",
+          "evidence": {
+            "segment_id": "seg-0074",
+            "t_start": 633.115,
+            "t_end": 639.593
+          },
+          "owner": "fe008",
+          "deadline": null
+        }
+      ],
+      "risks": [
+        {
+          "description": "The digital task will miss most of the really short things.",
+          "evidence": {
+            "segment_id": "seg-0019",
+            "t_start": 512.52,
+            "t_end": 519.555
+          }
+        },
+        {
+          "description": "The breaths will show up on the signal and make it difficult to judge when it was speech and when it wasn't.",
+          "evidence": {
+            "segment_id": "seg-0074",
+            "t_start": 633.115,
+            "t_end": 639.593
+          }
+        }
+      ],
+      "open_questions": [
+        {
+          "description": "What do the transcribers do when they're looking at the mixed signal?",
+          "evidence": {
+            "segment_id": "seg-0068",
+            "t_start": 614.47,
+            "t_end": 620.781
+          }
+        }
+      ]
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v7",
+    "attempts": 1,
+    "latency_ms": 1968,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

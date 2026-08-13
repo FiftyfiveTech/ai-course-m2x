@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-MTG_32257-c01",
+  "status": "ok",
+  "transcript_sha256": "e5c76be36b73cfda8f82703ba8f9d793dd2abd930f21f73605e5cb365aeea1fb",
+  "outcome": {
+    "meeting_id": "tiron-MTG_32257-c01",
+    "record": {
+      "decisions": [
+        {
+          "description": "The emergency is the trailers, and the food and chef issues will be taken care of.",
+          "evidence": {
+            "segment_id": "seg-0075",
+            "t_start": 88.02,
+            "t_end": 95.22
+          }
+        },
+        {
+          "description": "The trailers will be fixed.",
+          "evidence": {
+            "segment_id": "seg-0153",
+            "t_start": 161.77,
+            "t_end": 165.87
+          }
+        },
+        {
+          "description": "The signage will be fixed.",
+          "evidence": {
+            "segment_id": "seg-0162",
+            "t_start": 177.66,
+            "t_end": 182.05
+          }
+        },
+        {
+          "description": "The food and chef issues will be taken care of.",
+          "evidence": {
+            "segment_id": "seg-0161",
+            "t_start": 172.18,
+            "t_end": 177.86
+          }
+        },
+        {
+          "description": "The production will be put on the way.",
+          "evidence": {
+            "segment_id": "seg-0312",
+            "t_start": 329.42,
+            "t_end": 330.01
+          }
+        },
+        {
+          "description": "The budget will be given to fix the issues.",
+          "evidence": {
+            "segment_id": "seg-0314",
+            "t_start": 330.04,
+            "t_end": 333.41
+          }
+        },
+        {
+          "description": "The payroll issues will be taken care of.",
+          "evidence": {
+            "segment_id": "seg-0319",
+            "t_start": 333.74,
+            "t_end": 335.64
+          }
+        }
+      ],
+      "actions": [
+        {
+          "description": "Brad will talk to the actors in the trailers.",
+          "evidence": {
+            "segment_id": "seg-0153",
+            "t_start": 161.77,
+            "t_end": 165.87
+          },
+          "owner": "Brad",
+          "deadline": null
+        },
+        {
+          "description": "Tom will hire a detective to find the missing trailer.",
+          "evidence": {
+            "segment_id": "seg-0154",
+            "t_start": 164.16,
+            "t_end": 171.08
+          },
+          "owner": "Tom",
+          "deadline": null
+        },
+        {
+          "description": "Brad will get a guy to fix the trailers in two days.",
+          "evidence": {
+            "segment_id": "seg-0282",
+            "t_start": 298.81,
+            "t_end": 303.27
+          },
+          "owner": "Brad",
+          "deadline": null
+        },
+        {
+          "description": "Tom will send a guy to fix the trailers.",
+          "evidence": {
+            "segment_id": "seg-0288",
+            "t_start": 304.43,
+            "t_end": 311.59
+          },
+          "owner": "Tom",
+          "deadline": null
+        }
+      ],
+      "risks": [
+        {
+          "description": "The trailers are a problem.",
+          "evidence": {
+            "segment_id": "seg-0022",
+            "t_start": 25.47,
+            "t_end": 29.78
+          }
+        },
+        {
+          "description": "The food and chef issues are a problem.",
+          "evidence": {
+            "segment_id": "seg-0118",
+            "t_start": 134.34,
+            "t_end": 138.63
+          }
+        },
+        {
+          "description": "The signage is a problem.",
+          "evidence": {
+            "segment_id": "seg-0162",
+            "t_start": 177.66,
+            "t_end": 182.05
+          }
+        },
+        {
+          "description": "The production is a problem.",
+          "evidence": {
+            "segment_id": "seg-0312",
+            "t_start": 329.42,
+            "t_end": 330.01
+          }
+        },
+        {
+          "description": "The payroll issues are a problem.",
+          "evidence": {
+            "segment_id": "seg-0319",
+            "t_start": 333.74,
+            "t_end": 335.64
+          }
+        }
+      ],
+      "open_questions": [
+        {
+          "description": "Should the show be shut down due to the problems?",
+          "evidence": {
+            "segment_id": "seg-0206",
+            "t_start": 219.84,
+            "t_end": 227.56
+          }
+        }
+      ]
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v7",
+    "attempts": 2,
+    "latency_ms": 10748,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}
