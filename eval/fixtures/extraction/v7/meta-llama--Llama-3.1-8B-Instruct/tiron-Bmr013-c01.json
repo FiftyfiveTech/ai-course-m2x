@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-Bmr013-c01",
+  "status": "ok",
+  "transcript_sha256": "c4de6108f52f6d2430083c1cb09735d4b67e5c628f68bce42689953ae09038af",
+  "outcome": {
+    "meeting_id": "tiron-Bmr013-c01",
+    "record": {
+      "decisions": [],
+      "actions": [
+        {
+          "description": "Bring John Ohala in to advise on which articulatory features should be marked.",
+          "evidence": {
+            "segment_id": "seg-0085",
+            "t_start": 751.902,
+            "t_end": 754.986
+          },
+          "owner": "me013",
+          "deadline": null
+        },
+        {
+          "description": "Give the others a tutorial on accessing the corpus and walk them through the existing code and set-up.",
+          "evidence": {
+            "segment_id": "seg-0001",
+            "t_start": 594.977,
+            "t_end": 597.09
+          },
+          "owner": null,
+          "deadline": null
+        }
+      ],
+      "risks": [
+        {
+          "description": "The phenomenon of overlapping processes where some voicing some up and then some nasality comes in may not occur as much when reading digits.",
+          "evidence": {
+            "segment_id": "seg-0023",
+            "t_start": 651.641,
+            "t_end": 653.706
+          }
+        }
+      ],
+      "open_questions": [
+        {
+          "description": "Would this corpus really be the right one to even try that on?",
+          "evidence": {
+            "segment_id": "seg-0047",
+            "t_start": 694.112,
+            "t_end": 696.802
+          }
+        },
+        {
+          "description": "What particular acoustic features to mark?",
+          "evidence": {
+            "segment_id": "seg-0070",
+            "t_start": 730.372,
+            "t_end": 733.324
+          }
+        }
+      ]
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v7",
+    "attempts": 2,
+    "latency_ms": 4671,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-MTG_32185-c01",
+  "status": "ok",
+  "transcript_sha256": "c0e8b38f5217dff8ec13cab66c7866686f487a79cbf8e134c0d35d7a6de72018",
+  "outcome": {
+    "meeting_id": "tiron-MTG_32185-c01",
+    "record": {
+      "decisions": [
+        {
+          "description": "Finalize some things, especially around the holiday.",
+          "evidence": {
+            "segment_id": "seg-0036",
+            "t_start": 144.54,
+            "t_end": 147.97
+          }
+        },
+        {
+          "description": "Bring in all the water and all the fish.",
+          "evidence": {
+            "segment_id": "seg-0027",
+            "t_start": 106.66,
+            "t_end": 111.36
+          }
+        },
+        {
+          "description": "Decide on the salaries, decide on the benefits for them, and just overall kinda the values that and the culture that we want them to stand by.",
+          "evidence": {
+            "segment_id": "seg-0031",
+            "t_start": 124.75,
+            "t_end": 131.84
+          }
+        },
+        {
+          "description": "We are more or less all of us on the same page and it could be a very successful project.",
+          "evidence": {
+            "segment_id": "seg-0037",
+            "t_start": 148.03,
+            "t_end": 154.04
+          }
+        }
+      ],
+      "actions": [
+        {
+          "description": "Give out to people that walk into the mall about a thousand little fluffy animals, little fluffy sea animals.",
+          "evidence": {
+            "segment_id": "seg-0017",
+            "t_start": 69.62,
+            "t_end": 77.45
+          },
+          "owner": "Ron",
+          "deadline": null
+        },
+        {
+          "description": "Bring in all the water and all the fish.",
+          "evidence": {
+            "segment_id": "seg-0027",
+            "t_start": 106.66,
+            "t_end": 111.36
+          },
+          "owner": "John",
+          "deadline": null
+        },
+        {
+          "description": "Take food and give small samples to people so they can try the new food in the stores.",
+          "evidence": {
+            "segment_id": "seg-0101",
+            "t_start": 344.02,
+            "t_end": 347.95
+          },
+          "owner": "John",
+          "deadline": null
+        }
+      ],
+      "risks": [
+        {
+          "description": "We need a lot of legal documents to bring in all the water and all the fish.",
+          "evidence": {
+            "segment_id": "seg-0027",
+            "t_start": 106.66,
+            "t_end": 111.36
+          }
+        },
+        {
+          "description": "The budget is going to be a problem and the legal is gonna be a problem.",
+          "evidence": {
+            "segment_id": "seg-0052",
+            "t_start": 203.26,
+            "t_end": 208.23
+          }
+        }
+      ],
+      "open_questions": [
+        {
+          "description": "How will the things that we're planning right now impact the overall business and the projected budgets for next year and for the year after?",
+          "evidence": {
+            "segment_id": "seg-0046",
+            "t_start": 185.31,
+            "t_end": 191.0
+          }
+        },
+        {
+          "description": "How will the food that we'll be serving in the food court relate to the aquarium?",
+          "evidence": {
+            "segment_id": "seg-0090",
+            "t_start": 318.34,
+            "t_end": 320.89
+          }
+        }
+      ]
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v7",
+    "attempts": 1,
+    "latency_ms": 6077,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

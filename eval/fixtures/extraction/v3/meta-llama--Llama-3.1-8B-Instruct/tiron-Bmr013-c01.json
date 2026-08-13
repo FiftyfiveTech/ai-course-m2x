@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-Bmr013-c01",
+  "status": "ok",
+  "transcript_sha256": "c4de6108f52f6d2430083c1cb09735d4b67e5c628f68bce42689953ae09038af",
+  "outcome": {
+    "meeting_id": "tiron-Bmr013-c01",
+    "record": {
+      "decisions": [
+        {
+          "description": "Bring John Ohala in to advise on which articulatory features should be marked.",
+          "evidence": {
+            "segment_id": "seg-0085",
+            "t_start": 751.902,
+            "t_end": 754.986
+          }
+        }
+      ],
+      "actions": [
+        {
+          "description": "Get Ohala's advice on which features to mark.",
+          "evidence": {
+            "segment_id": "seg-0081",
+            "t_start": 744.37,
+            "t_end": 745.663
+          },
+          "owner": "me011",
+          "deadline": null
+        },
+        {
+          "description": "Take a small subset of conversational speech and a small subset of digits, and look at the features.",
+          "evidence": {
+            "segment_id": "seg-0051",
+            "t_start": 703.677,
+            "t_end": 707.554
+          },
+          "owner": "me013",
+          "deadline": null
+        }
+      ],
+      "risks": [],
+      "open_questions": [
+        {
+          "description": "Is the corpus the right one to try this on?",
+          "evidence": {
+            "segment_id": "seg-0047",
+            "t_start": 694.112,
+            "t_end": 696.802
+          }
+        },
+        {
+          "description": "What acoustic features to mark?",
+          "evidence": {
+            "segment_id": "seg-0070",
+            "t_start": 730.372,
+            "t_end": 733.324
+          }
+        }
+      ]
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v3",
+    "attempts": 1,
+    "latency_ms": 2327,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

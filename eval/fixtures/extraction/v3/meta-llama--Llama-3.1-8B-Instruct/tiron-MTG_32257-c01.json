@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-MTG_32257-c01",
+  "status": "ok",
+  "transcript_sha256": "e5c76be36b73cfda8f82703ba8f9d793dd2abd930f21f73605e5cb365aeea1fb",
+  "outcome": {
+    "meeting_id": "tiron-MTG_32257-c01",
+    "record": {
+      "decisions": [
+        {
+          "description": "We will take care of the trailers emergency.",
+          "evidence": {
+            "segment_id": "seg-0075",
+            "t_start": 88.02,
+            "t_end": 95.22
+          }
+        },
+        {
+          "description": "We will fix the food and chef issues.",
+          "evidence": {
+            "segment_id": "seg-0161",
+            "t_start": 172.18,
+            "t_end": 177.86
+          }
+        },
+        {
+          "description": "We will fix the signage issues.",
+          "evidence": {
+            "segment_id": "seg-0162",
+            "t_start": 177.66,
+            "t_end": 182.05
+          }
+        },
+        {
+          "description": "We will report back in a week.",
+          "evidence": {
+            "segment_id": "seg-0270",
+            "t_start": 285.96,
+            "t_end": 291.39
+          }
+        },
+        {
+          "description": "We will fix the trailers, signage, and other issues by next week.",
+          "evidence": {
+            "segment_id": "seg-0309",
+            "t_start": 326.48,
+            "t_end": 329.63
+          }
+        }
+      ],
+      "actions": [
+        {
+          "description": "Brad will talk to the actors and get a finalized list.",
+          "evidence": {
+            "segment_id": "seg-0153",
+            "t_start": 161.77,
+            "t_end": 165.87
+          },
+          "owner": "Brad",
+          "deadline": null
+        },
+        {
+          "description": "Tom will hire a detective to find the missing trailer.",
+          "evidence": {
+            "segment_id": "seg-0154",
+            "t_start": 164.16,
+            "t_end": 171.08
+          },
+          "owner": "Tom",
+          "deadline": null
+        },
+        {
+          "description": "Brad will get a guy to fix the trailers in two days.",
+          "evidence": {
+            "segment_id": "seg-0282",
+            "t_start": 298.81,
+            "t_end": 303.27
+          },
+          "owner": "Brad",
+          "deadline": "2024-01-01"
+        }
+      ],
+      "risks": [
+        {
+          "description": "The trailers are a problem.",
+          "evidence": {
+            "segment_id": "seg-0022",
+            "t_start": 25.47,
+            "t_end": 29.78
+          }
+        },
+        {
+          "description": "The food and chef issues are a problem.",
+          "evidence": {
+            "segment_id": "seg-0118",
+            "t_start": 134.34,
+            "t_end": 138.63
+          }
+        },
+        {
+          "description": "The signage issues are a problem.",
+          "evidence": {
+            "segment_id": "seg-0162",
+            "t_start": 177.66,
+            "t_end": 182.05
+          }
+        }
+      ],
+      "open_questions": [
+        {
+          "description": "How to address the security issues.",
+          "evidence": {
+            "segment_id": "seg-0194",
+            "t_start": 209.51,
+            "t_end": 213.96
+          }
+        }
+      ]
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v3",
+    "attempts": 1,
+    "latency_ms": 4452,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

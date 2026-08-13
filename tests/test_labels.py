@@ -19,7 +19,14 @@ from m2x.labels import (
     load_labelled_case,
     save_labelled_case,
 )
-from m2x.schema import ActionItem, Decision, Evidence, MeetingRecord
+from m2x.extraction import segment_ids
+from m2x.schema import (
+    SEGMENT_CONTEXT_KEY,
+    ActionItem,
+    Decision,
+    Evidence,
+    MeetingRecord,
+)
 
 
 def _write_reference(directory: Path, meeting_id: str, count: int) -> None:
@@ -114,10 +121,17 @@ def test_a_citation_outside_the_case_is_rejected(tmp_path: Path) -> None:
         bad.validate_citations(reference_dir=tmp_path)
 
 
-def test_a_citation_with_the_wrong_time_range_is_rejected(tmp_path: Path) -> None:
-    """Citing a real segment for words spoken elsewhere in it still fails."""
+def test_a_hand_written_time_range_is_replaced_by_the_segments_own(tmp_path: Path) -> None:
+    """Labels are re-derived through the same path the extractor is, drift fix included.
+
+    Writing a citation by hand is exactly as error-prone as a model inventing one, and
+    every one of the 84 cited items in the dev set carries the *rendered* one-decimal
+    timestamps rather than the segment's exact float bounds. Under the pre-M2X-041
+    contract those survived only because of a rounding tolerance. Now they are simply
+    overwritten with the true bounds, so a label cannot disagree with its own transcript.
+    """
     _write_reference(tmp_path, "ref-001", 10)
-    bad = _case(
+    case = _case(
         label=MeetingRecord(
             decisions=[
                 Decision(
@@ -128,8 +142,16 @@ def test_a_citation_with_the_wrong_time_range_is_rejected(tmp_path: Path) -> Non
         )
     )
 
-    with pytest.raises(ConfigError, match="falls outside"):
-        bad.validate_citations(reference_dir=tmp_path)
+    # Accepted where the pre-M2X-041 contract raised "falls outside segment". The check
+    # that still bites is the segment id, covered by the test above.
+    case.validate_citations(reference_dir=tmp_path)
+
+    bounds = segment_ids(case.segments(reference_dir=tmp_path))
+    resolved = MeetingRecord.model_validate(
+        case.label.model_dump(), context={SEGMENT_CONTEXT_KEY: bounds}
+    ).decisions[0]
+
+    assert (resolved.evidence.t_start, resolved.evidence.t_end) == bounds["seg-0001"]
 
 
 def test_bounds_past_the_end_of_a_changed_reference_are_rejected(tmp_path: Path) -> None:

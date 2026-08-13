@@ -68,6 +68,7 @@ from m2x.eval_extraction import (
     format_report,
     run_extraction_eval,
 )
+from m2x.eval_fixtures import DEFAULT_FIXTURES_DIR, FixtureMode
 from m2x.eval_injections import (
     DEFAULT_INJECTIONS_DIR,
     format_verdicts,
@@ -582,6 +583,23 @@ def build_parser() -> argparse.ArgumentParser:
             "'lexical' is the superseded token-set F1, kept so pre-M2X-036 numbers can "
             "be reproduced (default: embedding)"
         ),
+    )
+    eval_extraction.add_argument(
+        "--fixtures",
+        type=FixtureMode,
+        choices=list(FixtureMode),
+        default=FixtureMode.LIVE,
+        help=(
+            "'off' samples the provider (default); 'record' samples it and freezes each "
+            "outcome under eval/fixtures/; 'replay' scores the frozen outcomes and "
+            "contacts no provider. A gate number needs 'replay' — see docs/gates.md"
+        ),
+    )
+    eval_extraction.add_argument(
+        "--fixtures-dir",
+        type=Path,
+        default=DEFAULT_FIXTURES_DIR,
+        help=f"root of the fixture set (default: {DEFAULT_FIXTURES_DIR})",
     )
     eval_extraction.add_argument(
         "--no-record",
@@ -1387,6 +1405,8 @@ def _run_eval(
                 prompt_version=args.prompt_version,
                 similarity=similarity,
                 threshold=EMBEDDING_MATCH_THRESHOLD if use_embedding else None,
+                fixtures=args.fixtures,
+                fixtures_dir=args.fixtures_dir,
             )
     except FileNotFoundError as error:
         print(f"error: {error}", file=sys.stderr)
@@ -1399,6 +1419,12 @@ def _run_eval(
     print(format_report(report))
     print(f"\nprompt: {prompt_version}   model: {args.model}")
     print(f"matching: {args.similarity} at {threshold}")
+    print(f"fixtures: {args.fixtures.value}", end="")
+    print(
+        ""
+        if args.fixtures is FixtureMode.REPLAY
+        else "  — this number samples the provider and will not reproduce on another clone"
+    )
 
     if not args.no_record:
         written = append_result(
@@ -1409,6 +1435,7 @@ def _run_eval(
             similarity_kind="embedding_cosine" if use_embedding else "token_set_f1",
             threshold=threshold,
             embed_model_repo_id=DEFAULT_EMBED_MODEL if use_embedding else None,
+            fixtures=args.fixtures,
         )
         print(f"recorded -> {written}")
 

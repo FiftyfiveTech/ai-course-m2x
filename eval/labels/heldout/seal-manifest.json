@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "sealed_at": "2026-08-13",
+  "cipher": "AES256",
+  "case_count": 10,
+  "cases": [
+    {
+      "case_id": "tiron-Bmr013-c03",
+      "file": "tiron-Bmr013-c03.json",
+      "sha256": "6715392051dcd76bc2047ffc0bae124c8fa1027d3de1c77cb6b5e08f4888c9cc"
+    },
+    {
+      "case_id": "tiron-Bmr018-c02",
+      "file": "tiron-Bmr018-c02.json",
+      "sha256": "72c9af2f1bffe597e9782f0f38c2a49ef749de41f8b9f9a848fbfeadc706ef4a"
+    },
+    {
+      "case_id": "tiron-Bmr018-c03",
+      "file": "tiron-Bmr018-c03.json",
+      "sha256": "872da6719b84853a55ead3d866e72c2a36413f34af59123caf0e2fa152d6af9d"
+    },
+    {
+      "case_id": "tiron-EN2002a-c01",
+      "file": "tiron-EN2002a-c01.json",
+      "sha256": "e1ddeb846021516a3f99879932dcd393f3d3fec9a92b856908b1fe35afede121"
+    },
+    {
+      "case_id": "tiron-MTG_32040-c01",
+      "file": "tiron-MTG_32040-c01.json",
+      "sha256": "ddf1332e43d272b4a56533d246a82bdc8db85a9967d1a8cb45578bef23979348"
+    },
+    {
+      "case_id": "tiron-MTG_32072-c01",
+      "file": "tiron-MTG_32072-c01.json",
+      "sha256": "478636965bec474c33b217a6712455a39107016fb0b03a11963cdebfe0b8f137"
+    },
+    {
+      "case_id": "tiron-MTG_32074-c01",
+      "file": "tiron-MTG_32074-c01.json",
+      "sha256": "76e6cfb0ee902879cfa38ea4dabb2e4785570c33fb3f37969bacc5b45e4b1408"
+    },
+    {
+      "case_id": "tiron-MTG_32179-c01",
+      "file": "tiron-MTG_32179-c01.json",
+      "sha256": "68c68bc8af12fd2abbbf1a6771e4e97144bd09bfc9b7bcc9689c4a8a698e7a7f"
+    },
+    {
+      "case_id": "tiron-MTG_32256-c01",
+      "file": "tiron-MTG_32256-c01.json",
+      "sha256": "3a515c270620ca60b79505918a2682dd2f0b8e1b6b34b80b32cde0d05221b66c"
+    },
+    {
+      "case_id": "tiron-MTG_32322-c01",
+      "file": "tiron-MTG_32322-c01.json",
+      "sha256": "4859d36a6ee62736ae1f4ca1e2b0b0a020d2fbe31eb09c5de89c40829407f91d"
+    }
+  ]
+}

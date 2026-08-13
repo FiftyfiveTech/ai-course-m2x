@@ -26,6 +26,39 @@ per-field table plus the overall micro-F1. Every run appends a record to `result
 carrying the prompt version, the git SHA and the set name, because a number that cannot
 name the prompt that earned it is a rumour.
 
+### `--fixtures` — and why a gate run needs it
+
+The command above **samples the provider**, and the cache that makes a re-run cheap is
+git-ignored. M2X-041 measured what that costs: the same prompt, commit, matcher and
+fifteen cases scored 0.3086 on one checkout and 0.4279 on another, differing only in what
+each `data/cache/` held. `docs/gates.md` requires a number the supervisor reproduces on a
+fresh clone, and that number could not be reproduced by anyone.
+
+```bash
+uv run m2x eval extraction --set dev --fixtures record   # sample once, freeze the outcomes
+uv run m2x eval extraction --set dev --fixtures replay   # score the frozen outcomes
+```
+
+`replay` reads committed outcomes from `eval/fixtures/extraction/<prompt>/<model>/` and
+contacts no provider at all — a fresh clone with no API key reproduces the number exactly.
+It reproduces *scoring*, not *sampling*: a fixture freezes one draw from the model, chosen
+at record time, and re-recording is an explicit act that shows up as a diff. That is the
+property the cache never had.
+
+Three refusals make it trustworthy, and each maps to a way the number could otherwise lie:
+
+| refusal | what it prevents |
+|---|---|
+| a missing fixture aborts the run | a case dropping out of the micro-F1 denominator invisibly |
+| a fixture recorded from different transcript text aborts the run | scoring a model's answer against words it never read, after an `eval/tiron/` edit |
+| provider failures are never recorded | a 429 becoming a permanent gate number |
+
+Schema failures **are** recorded, because 100% schema validity is a gate leg and a fixture
+set holding only successes would report it green by construction.
+
+Every results row carries `fixtures: off | record | replay`. Rows written before M2X-041
+have no such field and are all `off`.
+
 ## What gets compared
 
 An extracted `MeetingRecord` against a labelled one, per case, then summed across cases.

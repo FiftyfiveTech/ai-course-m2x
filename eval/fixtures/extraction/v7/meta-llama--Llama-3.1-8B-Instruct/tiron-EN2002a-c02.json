@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-EN2002a-c02",
+  "status": "ok",
+  "transcript_sha256": "015c3bb0872b2079521f5f1558f97e2828ec33642c9a4a16bd20c4d87e6de1fb",
+  "outcome": {
+    "meeting_id": "tiron-EN2002a-c02",
+    "record": {
+      "decisions": [
+        {
+          "description": "Decide on the search interface and what to include in it over the weekend.",
+          "evidence": {
+            "segment_id": "seg-0024",
+            "t_start": 1776.468,
+            "t_end": 1779.664
+          }
+        }
+      ],
+      "actions": [
+        {
+          "description": "Give the others a tutorial on accessing the corpus and walk them through the existing code and set-up.",
+          "evidence": {
+            "segment_id": "seg-0040",
+            "t_start": 1823.04,
+            "t_end": 1828.52
+          },
+          "owner": "null",
+          "deadline": null
+        }
+      ],
+      "risks": [],
+      "open_questions": [
+        {
+          "description": "What types of search to include in the search interface.",
+          "evidence": {
+            "segment_id": "seg-0026",
+            "t_start": 1779.776,
+            "t_end": 1789.376
+          }
+        },
+        {
+          "description": "What the query language can do.",
+          "evidence": {
+            "segment_id": "seg-0030",
+            "t_start": 1791.304,
+            "t_end": 1796.08
+          }
+        }
+      ]
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v7",
+    "attempts": 1,
+    "latency_ms": 2750,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-ES2004a-c02",
+  "status": "ok",
+  "transcript_sha256": "0b8a945ab82721fa33d49448a197df3934b0da65d56350a3d7cd29a32467464e",
+  "outcome": {
+    "meeting_id": "tiron-ES2004a-c02",
+    "record": {
+      "decisions": [
+        {
+          "description": "The design of the device does not have to be fashionable.",
+          "evidence": {
+            "segment_id": "seg-0045",
+            "t_start": 984.944,
+            "t_end": 1014.848
+          }
+        }
+      ],
+      "actions": [
+        {
+          "description": "Research the cost implications of the flip top remote control.",
+          "evidence": {
+            "segment_id": "seg-0031",
+            "t_start": 950.694,
+            "t_end": 959.392
+          },
+          "owner": null,
+          "deadline": null
+        }
+      ],
+      "risks": [
+        {
+          "description": "The device may be too expensive due to the cost implications of the flip top remote control.",
+          "evidence": {
+            "segment_id": "seg-0031",
+            "t_start": 950.694,
+            "t_end": 959.392
+          }
+        }
+      ],
+      "open_questions": []
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v7",
+    "attempts": 1,
+    "latency_ms": 2000,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

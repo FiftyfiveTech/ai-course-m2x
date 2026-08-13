@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-MTG_32185-c01",
+  "status": "ok",
+  "transcript_sha256": "c0e8b38f5217dff8ec13cab66c7866686f487a79cbf8e134c0d35d7a6de72018",
+  "outcome": {
+    "meeting_id": "tiron-MTG_32185-c01",
+    "record": {
+      "decisions": [
+        {
+          "description": "The team decided to finalize some things, especially around the holiday.",
+          "evidence": {
+            "segment_id": "seg-0036",
+            "t_start": 144.54,
+            "t_end": 147.97
+          }
+        },
+        {
+          "description": "The team decided to finalize the salaries, benefits, and values for the new staff.",
+          "evidence": {
+            "segment_id": "seg-0031",
+            "t_start": 124.75,
+            "t_end": 131.84
+          }
+        },
+        {
+          "description": "The team decided to open the aquarium and bring in a new kind of public.",
+          "evidence": {
+            "segment_id": "seg-0061",
+            "t_start": 230.29,
+            "t_end": 236.67
+          }
+        }
+      ],
+      "actions": [
+        {
+          "description": "Bring in all the water and all the fish for the aquarium.",
+          "evidence": {
+            "segment_id": "seg-0027",
+            "t_start": 106.66,
+            "t_end": 111.36
+          },
+          "owner": null,
+          "deadline": null
+        },
+        {
+          "description": "Research the cost implications of the aquarium.",
+          "evidence": {
+            "segment_id": "seg-0027",
+            "t_start": 106.66,
+            "t_end": 111.36
+          },
+          "owner": null,
+          "deadline": null
+        },
+        {
+          "description": "Prepare a report on the aquarium project.",
+          "evidence": {
+            "segment_id": "seg-0007",
+            "t_start": 28.14,
+            "t_end": 36.06
+          },
+          "owner": null,
+          "deadline": null
+        },
+        {
+          "description": "Share the graphs for the aquarium project with the team.",
+          "evidence": {
+            "segment_id": "seg-0043",
+            "t_start": 173.04,
+            "t_end": 177.24
+          },
+          "owner": null,
+          "deadline": null
+        },
+        {
+          "description": "Hire a floor manager for the sales department.",
+          "evidence": {
+            "segment_id": "seg-0073",
+            "t_start": 268.54,
+            "t_end": 276.42
+          },
+          "owner": null,
+          "deadline": null
+        }
+      ],
+      "risks": [
+        {
+          "description": "The team needs to focus on the legal documents for the aquarium project.",
+          "evidence": {
+            "segment_id": "seg-0027",
+            "t_start": 106.66,
+            "t_end": 111.36
+          }
+        },
+        {
+          "description": "The team needs to deal with the legal problem for the parking lot.",
+          "evidence": {
+            "segment_id": "seg-0069",
+            "t_start": 256.34,
+            "t_end": 261.49
+          }
+        }
+      ],
+      "open_questions": [
+        {
+          "description": "What is the cost of the aquarium project?",
+          "evidence": {
+            "segment_id": "seg-0038",
+            "t_start": 154.14,
+            "t_end": 160.95
+          }
+        },
+        {
+          "description": "How will the aquarium project impact the overall business and projected budgets?",
+          "evidence": {
+            "segment_id": "seg-0044",
+            "t_start": 177.24,
+            "t_end": 181.56
+          }
+        },
+        {
+          "description": "What is the plan for the food court and how will it relate to the aquarium project?",
+          "evidence": {
+            "segment_id": "seg-0090",
+            "t_start": 318.34,
+            "t_end": 320.89
+          }
+        }
+      ]
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v3",
+    "attempts": 1,
+    "latency_ms": 4390,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

@@ -84,21 +84,28 @@ ten. Seeding is not fussiness: an unseeded split can be re-rolled until the held
 looks favourable and nothing in the repository would show it, which matters more than
 usual when the labeller and the prompt author are the same.
 
-## The seal — by convention, not encryption
+## The seal — convention until 2026-08-13, encryption after
 
 The ticket offers two forms: encrypt the set, **or** cover it with an agreed do-not-open
-rule. This project took the second, by the user's decision on 2026-08-12. `heldout/` holds
-10 plaintext cases which are **git-ignored and therefore never committed**.
+rule. This project first took the second, by the user's decision on 2026-08-12, and that
+left two gaps which M2X-041 closed before the gate was allowed to run:
 
-Two consequences, both real:
-
-1. **The held-out set exists only on the machine that produced it.** A fresh clone has
-   `dev/` and no `heldout/`, so it cannot reproduce the M2X-040 gate number — which
+1. **The held-out set existed only on the machine that produced it.** A fresh clone had
+   `dev/` and no `heldout/`, so it could not reproduce the M2X-040 gate number — which
    `CLAUDE.md` otherwise requires of any gate ("a gate number counts only when the
-   supervisor re-runs the command on a fresh clone"). The gate record must say so.
-2. **Nothing proves the set was unedited between the freeze and the gate.** Committed
-   ciphertext would have; an ignored directory cannot. The seal rests on the rule being
-   followed, not on it being enforced.
+   supervisor re-runs the command on a fresh clone").
+2. **Nothing proved the set was unedited between the freeze and the gate.** An ignored
+   directory cannot show that. The seal rested on the rule being followed, not on it being
+   enforced.
+
+Both are now covered by committed artefacts: `<case>.json.gpg` for recoverability and
+`heldout/seal-manifest.json` for integrity. The plaintext stays git-ignored. The full
+rationale — including why the digest manifest, not the ciphertext, is what actually proves
+anything — is in [`heldout/README.md`](heldout/README.md).
+
+**What the seal still does not cover:** it was applied on 2026-08-13, after the cases were
+written and after dev iteration had run on this machine. It makes edits visible from that
+commit forward and says nothing about the window before it. Recorded rather than glossed.
 
 **Protocol:** opened exactly once, at M2X-040, after the prompt version and SHA under
 test are frozen. The number goes into `docs/gates.md` whatever it is. After that the set

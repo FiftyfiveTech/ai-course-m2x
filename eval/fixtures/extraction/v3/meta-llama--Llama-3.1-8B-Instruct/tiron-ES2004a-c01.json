@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-ES2004a-c01",
+  "status": "ok",
+  "transcript_sha256": "aa520210778681e69dd95e38c2e0a0af35432973ce22040dcfec1b9da12ba8cc",
+  "outcome": {
+    "meeting_id": "tiron-ES2004a-c01",
+    "record": {
+      "decisions": [
+        {
+          "description": "The bird is an eagle.",
+          "evidence": {
+            "segment_id": "seg-0033",
+            "t_start": 501.616,
+            "t_end": 502.854
+          }
+        },
+        {
+          "description": "The bird is an eagle, and it is a flying animal.",
+          "evidence": {
+            "segment_id": "seg-0030",
+            "t_start": 492.88,
+            "t_end": 518.752
+          }
+        }
+      ],
+      "actions": [
+        {
+          "description": "Give the others a tutorial on accessing the corpus and walk them through the existing code and set-up.",
+          "evidence": {
+            "segment_id": "seg-0010",
+            "t_start": 439.803,
+            "t_end": 441.808
+          },
+          "owner": null,
+          "deadline": null
+        }
+      ],
+      "risks": [],
+      "open_questions": [
+        {
+          "description": "What is the selling price in Pounds?",
+          "evidence": {
+            "segment_id": "seg-0045",
+            "t_start": 563.104,
+            "t_end": 575.536
+          }
+        }
+      ]
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v3",
+    "attempts": 1,
+    "latency_ms": 1813,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

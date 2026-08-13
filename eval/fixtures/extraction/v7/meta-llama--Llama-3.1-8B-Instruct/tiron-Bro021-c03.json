@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-Bro021-c03",
+  "status": "ok",
+  "transcript_sha256": "5c8a5a7115023f2b1d2ad7e790ab21a94ebd4ba3797cda566b8f50f13e27180c",
+  "outcome": {
+    "meeting_id": "tiron-Bro021-c03",
+    "record": {
+      "decisions": [],
+      "actions": [],
+      "risks": [],
+      "open_questions": [
+        {
+          "description": "Determine the first variable in the probability.",
+          "evidence": {
+            "segment_id": "seg-0023",
+            "t_start": 3013.054,
+            "t_end": 3015.843
+          }
+        },
+        {
+          "description": "Identify the weight for each Gaussian in the dictionary.",
+          "evidence": {
+            "segment_id": "seg-0033",
+            "t_start": 3036.753,
+            "t_end": 3041.243
+          }
+        },
+        {
+          "description": "Develop an expression for calculating the required value.",
+          "evidence": {
+            "segment_id": "seg-0042",
+            "t_start": 3057.586,
+            "t_end": 3061.542
+          }
+        }
+      ]
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v7",
+    "attempts": 1,
+    "latency_ms": 1235,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

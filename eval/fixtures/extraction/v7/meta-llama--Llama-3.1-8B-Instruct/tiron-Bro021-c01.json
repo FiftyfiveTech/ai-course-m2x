@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-Bro021-c01",
+  "status": "ok",
+  "transcript_sha256": "80f5e2dc92954165fcb754b9d602da665d47dc27f49d0f9b5095f300a78ff883",
+  "outcome": {
+    "meeting_id": "tiron-Bro021-c01",
+    "record": {
+      "decisions": [],
+      "actions": [],
+      "risks": [],
+      "open_questions": []
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v7",
+    "attempts": 1,
+    "latency_ms": 577,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

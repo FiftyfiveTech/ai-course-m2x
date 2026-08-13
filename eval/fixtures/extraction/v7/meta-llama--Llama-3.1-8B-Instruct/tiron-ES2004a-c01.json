@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-ES2004a-c01",
+  "status": "ok",
+  "transcript_sha256": "aa520210778681e69dd95e38c2e0a0af35432973ce22040dcfec1b9da12ba8cc",
+  "outcome": {
+    "meeting_id": "tiron-ES2004a-c01",
+    "record": {
+      "decisions": [],
+      "actions": [],
+      "risks": [],
+      "open_questions": [
+        {
+          "description": "What is the selling price in Pounds?",
+          "evidence": {
+            "segment_id": "seg-0045",
+            "t_start": 563.104,
+            "t_end": 575.536
+          }
+        }
+      ]
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v7",
+    "attempts": 1,
+    "latency_ms": 609,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-Bmr013-c02",
+  "status": "ok",
+  "transcript_sha256": "bc357140bf2208973b2176e8ac61374372aaa0de96b1fa2a5ff58161556d2837",
+  "outcome": {
+    "meeting_id": "tiron-Bmr013-c02",
+    "record": {
+      "decisions": [],
+      "actions": [
+        {
+          "description": "Give the others a tutorial on accessing the corpus and walk them through the existing code and set-up.",
+          "evidence": {
+            "segment_id": "seg-0026",
+            "t_start": 1520.549,
+            "t_end": 1521.278
+          },
+          "owner": "me013",
+          "deadline": null
+        },
+        {
+          "description": "Use ninetieth quartile, rather than minimum, for normalization.",
+          "evidence": {
+            "segment_id": "seg-0053",
+            "t_start": 1592.04,
+            "t_end": 1594.806
+          },
+          "owner": "me011",
+          "deadline": null
+        },
+        {
+          "description": "Do some meetings in terms of speech-nonspeech in the specific channels.",
+          "evidence": {
+            "segment_id": "seg-0078",
+            "t_start": 1643.273,
+            "t_end": 1647.72
+          },
+          "owner": "mn014",
+          "deadline": null
+        }
+      ],
+      "risks": [
+        {
+          "description": "The system doesn't work at all when there are problems with normalization.",
+          "evidence": {
+            "segment_id": "seg-0066",
+            "t_start": 1613.765,
+            "t_end": 1616.284
+          }
+        },
+        {
+          "description": "The evaluation of the system is a little bit hard as I don't have any references.",
+          "evidence": {
+            "segment_id": "seg-0073",
+            "t_start": 1627.633,
+            "t_end": 1632.306
+          }
+        }
+      ],
+      "open_questions": []
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v3",
+    "attempts": 1,
+    "latency_ms": 2405,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}

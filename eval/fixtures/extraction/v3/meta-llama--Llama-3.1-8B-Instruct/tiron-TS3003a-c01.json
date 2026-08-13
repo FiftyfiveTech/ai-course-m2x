@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "case_id": "tiron-TS3003a-c01",
+  "status": "ok",
+  "transcript_sha256": "b73198e248c165426c4672a96195d40caefc57362dd3041e5837f1fa6426cbab",
+  "outcome": {
+    "meeting_id": "tiron-TS3003a-c01",
+    "record": {
+      "decisions": [],
+      "actions": [
+        {
+          "description": "Give a tutorial on accessing the corpus and walk the others through the existing code and set-up.",
+          "evidence": {
+            "segment_id": "seg-0025",
+            "t_start": 1098.96,
+            "t_end": 1110.176
+          },
+          "owner": null,
+          "deadline": null
+        }
+      ],
+      "risks": [],
+      "open_questions": []
+    },
+    "model_repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+    "provider": "nim",
+    "prompt_name": "extraction",
+    "prompt_version": "v3",
+    "attempts": 1,
+    "latency_ms": 890,
+    "cost_usd": 0.0,
+    "truncated": false
+  },
+  "failure": null
+}
