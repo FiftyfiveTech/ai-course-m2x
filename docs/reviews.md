@@ -92,3 +92,35 @@ it did, not less.
 
 **PM — cross-review.** *Pending.* Yash explains the diarisation code path (M2X-022);
 Saurabh explains the comparison doc's conclusions and defends the adopted route.
+
+---
+
+## Day 4 — RAG architecture (M2X-042)
+
+**AM — architecture pairing.** *Recorded, not paired.* The ticket asks the pair to decide
+the chunk unit, embedding model, vector store, metadata schema, top-k, abstention threshold
+and citation format together, and to commit the design doc *before* the index code. Neither
+happened in that order: M2X-043 and M2X-044 were built and merged first, so every item on
+that list was already decided in code by the time this ticket was opened.
+
+[`docs/design/day4-rag.md`](design/day4-rag.md) therefore records the decisions as taken,
+traces each to the ticket that took it, and answers the two questions the ticket says a
+pairing is incomplete without — *why this chunk unit* and *what happens on a low retrieval
+score*. Its five **OPEN** items are what a pairing would actually have argued about:
+
+1. `--max-distance = 0.48` rests on eight questions, and its answerable band spans 0.15 of
+   distance with no relation to answer quality. M2X-045's thirty questions re-derive it.
+2. `top_k = 5` has never been varied, and context precision is a direct function of it.
+3. No `mm:ss` citation has been produced against a real meeting — every verified citation to
+   date is a `§ heading` against this repo's own markdown.
+4. The RAG prompt default is still `latest_version('rag')` — the exact unpinned-default trap
+   that silently moved the extraction default from v3 to v5 on a merge.
+5. Nobody has measured the cost side of the 1200-character chunk.
+
+**PM — cross-review.** *Pending.* Yash explains the indexing and retrieval code path
+(M2X-043/044); Saurabh explains the 30-question set's design and what each RAGAS metric
+actually measures — context precision vs faithfulness vs citation accuracy.
+
+Not written up from what it would have concluded. One agent authoring both halves produces
+something shaped like a review with no second opinion in it, which is the same failure mode
+as one agent writing the labels, the extractor and the score.
