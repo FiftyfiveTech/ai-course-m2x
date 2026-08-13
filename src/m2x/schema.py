@@ -113,8 +113,24 @@ class _Item(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    description: str = Field(min_length=1)
-    """One self-contained sentence, in the meeting's own terms."""
+    description: str = Field(
+        min_length=1,
+        description=(
+            "One self-contained third-person sentence stating the resolved fact, not a "
+            "quote of what was said. Resolve pronouns and 'this'/'that' against the "
+            "surrounding turns, and name both the subject and the object so the sentence "
+            "stands alone away from the transcript. Roughly 12-20 words."
+        ),
+    )
+    """One self-contained sentence, in the meeting's own terms.
+
+    The guidance is duplicated into ``Field(description=...)`` on purpose. A bare
+    attribute docstring is invisible to the model: Pydantic only folds it into the JSON
+    schema under ``use_attribute_docstrings``, which is not set, so what Instructor
+    injected was ``{"minLength": 1, "title": "Description", "type": "string"}`` — the
+    convention existed for readers of this file and for nobody else. Class docstrings do
+    reach the model, which is why the kinds were described and the fields were not.
+    """
 
     evidence: Evidence
     """The transcript span this item was read from."""
@@ -135,7 +151,14 @@ class OpenQuestion(_Item):
 class ActionItem(_Item):
     """Work someone committed to."""
 
-    owner: str | None = None
+    owner: str | None = Field(
+        default=None,
+        description=(
+            "Who accepted the work, named as the meeting names them. null when nobody was "
+            "named. Never the speaker of the cited segment merely because they spoke it, "
+            "and never a pronoun."
+        ),
+    )
     """Who owns it, exactly as named in the meeting. ``None`` when nobody was named.
 
     Never inferred from who happened to be speaking: "we should do X" said by Yash is
