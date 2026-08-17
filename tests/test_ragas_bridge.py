@@ -26,11 +26,16 @@ import pytest
 
 from conftest import chat_response
 from m2x.adapter import ModelAdapter
-from m2x.ragas_bridge import JUDGE_MAX_TOKENS, AdapterRagasLLM
 
 ragas_base = pytest.importorskip(
     "ragas.llms.base", reason="optional 'ragas' dependency group is not installed"
 )
+
+# Below the skip on purpose: `m2x.ragas_bridge` imports langchain_core at module scope, so
+# importing it above would raise before the skip could fire and take the whole collection
+# down on a default `uv sync`. `m2x.cli` reaches for it inside the command for the same
+# reason.
+from m2x.ragas_bridge import JUDGE_MAX_TOKENS, AdapterRagasLLM  # noqa: E402
 
 MODEL = "meta-llama/Llama-3.1-8B-Instruct"
 
