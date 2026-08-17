@@ -1,0 +1,12 @@
+{
+  "question_id": "q15",
+  "gist": "She refused — the stop is only a night near the airport and the planned schedule stands.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32322",
+      "first_turn": 145,
+      "last_turn": 150
+    }
+  ],
+  "notes": "The clearest refusal in the four meetings, and useful precisely because most answers here are agreements."
+}

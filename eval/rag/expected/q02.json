@@ -1,0 +1,12 @@
+{
+  "question_id": "q02",
+  "gist": "About a thousand small fluffy sea animals to hand out in the mall, which say 'go up to the third floor' when pressed.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32185",
+      "first_turn": 15,
+      "last_turn": 20
+    }
+  ],
+  "notes": "Ron. The talking detail is at turn 18 and is the part a summary usually drops, so the span covers it."
+}

@@ -1,0 +1,67 @@
+{
+  "case_id": "tiron-MTG_32072-c01",
+  "meeting_id": "tiron-MTG_32072",
+  "first_turn": 0,
+  "last_turn": 179,
+  "label": {
+    "decisions": [
+      {
+        "description": "The customer for the workplace grooming service is the company, which offers it as an employee benefit, rather than the individual employee",
+        "evidence": {
+          "segment_id": "seg-0031",
+          "t_start": 80.6,
+          "t_end": 83.0
+        }
+      },
+      {
+        "description": "Assistants collect the pet from the employee and bring it back, so nobody has to leave work",
+        "evidence": {
+          "segment_id": "seg-0054",
+          "t_start": 128.5,
+          "t_end": 134.4
+        }
+      },
+      {
+        "description": "Start with a feasibility study covering one or two companies before committing further",
+        "evidence": {
+          "segment_id": "seg-0159",
+          "t_start": 328.1,
+          "t_end": 333.8
+        }
+      }
+    ],
+    "actions": [
+      {
+        "description": "Do the research for the feasibility study and produce the numbers",
+        "evidence": {
+          "segment_id": "seg-0165",
+          "t_start": 339.8,
+          "t_end": 342.2
+        },
+        "owner": "Beth",
+        "deadline": null
+      }
+    ],
+    "risks": [
+      {
+        "description": "Running the service needs trucks and staff to drive them, wash the dogs and walk the dogs, beyond the van already owned",
+        "evidence": {
+          "segment_id": "seg-0130",
+          "t_start": 275.8,
+          "t_end": 280.3
+        }
+      }
+    ],
+    "open_questions": [
+      {
+        "description": "What the grooming products used cost",
+        "evidence": {
+          "segment_id": "seg-0174",
+          "t_start": 354.2,
+          "t_end": 357.0
+        }
+      }
+    ]
+  },
+  "notes": "The action is cited at Beth's acceptance (seg-0165) rather than at Rachel's request (seg-0162), because a request is not yet a commitment -- the frozen contract cites the earliest segment where an item is recognisable as one, and owner is whoever accepted. Applied the same way in every case with a request/acceptance pair. Two concerns raised are deliberately NOT recorded because the case resolves them: grooming eating into working hours (seg-0044) is answered by the collect-and-return decision, and parking (seg-0137) is answered by the company providing it. Recording a mitigated concern as a standing risk would reward an extractor for reading only the first half of an exchange."
+}

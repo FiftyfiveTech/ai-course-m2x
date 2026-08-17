@@ -1,0 +1,12 @@
+{
+  "question_id": "q10",
+  "gist": "Ron suggested Kim Kardashian wearing the hiking boots; Sarah said she was not sure Kim Kardashian is who they want promoting the product.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32092",
+      "first_turn": 136,
+      "last_turn": 149
+    }
+  ],
+  "notes": "Rachel asks Sarah a different Kim Kardashian question at turn 146, so a retrieval can land on the wrong speaker's turn and still look right. Sarah's actual answer is at 149."
+}

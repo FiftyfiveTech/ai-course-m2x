@@ -1,0 +1,13 @@
+{
+  "case_id": "tiron-MTG_32256-c01",
+  "meeting_id": "tiron-MTG_32256",
+  "first_turn": 0,
+  "last_turn": 106,
+  "label": {
+    "decisions": [],
+    "actions": [],
+    "risks": [],
+    "open_questions": []
+  },
+  "notes": "Not a meeting. Four speakers read aloud a promotional article about a robotic nurse, then perform a scripted contrarian Q&A. Nothing is decided, owned, or left open by the speakers -- the questions are a rhetorical device inside the script and each is answered in the next breath. Empty is correct, and this is a demanding case: the text is full of persuasive claims and benefit language that a model asked to find decisions may well convert into decisions. Flagged in the ticket writeup because it means the NOTSOFAR slice measures false-positive behaviour rather than recall."
+}

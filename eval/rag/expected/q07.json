@@ -1,0 +1,12 @@
+{
+  "question_id": "q07",
+  "gist": "She wants to start in the US where the company is based: shipping to Japan is far more expensive and they already know the domestic hiking market.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32092",
+      "first_turn": 99,
+      "last_turn": 109
+    }
+  ],
+  "notes": "A rebuttal spread over five of Sarah's turns with three interjections inside it. The cost and the domestic-market reasons are both at turn 109."
+}

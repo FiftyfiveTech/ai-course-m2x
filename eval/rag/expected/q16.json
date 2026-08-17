@@ -1,0 +1,12 @@
+{
+  "question_id": "q16",
+  "gist": "Nursing Bot Incorporated; it stands five feet tall.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32256",
+      "first_turn": 8,
+      "last_turn": 9
+    }
+  ],
+  "notes": "A two-fact question over two adjacent turns, split mid-sentence by a filler token at the end of turn 8."
+}

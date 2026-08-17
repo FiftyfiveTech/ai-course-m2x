@@ -1,0 +1,12 @@
+{
+  "question_id": "q09",
+  "gist": "California, because it has warm-weather climate year round plus snow for skiers in winter, so a multitude of sports can be marketed there.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32092",
+      "first_turn": 113,
+      "last_turn": 125
+    }
+  ],
+  "notes": "Donald's turns are short and fragmentary; the reasoning only reads as an argument across the whole span."
+}

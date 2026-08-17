@@ -1,0 +1,6 @@
+{
+  "question_id": "q28",
+  "gist": "",
+  "evidence": [],
+  "notes": "The company is named and described at length in MTG_32256, so the entity match is strong and the fact is absent. Tests whether a near hit on the subject is mistaken for a hit on the question."
+}

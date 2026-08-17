@@ -1,0 +1,12 @@
+{
+  "question_id": "q01",
+  "gist": "Legal documents are needed to bring in the water and the fish, and John says it will take more than a couple of days.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32185",
+      "first_turn": 23,
+      "last_turn": 28
+    }
+  ],
+  "notes": "John states the obstacle across four consecutive turns. Turn 26 alone names 'a lot of legal documents'; the span is widened to 28 because that is where the difficulty is quantified."
+}

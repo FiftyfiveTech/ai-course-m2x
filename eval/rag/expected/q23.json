@@ -1,0 +1,17 @@
+{
+  "question_id": "q23",
+  "gist": "In the mall meeting she asks everyone to look through their connections for an experienced floor manager; in the marketing meeting she asks Donald to send her a list of influencers by Monday.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32185",
+      "first_turn": 70,
+      "last_turn": 76
+    },
+    {
+      "meeting_id": "tiron-MTG_32092",
+      "first_turn": 152,
+      "last_turn": 156
+    }
+  ],
+  "notes": "Tests whether retrieval can separate two meetings that share a chair and a register. The distractor risk is high: both spans are Sarah making a staffing-adjacent request."
+}

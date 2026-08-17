@@ -1,0 +1,12 @@
+{
+  "question_id": "q12",
+  "gist": "Something artistic — a day of painting near the beach.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32322",
+      "first_turn": 49,
+      "last_turn": 55
+    }
+  ],
+  "notes": "Sally's request is split across four turns with Jenny echoing 'Artistic' in the middle, so the object ('paints', 'near the beach') is two turns after the request."
+}

@@ -1,0 +1,27 @@
+{
+  "question_id": "q24",
+  "gist": "In the mall meeting Rachel worries about the cost of the aquarium and especially the insurance, and Ron says the budget will be a problem; in the marketing meeting Rachel argues online advertising is much cheaper than TV, and Sarah says shipping to Japan would be far more expensive.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32185",
+      "first_turn": 37,
+      "last_turn": 39
+    },
+    {
+      "meeting_id": "tiron-MTG_32185",
+      "first_turn": 51,
+      "last_turn": 51
+    },
+    {
+      "meeting_id": "tiron-MTG_32092",
+      "first_turn": 127,
+      "last_turn": 133
+    },
+    {
+      "meeting_id": "tiron-MTG_32092",
+      "first_turn": 108,
+      "last_turn": 109
+    }
+  ],
+  "notes": "Four spans across two meetings, and the same speaker (Rachel) raises cost in both — so retrieving 'Rachel on cost' is not sufficient; the question needs both meetings."
+}

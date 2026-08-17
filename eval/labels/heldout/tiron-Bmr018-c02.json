@@ -1,0 +1,47 @@
+{
+  "case_id": "tiron-Bmr018-c02",
+  "meeting_id": "tiron-Bmr018",
+  "first_turn": 751,
+  "last_turn": 802,
+  "label": {
+    "decisions": [],
+    "actions": [],
+    "risks": [
+      {
+        "description": "The word timings are unknown because these meetings were recorded before the segmentation existed, so an overlap cannot be confirmed as real",
+        "evidence": {
+          "segment_id": "seg-0017",
+          "t_start": 1585.0,
+          "t_end": 1595.2
+        }
+      },
+      {
+        "description": "Any script approximating the alignment would suffer from slippage",
+        "evidence": {
+          "segment_id": "seg-0052",
+          "t_start": 1707.9,
+          "t_end": 1716.4
+        }
+      }
+    ],
+    "open_questions": [
+      {
+        "description": "Which approach to take -- using non-lapel channels if the alignments are good enough, or aligning Thilo's energy segmentations with what they have",
+        "evidence": {
+          "segment_id": "seg-0015",
+          "t_start": 1573.7,
+          "t_end": 1581.1
+        }
+      },
+      {
+        "description": "How to tell a real overlap from a segment merely correlated with an overlap, without knowing where the words fall in time",
+        "evidence": {
+          "segment_id": "seg-0025",
+          "t_start": 1622.1,
+          "t_end": 1626.7
+        }
+      }
+    ]
+  },
+  "notes": "No decisions and no actions: the case is entirely option-weighing for a Eurospeech paper, and nothing is chosen or taken on. fe008's 'in principle I could imagine writing a script' (seg-0049) is explicitly hypothetical and is not an action -- it is the kind of phrasing an extractor most reliably mistakes for a commitment. me011's 'I forgot the digital camera again' (seg-0036) is meeting-room chatter and is correctly nothing."
+}

@@ -1,0 +1,73 @@
+{
+  "case_id": "tiron-MTG_32322-c01",
+  "meeting_id": "tiron-MTG_32322",
+  "first_turn": 0,
+  "last_turn": 157,
+  "label": {
+    "decisions": [
+      {
+        "description": "Horseback riding is included in the retreat programme",
+        "evidence": {
+          "segment_id": "seg-0043",
+          "t_start": 97.2,
+          "t_end": 99.4
+        }
+      },
+      {
+        "description": "Museum visits are included, including in the capital",
+        "evidence": {
+          "segment_id": "seg-0074",
+          "t_start": 157.8,
+          "t_end": 161.5
+        }
+      },
+      {
+        "description": "A private chef will be brought in at the accommodation to teach the group to cook classic Mexican food",
+        "evidence": {
+          "segment_id": "seg-0097",
+          "t_start": 221.1,
+          "t_end": 226.0
+        }
+      },
+      {
+        "description": "Attendees may bring a spouse or significant other, or a parent if they have none",
+        "evidence": {
+          "segment_id": "seg-0129",
+          "t_start": 300.6,
+          "t_end": 305.3
+        }
+      },
+      {
+        "description": "Children are not coming on the retreat",
+        "evidence": {
+          "segment_id": "seg-0135",
+          "t_start": 308.6,
+          "t_end": 312.6
+        }
+      },
+      {
+        "description": "No theme-park stop will be added to the Florida layover; it stays a single night near the airport",
+        "evidence": {
+          "segment_id": "seg-0151",
+          "t_start": 334.6,
+          "t_end": 340.9
+        }
+      }
+    ],
+    "actions": [
+      {
+        "description": "Talk to the chef about what he can put on the menu, including the foods people asked for",
+        "evidence": {
+          "segment_id": "seg-0115",
+          "t_start": 259.4,
+          "t_end": 264.7
+        },
+        "owner": null,
+        "deadline": null
+      }
+    ],
+    "risks": [],
+    "open_questions": []
+  },
+  "notes": "The retreat itself, the Mexico location and the Florida layover are presented by Jenny as already planned, so they are not decisions this case makes -- the same reading applied to the finance briefings in tiron-TS3003a-c01 and tiron-ES2004a-c01. What IS decided here is everything settled in response to a question from the room: horseback riding, museums, the chef, spouses, children, and the rejected Disney stop. A rejection is a decision; 'no' settles the matter as much as 'yes'. The chef action keeps owner null because 'we will talk to the chef' is literally plural -- Jenny is the obvious owner, which is exactly why guessing her would be a guess."
+}

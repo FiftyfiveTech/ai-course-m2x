@@ -1,0 +1,17 @@
+{
+  "question_id": "q22",
+  "gist": "The mall meeting proposes fish and chips in the food court tied to the aquarium, with free samples handed to people queueing; the retreat meeting plans a culinary tour of tacos, burritos and enchiladas with a private chef teaching guacamole.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32185",
+      "first_turn": 85,
+      "last_turn": 101
+    },
+    {
+      "meeting_id": "tiron-MTG_32322",
+      "first_turn": 83,
+      "last_turn": 98
+    }
+  ],
+  "notes": "Both halves are strongly about food, so this is the cross-meeting case most likely to retrieve well — included deliberately as the easy end of the bucket."
+}

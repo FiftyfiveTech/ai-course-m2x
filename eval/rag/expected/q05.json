@@ -1,0 +1,12 @@
+{
+  "question_id": "q05",
+  "gist": "Tuesday, with a follow-up.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32185",
+      "first_turn": 69,
+      "last_turn": 71
+    }
+  ],
+  "notes": "Split across turns 69 and 71 by Sarah interrupting at 70 — deliberately kept, because a retrieval that returns only turn 69 gets 'I'm gonna come back on Tuesday with a' and no object."
+}

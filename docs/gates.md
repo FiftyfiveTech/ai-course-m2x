@@ -7,7 +7,7 @@ listed number. Claimed ≠ verified.
 |------|-------|---------|---------|--------|-----------|
 | 2026-08-04 | Phase 0 | `make run` then `make run-local` | `85f80d4` | hosted 395 ms vs local 141,339 ms — **358×** | **PASS** |
 | 2026-08-12 | Phase 1 | `uv run python eval/validate_transcripts.py` | `e392922` | **3/3** speaker-attributed and schema-valid | **PASS** |
-| 2026-08-13 | Phase 1B | *not run — set not unsealed* | `066253b` | dev 0.3882 against a 0.85 bar; two preconditions were structurally unmet | **NOT RUN** |
+| 2026-08-13 | Phase 1B | *not run — and the set is now open, so it cannot be* | `066253b` | dev 0.3882 against a 0.85 bar; the held-out set was later committed in plaintext | **NOT RUN** |
 
 ## Phase 1 — 2026-08-12, SHA `e392922`
 
@@ -191,3 +191,32 @@ Decrypted content was byte-identical to what went in.
 prompt and the schema (`eval/labels/README.md` §"these labels are not independent"). A
 perfect seal on a non-independent set is still a perfect seal on a non-independent set, and
 0.3882 against a 0.85 bar is not a tuning gap.
+
+### Amendment, same day: the held-out set is now OPEN
+
+Hours after the above was written, the supervisor decided both answer keys should be
+readable by the whole team, and `eval/labels/heldout/` was committed in **plaintext**.
+
+That adds a **second, independent reason this gate cannot be run as written**, and it is
+the more permanent of the two. The first reason — dev F1 at 0.3882 — is a quality problem
+that better work can fix. This one is structural: *there is no longer a held-out set to
+open once.* The Builder can read all ten cases, so no score against them is a held-out
+score, and there is nothing left to burn.
+
+Sealing while publishing the passphrase was considered and rejected as worse than not
+sealing at all: a repository holding ciphertext plus the key to open it reads as *sealed*
+to anyone checking it, which misleads in a way an honest absence does not.
+
+**What survives is integrity, not confidentiality.** `seal-manifest.json` still carries a
+SHA-256 per case and `scripts/seal_heldout.py verify` still fails if any case is edited,
+added or removed — the property that stops a label being adjusted after somebody has seen a
+score, and the one an ignored directory never had. It also means a fresh clone can now
+actually run the command, which it could not before.
+
+**Certifying Phase 1B for real now requires fresh cases**, hand-written by someone who has
+not read the prompt and kept genuinely private until the run. That was already M2X-041's
+outstanding second half; it is now the only remaining route.
+
+The same decision applies to `eval/rag/expected/`, so the Phase 2 gate (M2X-050, Friday)
+inherits the identical caveat: its answer key is public and its numbers can be optimised
+against it. Recorded here so Friday's record does not have to discover it.

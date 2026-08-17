@@ -1,0 +1,12 @@
+{
+  "question_id": "q18",
+  "gist": "Robust encryption and data-protection protocols to keep patient information confidential, plus rigorous testing and training to limit malfunctions.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32256",
+      "first_turn": 48,
+      "last_turn": 56
+    }
+  ],
+  "notes": "Brad. Turn 48-50 raise the concern and 51-56 answer it; a span covering only the answer reads as unprompted."
+}

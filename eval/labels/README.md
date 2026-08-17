@@ -84,30 +84,33 @@ ten. Seeding is not fussiness: an unseeded split can be re-rolled until the held
 looks favourable and nothing in the repository would show it, which matters more than
 usual when the labeller and the prompt author are the same.
 
-## The seal — convention until 2026-08-13, encryption after
+## The seal — abandoned on 2026-08-13. The held-out set is OPEN
 
-The ticket offers two forms: encrypt the set, **or** cover it with an agreed do-not-open
-rule. This project first took the second, by the user's decision on 2026-08-12, and that
-left two gaps which M2X-041 closed before the gate was allowed to run:
+The ticket offered two forms: encrypt the set, **or** cover it with an agreed do-not-open
+rule. This project first took the second, then M2X-041 replaced it with real encryption,
+and then the supervisor decided the same day that every developer should be able to read
+both answer keys.
 
-1. **The held-out set existed only on the machine that produced it.** A fresh clone had
-   `dev/` and no `heldout/`, so it could not reproduce the M2X-040 gate number — which
-   `CLAUDE.md` otherwise requires of any gate ("a gate number counts only when the
-   supervisor re-runs the command on a fresh clone").
-2. **Nothing proved the set was unedited between the freeze and the gate.** An ignored
-   directory cannot show that. The seal rested on the rule being followed, not on it being
-   enforced.
+**So there is no seal.** `heldout/` holds ten cases in committed plaintext. The Builder can
+read them. **A Phase 1B number computed against this set is not a held-out number**, and the
+protocol below is history rather than instruction.
 
-Both are now covered by committed artefacts: `<case>.json.gpg` for recoverability and
-`heldout/seal-manifest.json` for integrity. The plaintext stays git-ignored. The full
-rationale — including why the digest manifest, not the ciphertext, is what actually proves
-anything — is in [`heldout/README.md`](heldout/README.md).
+The alternative — sealing and publishing the passphrase — was rejected as worse: ciphertext
+plus a public key reads as *sealed* to a reviewer while being nothing of the sort, and a
+false artefact misleads where an honest absence does not. The full accounting of what was
+given up is in [`heldout/README.md`](heldout/README.md).
 
-**What the seal still does not cover:** it was applied on 2026-08-13, after the cases were
-written and after dev iteration had run on this machine. It makes edits visible from that
-commit forward and says nothing about the window before it. Recorded rather than glossed.
+**What survives:** `heldout/seal-manifest.json` still carries a SHA-256 per case, and
+`scripts/seal_heldout.py verify` still fails if one is edited, added or removed.
+Confidentiality is gone; integrity is not, and integrity is what stops a label being
+adjusted after somebody has seen a score.
 
-**Protocol:** opened exactly once, at M2X-040, after the prompt version and SHA under
+**Consequence:** certifying Phase 1B for real now needs *fresh* cases, written by someone
+who has not read the prompt and kept genuinely private until the run. That was already
+M2X-041's outstanding second half.
+
+**The protocol as originally written**, kept for the record — opened exactly once, at
+M2X-040, after the prompt version and SHA under
 test are frozen. The number goes into `docs/gates.md` whatever it is. After that the set
 is **burnt**: it can never certify a later prompt change, because a failure teaches you
 what the set contains. Certifying any subsequent fix requires *fresh* cases — which is
@@ -115,3 +118,6 @@ what recovery ticket M2X-041 exists for.
 
 The Builder does not open `heldout/`. With one operator that rule is a convention rather
 than an enforced boundary, which is recorded here rather than pretended away.
+
+*(End of the original protocol. It no longer applies: the set is open, so there is nothing
+to unseal and nothing to burn.)*

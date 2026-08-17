@@ -1,0 +1,27 @@
+{
+  "question_id": "q25",
+  "gist": "The marketing meeting discusses hiking, skiing, horseback riding and track and field as uses for the sports equipment; the retreat meeting plans yoga, golf, horseback riding, beach time and meditation.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32092",
+      "first_turn": 47,
+      "last_turn": 53
+    },
+    {
+      "meeting_id": "tiron-MTG_32322",
+      "first_turn": 3,
+      "last_turn": 17
+    },
+    {
+      "meeting_id": "tiron-MTG_32322",
+      "first_turn": 39,
+      "last_turn": 45
+    },
+    {
+      "meeting_id": "tiron-MTG_32322",
+      "first_turn": 121,
+      "last_turn": 122
+    }
+  ],
+  "notes": "Horseback riding appears in both for different reasons — equipment marketing versus a retreat activity — which is the distinction a shallow retrieval collapses."
+}

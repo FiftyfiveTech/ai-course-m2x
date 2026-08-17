@@ -1,0 +1,12 @@
+{
+  "question_id": "q20",
+  "gist": "That it is flawed — robots may be cheaper short term but cost more long term through maintenance, repair, replacement and staff training.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32256",
+      "first_turn": 100,
+      "last_turn": 106
+    }
+  ],
+  "notes": "The final turns of the meeting. Sits at the very end of the transcript, where a chunker with overlap has the least context either side."
+}

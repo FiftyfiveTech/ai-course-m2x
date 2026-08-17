@@ -1,0 +1,12 @@
+{
+  "question_id": "q14",
+  "gist": "Florida — one night near the airport, because of a very long layover.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32322",
+      "first_turn": 139,
+      "last_turn": 143
+    }
+  ],
+  "notes": "Jenny mentions the Florida stop at turn 125 without detail; the night-near-the-airport answer is Donald's follow-up at 141-142."
+}

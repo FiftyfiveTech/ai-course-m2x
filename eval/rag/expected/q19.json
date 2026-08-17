@@ -1,0 +1,12 @@
+{
+  "question_id": "q19",
+  "gist": "Robots are cold and impersonal and cannot provide the emotional support and empathy patients need, which human nurses and doctors connect with them to give.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32256",
+      "first_turn": 69,
+      "last_turn": 85
+    }
+  ],
+  "notes": "Rachel voices both sides of a scripted Q&A, so speaker attribution cannot disambiguate question from answer here — the content has to."
+}

@@ -5,31 +5,39 @@ blind against the corpus, never against system output. The Friday gate (M2X-050)
 context precision ≥0.75, faithfulness ≥0.80 and citation accuracy ≥0.90 on this set;
 M2X-046 is the harness that computes them.
 
-## Two halves, held differently
+## Both halves are committed in plaintext — the answer key is OPEN
 
-| | in git? | why |
-|---|---|---|
-| `questions.jsonl` | **yes**, plaintext | the system has to be asked the questions; hiding them would only stop the harness running |
-| `expected/<qid>.json` | **never** — git-ignored | a builder who can read the expected segments can tune retrieval until they come back |
-| `expected/<qid>.json.gpg` | yes | recoverability, so a fresh clone can score the gate |
-| `expected/seal-manifest.json` | yes | integrity — digests, so an edit is visible |
+> **Read this before quoting any Phase 2 number.** The expected answers are readable by
+> everyone, including whoever is tuning retrieval. **Nothing stops a gate figure being
+> optimised against its own answer key**, and the numbers must be read with that in mind.
 
-Same tooling and the same reasoning as the held-out labels; see
-[`../labels/heldout/README.md`](../labels/heldout/README.md) for why both artefacts are
-needed and why the manifest, not the ciphertext, is the one that proves anything.
+| | in git? |
+|---|---|
+| `questions.jsonl` | yes, plaintext — the system has to be asked them |
+| `expected/<qid>.json` | **yes, plaintext** — supervisor's decision, 2026-08-13 |
+| `expected/seal-manifest.json` | yes — SHA-256 per answer, so an edit stays visible |
+
+M2X-045 originally sealed the `expected/` half, on the reasoning that a builder who can
+read the expected segments can tune retrieval until they come back. The supervisor decided
+the same day that the whole team should be able to read it. The alternative — sealing and
+publishing the passphrase — was rejected as worse: ciphertext plus a public key reads as
+sealed to a reviewer while being nothing of the sort.
+
+**Integrity survives; confidentiality does not.** Re-digest whenever an answer legitimately
+changes, and let the manifest diff be the record:
 
 ```bash
-uv run python scripts/seal_heldout.py verify --dir eval/rag/expected   # no passphrase
-uv run python scripts/seal_heldout.py unseal --dir eval/rag/expected   # gate day
-uv run python scripts/validate_rag_questions.py                        # needs it unsealed
+uv run python scripts/seal_heldout.py verify --dir eval/rag/expected    # anyone, any time
+uv run python scripts/seal_heldout.py manifest --dir eval/rag/expected  # after a change
+uv run python scripts/validate_rag_questions.py
 ```
 
-**The same caveat as the labels applies.** One operator writes the questions, the expected
-answers and the system under test, so the seal is a discipline rather than an enforced
-boundary — see [`../labels/README.md`](../labels/README.md) §"these labels are not
-independent". Unlike the extraction labels, though, these questions were written against
-*human-annotated reference transcripts nobody in this project authored*, so what a question
-asks about is at least not downstream of the system's own vocabulary.
+**A second caveat, which predates this and is not fixed by it.** One operator wrote the
+questions, the expected answers and the system under test — see
+[`../labels/README.md`](../labels/README.md) §"these labels are not independent". Unlike
+the extraction labels, these questions were at least written against *human-annotated
+reference transcripts nobody in this project authored*, so what a question asks about is
+not downstream of the system's own vocabulary.
 
 ## The corpus is `eval/tiron/`, and that is a decision
 

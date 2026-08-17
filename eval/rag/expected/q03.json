@@ -1,0 +1,12 @@
+{
+  "question_id": "q03",
+  "gist": "The overall floor manager; Sarah asks everyone to look for an experienced candidate.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32185",
+      "first_turn": 70,
+      "last_turn": 76
+    }
+  ],
+  "notes": "Sarah says twice that hiring is done, which is the trap — the exception is the floor manager at turn 72."
+}

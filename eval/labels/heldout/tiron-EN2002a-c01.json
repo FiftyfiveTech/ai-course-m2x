@@ -1,0 +1,51 @@
+{
+  "case_id": "tiron-EN2002a-c01",
+  "meeting_id": "tiron-EN2002a",
+  "first_turn": 186,
+  "last_turn": 254,
+  "label": {
+    "decisions": [
+      {
+        "description": "Transcript views and the summary share one window as mutually exclusive alternatives -- full meeting, meeting without disfluencies, and summary",
+        "evidence": {
+          "segment_id": "seg-0059",
+          "t_start": 790.8,
+          "t_end": 803.9
+        }
+      }
+    ],
+    "actions": [
+      {
+        "description": "Look into whether tabbed windows are feasible in Java's windowing toolkit",
+        "evidence": {
+          "segment_id": "seg-0019",
+          "t_start": 691.9,
+          "t_end": 692.9
+        },
+        "owner": "EN2002a.C",
+        "deadline": null
+      }
+    ],
+    "risks": [
+      {
+        "description": "Java's windowing toolkit is limited and may not support the tabbed interface well",
+        "evidence": {
+          "segment_id": "seg-0016",
+          "t_start": 682.9,
+          "t_end": 690.7
+        }
+      }
+    ],
+    "open_questions": [
+      {
+        "description": "What kind of prototype to aim for, and whether to aim for a specific target at all",
+        "evidence": {
+          "segment_id": "seg-0067",
+          "t_start": 816.5,
+          "t_end": 822.4
+        }
+      }
+    ]
+  },
+  "notes": "The prototype question carries a spoken deadline -- 'by the end of February' at seg-0068 -- and it stays null. There is no year in the utterance and no meeting date in the corpus to resolve it against, which is exactly the conditional rule in the frozen contract; resolving it would mean inventing a year. Worth keeping as a case for that reason alone. 'I can have a look' at seg-0019 is a real acceptance and so becomes an action, while every other feature suggestion in the case is floated without anyone taking it."
+}

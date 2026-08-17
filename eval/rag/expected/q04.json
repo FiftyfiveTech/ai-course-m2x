@@ -1,0 +1,12 @@
+{
+  "question_id": "q04",
+  "gist": "The figures she presented last week still hold and they are down about forty percent, which she calls profitable despite spending more than expected.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32185",
+      "first_turn": 10,
+      "last_turn": 14
+    }
+  ],
+  "notes": "Beth's turns are interleaved with Rachel's, so a chunk boundary here is a real risk. 'Going down forty percent is profitable' at turn 14 is the claim."
+}

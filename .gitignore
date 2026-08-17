@@ -7,35 +7,20 @@ data/*
 !data/corpus.json
 # real keys live in ~/.config, only .env.example is tracked
 .env
-# held-out labels are Evaluator-only until the gate (blind-labelling rule). The sealed
-# set is committed as *ciphertext* so a reviewer can confirm the ten cases exist and were
-# not edited between the freeze and the gate — an ignored directory proves neither.
-# Plaintext beside it must never enter git. Same `dir/*` trick as data/ above: git will
-# not re-include a file whose parent directory is excluded.
-eval/labels/heldout/*
-!eval/labels/heldout/*.age
-!eval/labels/heldout/*.gpg
-!eval/labels/heldout/.gitkeep
-!eval/labels/heldout/README.md
-# the integrity half of the seal (M2X-041). Ciphertext proves the set is recoverable;
-# only this manifest proves it is unedited, because gpg salts every run and a *.gpg diff
-# therefore cannot tell a re-seal from a content change. Digests leak nothing.
-!eval/labels/heldout/seal-manifest.json
+# NOTE (2026-08-13): the held-out labels and the Phase 2 answer key are NO LONGER
+# ignored. Both are committed in plaintext, by the supervisor's explicit decision, so
+# every developer can read them. That decision gives up the blind property both gates
+# rested on — see eval/labels/heldout/README.md for what it costs and why it was still
+# preferred to a seal whose passphrase everyone holds.
+#
+# The digest manifests stay. Confidentiality is gone; integrity is not, and integrity is
+# the property that stops a case being quietly edited after someone has seen a score.
+#
 # the pre-M2X-030 path, kept ignored so an older checkout cannot leak a case through it
 eval/heldout/
-# the Phase 2 gate's answer key (M2X-045), sealed on the same terms as the held-out
-# labels. Questions are public -- the system has to be asked them -- but a builder who can
-# read the expected segments can tune retrieval until they come back, and a retrieval
-# metric tuned against its own answer key measures nothing.
-eval/rag/expected/*
-!eval/rag/expected/*.gpg
-!eval/rag/expected/seal-manifest.json
-!eval/rag/expected/.gitkeep
-!eval/rag/expected/README.md
-# labels in progress, before the dev/held-out split has been drawn. Every case is
-# plaintext here and ten of them are about to become the sealed set -- committing this
-# directory would put the held-out cases in git history, and no later encryption can
-# take them back out. Ignored so the seal cannot be lost before it is applied.
+# labels in progress, before the dev/held-out split has been drawn. Still ignored: an
+# unsplit staging directory is scratch, not a deliverable, and committing it would put
+# half-finished labels in the history for no reader's benefit.
 eval/labels/staging/
 __pycache__/
 .venv/

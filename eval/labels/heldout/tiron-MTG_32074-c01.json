@@ -1,0 +1,68 @@
+{
+  "case_id": "tiron-MTG_32074-c01",
+  "meeting_id": "tiron-MTG_32074",
+  "first_turn": 0,
+  "last_turn": 229,
+  "label": {
+    "decisions": [],
+    "actions": [
+      {
+        "description": "Get numbers from the companies on how much time they expect, and are willing to give, per dog per week",
+        "evidence": {
+          "segment_id": "seg-0209",
+          "t_start": 325.2,
+          "t_end": 332.2
+        },
+        "owner": "Beth",
+        "deadline": null
+      },
+      {
+        "description": "Sit down with Beth separately and talk her through the commercial argument",
+        "evidence": {
+          "segment_id": "seg-0180",
+          "t_start": 281.3,
+          "t_end": 285.1
+        },
+        "owner": "Linda",
+        "deadline": null
+      }
+    ],
+    "risks": [
+      {
+        "description": "Trimming the service for business clients would be a substandard service and the company's reputation would suffer",
+        "evidence": {
+          "segment_id": "seg-0201",
+          "t_start": 312.0,
+          "t_end": 319.9
+        }
+      },
+      {
+        "description": "Companies perceive the on-site grooming as taking working time away, which is the opposite of how the team sees it",
+        "evidence": {
+          "segment_id": "seg-0166",
+          "t_start": 263.1,
+          "t_end": 267.9
+        }
+      }
+    ],
+    "open_questions": [
+      {
+        "description": "What the basic service menu includes and how long each service takes",
+        "evidence": {
+          "segment_id": "seg-0009",
+          "t_start": 29.7,
+          "t_end": 35.2
+        }
+      },
+      {
+        "description": "Whether the offering for business clients can be reduced below the company's quality standard while home services keep it",
+        "evidence": {
+          "segment_id": "seg-0193",
+          "t_start": 299.4,
+          "t_end": 304.6
+        }
+      }
+    ]
+  },
+  "notes": "No decisions, on purpose: this is an argument the meeting does not settle. Beth ends on 'I cannot agree to this' (seg-0199) and Rachel's home-versus-business compromise is proposed and never accepted, so recording it as a decision would report an outcome that did not happen. Meetings that fail to converge are exactly the case an extractor is most tempted to tidy up.\n\nThe Beth action is the most contestable label in the set and bends the acceptance rule. Rachel assigns it to Beth by name, three times (seg-0134, seg-0136, seg-0209), and Beth never accepts it -- but her objections are all to the premise about cutting services, never to gathering the numbers. Recorded with owner Beth because a directed, unrefused assignment is still an assignment; flagged here because another labeller could defensibly drop it or set owner null, and that disagreement would move the F1."
+}

@@ -1,0 +1,12 @@
+{
+  "question_id": "q13",
+  "gist": "Spouses and significant others are included, and someone without one may bring a parent, but children are not allowed.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32322",
+      "first_turn": 127,
+      "last_turn": 136
+    }
+  ],
+  "notes": "Two questions with opposite answers inside one span. A retrieval that returns only turn 128 gets 'yes' and misses the exclusion."
+}

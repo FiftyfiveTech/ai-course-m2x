@@ -1,0 +1,22 @@
+{
+  "case_id": "tiron-Bmr013-c03",
+  "meeting_id": "tiron-Bmr013",
+  "first_turn": 1281,
+  "last_turn": 1397,
+  "label": {
+    "decisions": [],
+    "actions": [],
+    "risks": [],
+    "open_questions": [
+      {
+        "description": "What happens to the old microphones once the new ones arrive -- whether they are given to someone",
+        "evidence": {
+          "segment_id": "seg-0030",
+          "t_start": 2512.7,
+          "t_end": 2514.8
+        }
+      }
+    ]
+  },
+  "notes": "The microphone purchase is NOT recorded as a decision, and this is the closest call in the set. me011 says 'what I decided to do, on Morgan's suggestion, was just get two new microphones' (seg-0041) -- past tense, taken outside the meeting and reported into it, exactly like the finance briefings in tiron-TS3003a-c01 and the twenty percent cut in tiron-MTG_32179-c01. Applying the rule consistently matters more than the individual call, because an extractor is graded against the whole set. The old-microphones question gets a non-answer ('they go where old microphones go') and then drifts into what spare kit exists, so it stays open. The case ends with the ICSI digit-reading task (seg-0104 onward), which is recording protocol, not content."
+}

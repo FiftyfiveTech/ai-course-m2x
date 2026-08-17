@@ -1,0 +1,22 @@
+{
+  "question_id": "q21",
+  "gist": "In the marketing meeting he offers to produce an influencer list from his Dodgers and San Francisco 49ers contacts and a relative who knows Schwarzenegger; in the retreat meeting he asks about horseback riding and about stopping at a theme park in Florida.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32092",
+      "first_turn": 152,
+      "last_turn": 160
+    },
+    {
+      "meeting_id": "tiron-MTG_32322",
+      "first_turn": 39,
+      "last_turn": 44
+    },
+    {
+      "meeting_id": "tiron-MTG_32322",
+      "first_turn": 145,
+      "last_turn": 145
+    }
+  ],
+  "notes": "The cleanest cross-meeting case: one person, two meetings, no shared vocabulary between the halves. A system retrieving only the marketing meeting answers half and must be scored as missing."
+}

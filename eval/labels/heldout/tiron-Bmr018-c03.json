@@ -1,0 +1,38 @@
+{
+  "case_id": "tiron-Bmr018-c03",
+  "meeting_id": "tiron-Bmr018",
+  "first_turn": 1252,
+  "last_turn": 1311,
+  "label": {
+    "decisions": [],
+    "actions": [],
+    "risks": [],
+    "open_questions": [
+      {
+        "description": "What analyses to start doing on the word transcripts once Mari, Katrin and Jeff are visiting",
+        "evidence": {
+          "segment_id": "seg-0003",
+          "t_start": 2841.5,
+          "t_end": 2846.5
+        }
+      },
+      {
+        "description": "Whether to generate meeting minutes from the recordings, and who in the group would do it given the technical subject matter",
+        "evidence": {
+          "segment_id": "seg-0009",
+          "t_start": 2856.6,
+          "t_end": 2862.3
+        }
+      },
+      {
+        "description": "How to evaluate whether a generated summary is any good, given there are several different ways to measure it",
+        "evidence": {
+          "segment_id": "seg-0015",
+          "t_start": 2875.4,
+          "t_end": 2882.2
+        }
+      }
+    ]
+  },
+  "notes": "Three open questions and nothing else. Most of the case is a conference debrief about a Microsoft talk on data scaling versus choice of learning machine -- other people's results, discussed with interest and no bearing on this group's plan, so none of it is a decision, risk or action. me011's criticism that Microsoft assumed web text is correct (seg-0054) is a critique of someone else's method, not a threat to this project, and recording it as a risk would be the easy mistake here."
+}

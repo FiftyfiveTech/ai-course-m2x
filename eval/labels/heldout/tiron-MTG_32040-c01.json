@@ -1,0 +1,99 @@
+{
+  "case_id": "tiron-MTG_32040-c01",
+  "meeting_id": "tiron-MTG_32040",
+  "first_turn": 0,
+  "last_turn": 226,
+  "label": {
+    "decisions": [
+      {
+        "description": "Keep the product focus on home kitchens rather than restaurants or industrial kitchens, because the home identity is what the idea grew from",
+        "evidence": {
+          "segment_id": "seg-0065",
+          "t_start": 125.9,
+          "t_end": 131.5
+        }
+      },
+      {
+        "description": "Use industrial kitchens as a laboratory to learn what does and does not adapt to homes",
+        "evidence": {
+          "segment_id": "seg-0074",
+          "t_start": 145.0,
+          "t_end": 150.9
+        }
+      },
+      {
+        "description": "Brainstorm ambitiously rather than restricting ideas to what is currently feasible, and scale back later",
+        "evidence": {
+          "segment_id": "seg-0219",
+          "t_start": 344.6,
+          "t_end": 350.2
+        }
+      }
+    ],
+    "actions": [
+      {
+        "description": "Summarise the research already done and send it to Beth",
+        "evidence": {
+          "segment_id": "seg-0177",
+          "t_start": 280.1,
+          "t_end": 280.9
+        },
+        "owner": "Rachel",
+        "deadline": null
+      },
+      {
+        "description": "Prepare and give a presentation on the survey research into what kitchen and restaurant people want automated",
+        "evidence": {
+          "segment_id": "seg-0184",
+          "t_start": 288.8,
+          "t_end": 289.6
+        },
+        "owner": "Ron",
+        "deadline": null
+      },
+      {
+        "description": "Invite technical people to attend Ron's presentation",
+        "evidence": {
+          "segment_id": "seg-0188",
+          "t_start": 296.1,
+          "t_end": 297.1
+        },
+        "owner": "Linda",
+        "deadline": null
+      },
+      {
+        "description": "Go through the ideas raised and give a running commentary on which ones are worth expanding on",
+        "evidence": {
+          "segment_id": "seg-0200",
+          "t_start": 316.5,
+          "t_end": 321.1
+        },
+        "owner": "Beth",
+        "deadline": null
+      },
+      {
+        "description": "Check everyone's calendars and book the follow-up meeting for the beginning of next week",
+        "evidence": {
+          "segment_id": "seg-0214",
+          "t_start": 336.7,
+          "t_end": 338.1
+        },
+        "owner": "Sarah",
+        "deadline": null
+      },
+      {
+        "description": "Each person does informal market research on the idea with friends and neighbours",
+        "evidence": {
+          "segment_id": "seg-0205",
+          "t_start": 322.6,
+          "t_end": 330.1
+        },
+        "owner": null,
+        "deadline": null
+      }
+    ],
+    "risks": [],
+    "open_questions": []
+  },
+  "notes": "Three spoken deadlines, all null: 'next week Wednesday' (seg-0175), 'Monday' (seg-0190) and 'beginning of next week' (seg-0210). This is the densest deadline case in the set and every one of them fails the conditional rule for the same reason -- no meeting date exists to resolve against. The summarise-research action has owner Rachel because Rachel is who accepts it (seg-0177); Beth's request at seg-0175 does not name anyone, and the turn order suggests Linda, which is exactly the kind of inference the owner rule forbids. Ron's presentation is cited at his 'Sure' rather than at his later 'ready by Monday', since acceptance is where the commitment starts."
+}

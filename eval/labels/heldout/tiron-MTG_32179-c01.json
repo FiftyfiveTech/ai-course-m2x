@@ -1,0 +1,93 @@
+{
+  "case_id": "tiron-MTG_32179-c01",
+  "meeting_id": "tiron-MTG_32179",
+  "first_turn": 0,
+  "last_turn": 242,
+  "label": {
+    "decisions": [
+      {
+        "description": "The twenty percent budget cut is projected to run for about three months",
+        "evidence": {
+          "segment_id": "seg-0189",
+          "t_start": 272.4,
+          "t_end": 275.0
+        }
+      }
+    ],
+    "actions": [
+      {
+        "description": "Send Ron the full budget numbers report for every department",
+        "evidence": {
+          "segment_id": "seg-0087",
+          "t_start": 117.6,
+          "t_end": 123.0
+        },
+        "owner": "Sarah",
+        "deadline": null
+      },
+      {
+        "description": "Each department names three specific items it can cut to reach the reduction",
+        "evidence": {
+          "segment_id": "seg-0210",
+          "t_start": 308.3,
+          "t_end": 310.2
+        },
+        "owner": null,
+        "deadline": null
+      }
+    ],
+    "risks": [
+      {
+        "description": "A three-month estimate for the cut is likely to turn into five months",
+        "evidence": {
+          "segment_id": "seg-0195",
+          "t_start": 281.6,
+          "t_end": 287.6
+        }
+      },
+      {
+        "description": "Beth's department is already scraping its budget and may not be able to cut twenty percent at all",
+        "evidence": {
+          "segment_id": "seg-0143",
+          "t_start": 201.6,
+          "t_end": 208.7
+        }
+      },
+      {
+        "description": "Rachel's department cannot go below two million without the operation failing",
+        "evidence": {
+          "segment_id": "seg-0105",
+          "t_start": 147.0,
+          "t_end": 150.8
+        }
+      },
+      {
+        "description": "Cost estimates on this project have historically come in at two to four times what was anticipated",
+        "evidence": {
+          "segment_id": "seg-0200",
+          "t_start": 290.3,
+          "t_end": 295.1
+        }
+      }
+    ],
+    "open_questions": [
+      {
+        "description": "Whether cuts should follow a hierarchy of what matters most rather than a flat twenty percent from every department",
+        "evidence": {
+          "segment_id": "seg-0142",
+          "t_start": 194.2,
+          "t_end": 201.3
+        }
+      },
+      {
+        "description": "How much revenue the aquarium will actually bring in, which will not be known for two months",
+        "evidence": {
+          "segment_id": "seg-0123",
+          "t_start": 165.1,
+          "t_end": 171.6
+        }
+      }
+    ]
+  },
+  "notes": "The twenty percent cut itself is NOT recorded as a decision. Ron arrives with it and Rachel confirms 'there is no way back on the twenty percent' -- it is handed down, not settled here, the same reading applied to the finance briefings in tiron-TS3003a-c01 and tiron-ES2004a-c01. What this meeting does settle is the duration, which Ron gives only when Beth asks. Sarah's 'for tomorrow' (seg-0087) is another relative deadline that stays null. The three-items-to-cut instruction is recorded as an action rather than a decision, so the same instruction is not counted twice under two kinds."
+}

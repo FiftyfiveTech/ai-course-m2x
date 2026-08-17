@@ -1,0 +1,12 @@
+{
+  "question_id": "q11",
+  "gist": "Mexico — both a coastal retreat centre on the Gulf and a trip to Mexico City.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32322",
+      "first_turn": 27,
+      "last_turn": 36
+    }
+  ],
+  "notes": "Turn 1 names Mexico but not the two locations. Donald's country-or-city question at 32 is what forces the complete answer at 36."
+}

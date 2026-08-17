@@ -1,0 +1,12 @@
+{
+  "question_id": "q08",
+  "gist": "A list of influencers the company could work with, by Monday.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32092",
+      "first_turn": 152,
+      "last_turn": 156
+    }
+  ],
+  "notes": "The only deadline anywhere in these four meetings that is actually a named day. The ask is at 152, the deadline at 156."
+}

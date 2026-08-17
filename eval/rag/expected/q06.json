@@ -1,0 +1,12 @@
+{
+  "question_id": "q06",
+  "gist": "The Japanese market, because they are big hikers, reached through the company's Instagram channel.",
+  "evidence": [
+    {
+      "meeting_id": "tiron-MTG_32092",
+      "first_turn": 69,
+      "last_turn": 73
+    }
+  ],
+  "notes": "Beth first names Japan at turn 16, but the channel and the reason are only at 69-73. Both are needed for a complete answer, so the later span is the evidence."
+}
