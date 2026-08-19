@@ -40,7 +40,7 @@ from m2x.corpus import DEFAULT_MANIFEST, load_corpus
 # Constants only — this module keeps its torch imports inside the diarize handler, so
 # `m2x process` still runs where the optional `diarize` group was never installed.
 from m2x.diarization import DEFAULT_DIARIZATION_DIR
-from m2x.errors import M2XError
+from m2x.errors import ConfigError, M2XError
 from m2x.extraction import (
     DEFAULT_EXTRACT_MODEL,
     DEFAULT_EXTRACTION_PROMPT_VERSION,
@@ -69,6 +69,16 @@ from m2x.eval_extraction import (
     run_extraction_eval,
 )
 from m2x.eval_fixtures import DEFAULT_FIXTURES_DIR, FixtureMode
+from m2x.eval_rag import (
+    DEFAULT_JUDGE_MODEL,
+    DEFAULT_RAG_RESULTS_PATH,
+    append_rag_result,
+    build_reference_index,
+    format_rag_report,
+    load_question_set,
+    run_rag_eval,
+)
+from m2x.rag_questions import DEFAULT_RAG_EVAL_DIR
 from m2x.eval_injections import (
     DEFAULT_INJECTIONS_DIR,
     format_verdicts,
@@ -602,6 +612,63 @@ def build_parser() -> argparse.ArgumentParser:
         help=f"root of the fixture set (default: {DEFAULT_FIXTURES_DIR})",
     )
     eval_extraction.add_argument(
+        "--no-record",
+        action="store_true",
+        help="print the table without appending to the results log",
+    )
+
+    eval_rag = eval_actions.add_parser(
+        "rag",
+        help="the three Phase 2 gate numbers plus abstention, over the M2X-045 question set",
+    )
+    _add_index_arguments(eval_rag)
+    eval_rag.add_argument(
+        "--eval-dir",
+        type=Path,
+        default=DEFAULT_RAG_EVAL_DIR,
+        help=f"root of the question set (default: {DEFAULT_RAG_EVAL_DIR})",
+    )
+    eval_rag.add_argument(
+        "--answer-model",
+        default=DEFAULT_ASK_MODEL,
+        help=f"Hugging Face repo id of the answering model (default: {DEFAULT_ASK_MODEL})",
+    )
+    eval_rag.add_argument(
+        "--judge-model",
+        default=DEFAULT_JUDGE_MODEL,
+        help=(
+            "Hugging Face repo id RAGAS judges with. Defaults to the answering model, "
+            f"which is a known weakness ({DEFAULT_JUDGE_MODEL} judging itself) forced by "
+            "the zero-spend rule — pass a stronger model when one is available"
+        ),
+    )
+    eval_rag.add_argument(
+        "--top-k",
+        type=int,
+        default=DEFAULT_TOP_K,
+        help=f"passages retrieved per question (default: {DEFAULT_TOP_K})",
+    )
+    eval_rag.add_argument(
+        "--max-distance",
+        type=float,
+        default=DEFAULT_MAX_DISTANCE,
+        help=f"abstention threshold (default: {DEFAULT_MAX_DISTANCE}, provisional)",
+    )
+    eval_rag.add_argument(
+        "--build-index",
+        action="store_true",
+        help=(
+            "index the tiron reference transcripts the question set draws on before "
+            "scoring. Needed on a fresh clone, where no index exists"
+        ),
+    )
+    eval_rag.add_argument(
+        "--results",
+        type=Path,
+        default=DEFAULT_RAG_RESULTS_PATH,
+        help=f"append-only results log (default: {DEFAULT_RAG_RESULTS_PATH})",
+    )
+    eval_rag.add_argument(
         "--no-record",
         action="store_true",
         help="print the table without appending to the results log",
@@ -1374,6 +1441,8 @@ def _run_eval(
     """
     if args.action == "injections":
         return _run_injections(args, adapter_factory=adapter_factory)
+    if args.action == "rag":
+        return _run_rag_eval(args, adapter_factory=adapter_factory)
 
     if args.set_name == "heldout":
         print(
@@ -1440,6 +1509,90 @@ def _run_eval(
         print(f"recorded -> {written}")
 
     return EXIT_OK
+
+
+def _run_rag_eval(
+    args: argparse.Namespace,
+    *,
+    adapter_factory: Callable[[], ModelAdapter],
+) -> int:
+    """Score the RAG stack against the M2X-045 question set.
+
+    Args:
+        args: Parsed ``eval rag`` arguments.
+        adapter_factory: Builds the adapter.
+
+    Returns:
+        Process exit code. **Non-zero when any PRD leg fails**, unlike the extraction
+        eval: those three floors are the Phase 2 gate's binary criteria, so a shell that
+        checks the status is reading the gate rather than a diagnostic. A sealed question
+        set exits 2, because that is bad input rather than a failing measurement.
+    """
+    try:
+        questions, expected = load_question_set(args.eval_dir)
+    except (ConfigError, OSError) as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_USAGE
+
+    judge = None
+    try:
+        store = VectorStore(
+            args.index_dir,
+            collection=args.collection,
+            embed_model_repo_id=args.model,
+        )
+        with adapter_factory() as adapter:
+            if args.build_index:
+                meetings = sorted(
+                    {span.meeting_id for answer in expected.values() for span in answer.evidence}
+                )
+                written = build_reference_index(
+                    store, adapter, meetings, provider=args.provider
+                )
+                print(f"indexed {written} chunks from {len(meetings)} reference meetings")
+
+            from m2x.ragas_bridge import build_ragas_judge
+
+            judge = build_ragas_judge(
+                adapter, model_repo_id=args.judge_model, provider=args.provider
+            )
+            report, prompt_version = run_rag_eval(
+                questions,
+                expected,
+                store=store,
+                adapter=adapter,
+                judge=judge,
+                model_repo_id=args.answer_model,
+                provider=args.provider,
+                top_k=args.top_k,
+                max_distance=args.max_distance,
+            )
+    except ImportError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_USAGE
+    except M2XError as error:
+        print(f"error: {error}", file=sys.stderr)
+        return EXIT_FAILURE
+
+    print(format_rag_report(report))
+    print(f"\nprompt: rag/{prompt_version}   answering: {args.answer_model}")
+    print(f"judging: {args.judge_model}   embedding: {args.model}")
+    print(f"top-k: {args.top_k}   max-distance: {args.max_distance}")
+
+    if not args.no_record:
+        written_path = append_rag_result(
+            report,
+            prompt_version=prompt_version,
+            model_repo_id=args.answer_model,
+            judge_model_repo_id=args.judge_model,
+            embed_model_repo_id=args.model,
+            top_k=args.top_k,
+            max_distance=args.max_distance,
+            path=args.results,
+        )
+        print(f"recorded -> {written_path}")
+
+    return EXIT_OK if all(report.passes().values()) else EXIT_FAILURE
 
 
 def _run_injections(
